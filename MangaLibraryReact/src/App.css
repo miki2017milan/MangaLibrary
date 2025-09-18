@@ -1,0 +1,131 @@
+.header {
+  position: sticky;
+  height: var(--header-height);
+  background-color: var(--bg);
+}
+
+.header-content {
+  margin-left: 1em;
+  margin-right: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.logo img {
+  height: 40px;
+  padding-right: 1em;
+}
+
+.logo h2 {
+  color: var(--text-muted)
+}
+
+.full-w {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 3em;
+  pointer-events: all;
+}
+
+.nav-link {
+  color: var(--text-muted);
+  font: var(--p);
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.nav-link:hover {
+ color: var(--text);
+ transition: 0.2s;
+ transform: scale(1.05);
+}
+
+/* .searchbar {
+  display: flex;
+  align-items: center;
+  padding-left: 1em;
+  padding-right: 1em;
+  width: 300px;
+  background-color: var(--bg-light);
+  height: var(--spacing6);
+  border-radius: 20px;
+  pointer-events: all;
+}
+.searchbar input {
+  width: 100%;
+  color: var(--text);
+  font: var(--ff);
+  background: transparent;
+  border: none;
+  outline: none;
+  padding-left: 1em;
+}
+.searchbar img {
+  height: 24px;
+  cursor: pointer;
+} */
+
+.header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+.header-buttons button {
+  font: var(--p);
+  font-size: 1.1em;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.login button {
+  color: var(--text-muted);
+}
+
+.login button:hover {
+ color: var(--text);
+ transition: 0.1s;
+}
+
+.signup button {
+  color: var(--text);
+  font: var(--p);
+  font-weight: 600;
+  background-color: var(--primary);
+  border-radius: 16px;
+  padding: 0.5em 1em;
+}
+
+.signup button:hover {
+  scale: 1.04;
+  transition: 0.1s;
+  box-shadow: 0 2px 10px rgba(8,150,230,.6);
+}
+
+.content {
+  text-align: center;
+  min-height: 100vh;
+  padding-top: 100px;
+}

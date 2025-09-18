@@ -1,0 +1,68 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+/* Vars */
+:root {
+  --bg: #151F2E;
+  --bg-dark: #0b1622;
+  --bg-light: #253041;
+  --text: oklch(0.96 0.02 268);
+  --text-muted: oklch(80.74% 0.02086 267.277);
+  --highlight: oklch(0.5 0.02 268);
+  --border: oklch(0.4 0.02 268);
+  --border-muted: oklch(0.3 0.02 268);
+  --primary: #3577FF;
+  --secondary: oklch(0.76 0.1 88);
+  --danger: oklch(0.7 0.05 30);
+  --warning: oklch(0.7 0.05 100);
+  --success: oklch(0.7 0.05 160);
+  --info: oklch(0.7 0.05 260);
+
+  --ff: "Sans", serif;
+  --ff2: "Sans", serif;
+  --p: 1rem/1.5em var(--ff);
+  --h1: 600 3rem/1.2em var(--ff2);
+  --h2: 600 2rem/1.2em var(--ff2);
+  --h3: 600 1.2rem/1.2em var(--ff2);
+
+  --header-height: 72px;
+  --spacing1: 4px;
+  --spacing2: 8px;
+  --spacing3: 12px;
+  --spacing4: 16px;
+  --spacing5: 20px;
+  --spacing6: 40px;
+  --spacing7: 80px;
+}
+
+body {
+  font: var(--p);
+  background-color: var(--bg-dark);
+  color: var(--text);
+}
+
+h1 {
+  font: var(--h1);
+}
+
+h2 {
+  font: var(--h2);
+}
+
+a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+a.hover {
+  color: var(--text-muted);
+}
+
+image {
+  width: 100%;
+}
