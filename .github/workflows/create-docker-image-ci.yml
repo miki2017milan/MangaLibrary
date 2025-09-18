@@ -13,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: test
+      run: ls ./MangaLibraryReact
     - name: Build the Docker image
       run: docker build ./MangaLibraryReact --file Dockerfile --tag manga-library-react:$(date +%s)
     
