@@ -1,20 +1,17 @@
 name: Create Nginx docker image
 
 on:
-  push:
-    paths: ["MangaLibraryReact/**"]
-    branches: [ "main" ]
+    push:
+        paths: ["MangaLibraryReact/**"]
+        branches: ["main"]
 
 jobs:
+    build:
+        runs-on: ubuntu-latest
 
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: test
-      run: ls ./MangaLibraryReact
-    - name: Build the Docker image
-      run: docker build ./MangaLibraryReact --file Dockerfile --tag manga-library-react:$(date +%s)
-    
+        steps:
+            - uses: actions/checkout@v4
+            - name: testt
+              run: ls ./MangaLibraryReact
+            - name: Build the Docker image
+              run: docker build ./MangaLibraryReact --file Dockerfile --tag manga-library-react:$(date +%s)
