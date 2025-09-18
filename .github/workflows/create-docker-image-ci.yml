@@ -14,4 +14,4 @@ jobs:
             - name: testt
               run: ls ./MangaLibraryReact
             - name: Build the Docker image
-              run: docker build ./MangaLibraryReact --file Dockerfile --tag manga-library-react:$(date +%s)
+              run: docker build ./MangaLibraryReact --tag manga-library-react:$(date +%s)
