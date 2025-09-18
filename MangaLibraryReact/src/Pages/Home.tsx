@@ -5,7 +5,7 @@ export default function Home() {
             <br />
             <p>
                 Here you can search and discover Manga and manage your own
-                collection.
+                Collection.
             </p>
         </>
     );
