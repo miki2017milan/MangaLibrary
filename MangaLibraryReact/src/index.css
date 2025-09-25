@@ -11,8 +11,8 @@
   --bg: #151F2E;
   --bg-dark: #0b1622;
   --bg-light: #253041;
-  --text: oklch(0.96 0.02 268);
-  --text-muted: oklch(80.74% 0.02086 267.277);
+  --text: #d4d9e6;
+  --text-muted: #b2b7c4;
   --highlight: oklch(0.5 0.02 268);
   --border: oklch(0.4 0.02 268);
   --border-muted: oklch(0.3 0.02 268);
@@ -24,11 +24,9 @@
   --info: oklch(0.7 0.05 260);
 
   --ff: "Sans", serif;
-  --ff2: "Sans", serif;
   --p: 1rem/1.5em var(--ff);
-  --h1: 600 3rem/1.2em var(--ff2);
-  --h2: 600 2rem/1.2em var(--ff2);
-  --h3: 600 1.2rem/1.2em var(--ff2);
+  --h1: 600 3rem/1.2em var(--ff);
+  --h2: 600 1.9rem/1.2em var(--ff);
 
   --header-height: 72px;
   --spacing1: 4px;
@@ -42,8 +40,8 @@
 
 body {
   font: var(--p);
-  background-color: var(--bg-dark);
   color: var(--text);
+  background-color: var(--bg-dark);
 }
 
 h1 {
@@ -55,14 +53,10 @@ h2 {
 }
 
 a {
-  color: var(--text);
   text-decoration: none;
-}
-
-a.hover {
-  color: var(--text-muted);
 }
 
 image {
   width: 100%;
+  height: auto;
 }

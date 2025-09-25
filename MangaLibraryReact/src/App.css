@@ -2,6 +2,7 @@
   position: sticky;
   height: var(--header-height);
   background-color: var(--bg);
+  top: 0;
 }
 
 .header-content {
@@ -11,6 +12,11 @@
   align-items: center;
   justify-content: space-between;
   height: 100%;
+  list-style: none;
+}
+
+.header-content li {
+  width: 30vw;
 }
 
 .logo {
@@ -25,39 +31,28 @@
 }
 
 .logo h2 {
-  color: var(--text-muted)
-}
-
-.full-w {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: var(--header-height);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
+  color: var(--text)
 }
 
 .header-nav {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 3em;
   pointer-events: all;
 }
 
 .nav-link {
-  color: var(--text-muted);
+  color: var(--text);
   font: var(--p);
   font-size: 1.1em;
   font-weight: 600;
   cursor: pointer;
+  transition: 200ms ease;
 }
 
 .nav-link:hover {
- color: var(--text);
- transition: 0.2s;
+ color: var(--text-muted);
  transform: scale(1.05);
 }
 
@@ -89,11 +84,11 @@
 .header-buttons {
   display: flex;
   align-items: center;
+  justify-content: end;
   gap: 1em;
 }
 
 .header-buttons button {
-  font: var(--p);
   font-size: 1.1em;
   background: transparent;
   border: 0;
@@ -101,12 +96,16 @@
 }
 
 .login button {
-  color: var(--text-muted);
+  color: var(--text);
+  padding: 0.5em 1em;
+  border-radius: 16px;
+  transition: 150ms ease;
 }
 
 .login button:hover {
- color: var(--text);
- transition: 0.1s;
+ color: var(--text-muted);
+ background-color: var(--bg-light);
+ box-shadow: 0 2px 10px var(--bg-light);
 }
 
 .signup button {
@@ -124,8 +123,43 @@
   box-shadow: 0 2px 10px rgba(8,150,230,.6);
 }
 
+@media screen and (max-width: 1024px) {
+  .header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    height: 100dvh;
+    width: min(15em, 100%);
+    z-index: 10;
+  }
+
+  .header-content {
+    flex-direction: column;
+    justify-content: start;
+    gap: 2em;
+    margin-left: 0.5em;
+  }
+
+  .header-content li {
+    width: 100%;
+    border-bottom: 1 solid gray;
+  }
+
+  .header-nav {
+    flex-direction: column;
+    justify-content: start;
+    gap: 1em;
+  }
+}
+
 .content {
   text-align: center;
-  min-height: 100vh;
-  padding-top: 100px;
+  height: 100vh;
+  height: 100dvh;
+  padding: 5% min(5em, 6%);
+}
+
+.content h1 {
+  font-size: clamp(1.5rem, calc(4vw + 1rem), 5rem);
 }
