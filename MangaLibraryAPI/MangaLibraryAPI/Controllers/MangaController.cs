@@ -15,15 +15,17 @@ public class MangaController : Controller
     }
 
     [HttpGet("")]
-    public async Task<List<MangaResponse>> GetMangas([FromQuery] string? title)
+    public async Task<ActionResult<MangaResponse>> GetMangaFromId([FromQuery] string? id)
     {
-        if (title is null) return await _mangaService.GetAllMangas();
-        return await _mangaService.GetMangasByTitle(title);
-    }
+        var manga = await _mangaService.GetMangaById(id);
 
-    [HttpGet("{id}")]
-    public async Task<MangaResponse> GetManga(string id)
+        return manga is null ? NotFound() : manga;
+    }
+    
+    [HttpGet("search/{searchWord}")]
+    public async Task<ActionResult<List<MangaSearchResponse>>> SearchMangas(string? searchWord)
     {
-        return await _mangaService.GetMangaById(id);
+        var mangas = await _mangaService.SearchMangasWithTitle(searchWord);
+        return mangas is null ? NotFound() : mangas;
     }
 }

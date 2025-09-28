@@ -4,7 +4,8 @@ namespace ServiceContracts.DTO;
 
 public class MangaResponse
 {
-    public List<string?>? Titles { get; set; }
+    public string? TitleEnglish { get; set; }
+    public string? TitleNative{ get; set; }
     public List<string?>? Genres { get; set; }
     public string? Cover { get; set; }
     public string? BannerImage { get; set; }
@@ -18,7 +19,8 @@ public static class MangaResponseExtensions
     {
         return new MangaResponse
         {
-            Titles = manga.Titles,
+            TitleEnglish = manga.TitleEnglish,
+            TitleNative = manga.TitleNative,
             Genres = manga.Genres,
             Cover = manga.Cover,
             BannerImage = manga.BannerImage,

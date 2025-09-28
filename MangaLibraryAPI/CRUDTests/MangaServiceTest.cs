@@ -23,7 +23,7 @@ public class MangaServiceTest
 
         var databaseService = new MongoDbService(configuration);
         _mangaService = new MangaService(databaseService);
-
+        
         // Ping MongoDb server to check if it is running
         try
         {
@@ -35,13 +35,8 @@ public class MangaServiceTest
         }
     }
 
-    [Fact]
-    public async Task TestGetAllManga()
-    {
-        var mangas = await _mangaService.GetAllMangas();
-        Assert.NotEmpty(mangas);
-    }
-
+    #region GetMangaById
+    
     [Fact]
     public async Task GetMangaById_NullId()
     {
@@ -55,4 +50,48 @@ public class MangaServiceTest
         const string id = "invalid object id";
         await Assert.ThrowsAsync<ArgumentException>(() => _mangaService.GetMangaById(id));
     }
+    
+    [Fact]
+    public async Task GetMangaById_ValidIdAndFound()
+    {
+        const string id = "68d9845c347cd7e2f299a9a7";
+        var manga = await _mangaService.GetMangaById(id);
+        Assert.NotNull(manga);
+    }
+    
+    [Fact]
+    public async Task GetMangaById_ValidIdAndNotFound()
+    {
+        const string id = "68d721b67539e15774909109";
+        var manga = await _mangaService.GetMangaById(id);
+        Assert.Null(manga);
+    }
+    
+    #endregion
+    
+    #region GetMangaByTitle
+    
+    [Fact]
+    public async Task GetMangaByTitle_NullSearchWord()
+    {
+        string? searchWord = null;
+        await Assert.ThrowsAsync<ArgumentNullException>(() => _mangaService.SearchMangasWithTitle(searchWord!));
+    }
+    
+    [Fact]
+    public async Task GetMangaByTitle_NoResult()
+    {
+        string? searchWord = "asadsdasdasdasdasdasdwawfawfas";
+        Assert.Null(await _mangaService.SearchMangasWithTitle(searchWord));
+    }
+    
+    [Fact]
+    public async Task GetMangaByTitle_WithResult()
+    {
+        string? searchWord = "naruto";
+        Assert.NotNull(await _mangaService.SearchMangasWithTitle(searchWord));
+    }
+    
+    #endregion
+    
 }

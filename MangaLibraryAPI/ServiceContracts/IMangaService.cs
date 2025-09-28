@@ -4,7 +4,17 @@ namespace ServiceContracts;
 
 public interface IMangaService
 {
-    public Task<List<MangaResponse>> GetAllMangas();
-    public Task<MangaResponse> GetMangaById(string id);
-    public Task<List<MangaResponse>> GetMangasByTitle(string title);
+    /// <summary>
+    /// Gets a manga from database with given id.
+    /// </summary>
+    /// <param name="id">Input ObjectId</param>
+    /// <returns>Found manga or null</returns>
+    Task<MangaResponse?> GetMangaById(string? id);
+    
+    /// <summary>
+    /// Gets mangas from database with given search word.
+    /// </summary>
+    /// <param name="searchWord">Search string</param>
+    /// <returns>List of found mangas or null.</returns>
+    Task<List<MangaSearchResponse>?> SearchMangasWithTitle(string? searchWord);
 }

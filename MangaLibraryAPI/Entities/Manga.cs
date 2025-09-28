@@ -10,15 +10,17 @@ public class Manga
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
 
-    [BsonElement("title")] public List<string?>? Titles { get; set; }
+    [BsonElement("titleEnglish")] public required string TitleEnglish { get; set; }
+    
+    [BsonElement("titleNative")] public required string TitleNative { get; set; }
 
-    [BsonElement("genres")] public List<string?>? Genres { get; set; }
+    [BsonElement("genres")] public required List<string?>? Genres { get; set; }
 
-    [BsonElement("cover")] public string? Cover { get; set; }
+    [BsonElement("cover")] public required string Cover { get; set; }
 
-    [BsonElement("bannerImage")] public string? BannerImage { get; set; }
+    [BsonElement("bannerImage")] public required string BannerImage { get; set; }
 
-    [BsonElement("description")] public string? Description { get; set; }
+    [BsonElement("description")] public required string Description { get; set; }
 
-    [BsonElement("staff")] public List<Dictionary<string, string>>? Staff { get; set; }
+    [BsonElement("staff")] public required List<Dictionary<string, string>> Staff { get; set; }
 }
