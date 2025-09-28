@@ -23,10 +23,8 @@ export default function Header() {
                         </Link>
                     </div>
                 </li>
-                <li>
-                    <div className="header-buttons">
-                        <HeaderButtons></HeaderButtons>
-                    </div>
+                <li className="header-buttons">
+                    <HeaderButtons></HeaderButtons>
                 </li>
             </ul>
         </nav>
