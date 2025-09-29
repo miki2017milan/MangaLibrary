@@ -11,16 +11,19 @@ export default function Header( { show, toggleShowHeader } : data ) {
         <nav className={show ? "header show" : "header"}>
             <ul className="header-content">
                 <li>
-                    <Link to="/">
-                        <div className="logo">
+                    <div className="header-left">
+                        <Link to="/">
                             <img src="logo.webp" />
                             <h2>Manga Library</h2>
-                            <img className="closeButton" src="close-button.webp" onClick={() => toggleShowHeader()} />
-                        </div>
-                    </Link>
+                        </Link>
+                        <img className="closeButton" src="close-button.webp" onClick={() => toggleShowHeader()} />
+                    </div>
                 </li>
                 <li>
-                    <div className="header-nav">
+                    <div className="header-middle">
+                        <Link className="nav-link" to="/">
+                            Home
+                        </Link>
                         <Link className="nav-link" to="/search">
                             Search
                         </Link>
@@ -29,7 +32,7 @@ export default function Header( { show, toggleShowHeader } : data ) {
                         </Link>
                     </div>
                 </li>
-                <li className="header-buttons">
+                <li className="header-right">
                     <HeaderButtons></HeaderButtons>
                 </li>
             </ul>

@@ -1,16 +1,17 @@
 .header {
   position: sticky;
-  height: var(--header-height);
+  height: var(--space-xxl);
   background-color: var(--bg);
   top: 0;
 }
 
 .header-content {
-  margin-left: 1em;
-  margin-right: 1em;
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  margin-left: var(--space-m);
+  margin-right: var(--space-m);
   height: 100%;
   list-style: none;
 }
@@ -19,37 +20,36 @@
   width: 30vw;
 }
 
-.logo {
+.header-left a {
   display: flex;
   align-items: center;
   cursor: pointer;
 }
 
-.logo img {
-  height: 40px;
+.header-left a img {
+  height: var(--space-xl);
 }
 
-.logo h2 {
+.header-left a h2 {
   color: var(--text);
-  padding-left: 0.5em;
-  font-family: "Arial";
+  padding-left: var(--space-xs);
 }
 
-.header-nav {
+.header-middle {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 3em;
-  pointer-events: all;
+
+  gap: var(--space-xxl);
 }
 
 .nav-link {
   color: var(--text);
-  font: var(--p);
-  font-size: 1.1em;
+  font-size: var(--space-l);
   font-weight: 600;
   cursor: pointer;
   transition: 200ms ease;
+  text-wrap: none;
 }
 
 .nav-link:hover {
@@ -82,14 +82,14 @@
   cursor: pointer;
 } */
 
-.header-buttons {
+.header-right {
   display: flex;
   align-items: center;
   justify-content: end;
   gap: 1em;
 }
 
-.header-buttons button {
+.header-right button {
   font-size: 1.1em;
   background: transparent;
   border: 0;
@@ -125,10 +125,12 @@
 }
 
 .content {
+  display: flex;
+  justify-content: center;
   text-align: center;
   height: 100vh;
   height: 100dvh;
-  padding: 5% min(5em, 6%);
+  padding: 8rem 10%;
 }
 
 .content h1 {
@@ -138,11 +140,6 @@
 
 .menuButton {
   display: none;
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  height: 50px;
-  cursor: pointer;
 }
 
 .closeButton {
@@ -156,6 +153,127 @@
   z-index: 9;
   display: none;
   transition: background-color 300ms ease-in-out;
+}
+
+.mangaDisplayContent {
+  display: grid;
+  grid-template-columns: min-content min(1200px, 80vw);
+  grid-template-rows: 650px auto;
+}
+
+.coverImage {
+  grid-column: 1;
+  grid-row: 1;
+  height: 650px;
+  width: auto;
+}
+
+.mangaText {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: start;
+  margin-left: var(--space-m);
+  margin-top: var(--space-m);
+
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: var(--space-l);
+}
+
+.mangaTitleEnglish {
+  font-size: 3rem;
+  line-height: 3rem;
+}
+
+.mangaTitleNative {
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.mangaDescription {
+  margin-top: auto;
+  margin-bottom: var(--space-xl);
+  text-align: start;
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.mangaGenres {
+  grid-column: 1;
+  grid-row: 2;
+  list-style: none;
+  display: flex;
+  gap: var(--space-m);
+  flex-wrap: wrap;
+}
+
+.mangaGenres li {
+  background-color: var(--primary);
+  border-radius: var(--space-m);
+  padding: var(--space-xs) var(--space-m);
+  color: var(--text-highligth);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.genreTag:nth-child(5n+1) {
+  background-color: #59ad35;
+}
+.genreTag:nth-child(5n+2) {
+  background-color: #02a9ff;
+}
+.genreTag:nth-child(5n+3) {
+  background-color: #9256f3;
+}
+.genreTag:nth-child(5n+4) {
+  background-color: #f779a4;
+}
+.genreTag:nth-child(5n+5) {
+  background-color: #e85d75;
+}
+
+.staff {
+  grid-column-start: 1;
+  grid-column-end: span 2;
+  grid-row: 2;
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  gap: var(--space-l);
+  margin: var(--space-l);
+}
+
+.staff li {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid white;
+  border-radius: var(--space-xs);
+  height: fit-content;
+  padding: var(--space-s);
+}
+
+.staffName {
+  font-size: 1.3rem;
+  color: var(--text-highligth);
+  font-weight: 600;
+}
+
+@media screen and (max-width: 1750px){
+  .mangaDisplayContent {
+    grid-template-columns: min-content 550px;
+  }
+  .header-middle {
+    gap: var(--space-xl);
+  }
+  .mangaDescription {
+    font-size: 1.2rem;
+    line-height: 1.5rem;
+  }
+  .header {
+    height: 60px;
+  }
 }
 
 @media screen and (max-width: 1024px) {
@@ -176,7 +294,7 @@
   }
 
   .header.show ~ .overlay {
-    display: unset;
+    display: block;
   }
 
   .header-content {
@@ -191,43 +309,45 @@
     width: 100%;
   }
 
-  .logo h2 {
+  .header-left {
+    display: flex;
+  }
+
+  .header-left h2 {
     display: none;
   }
 
-  .logo {
-    cursor: default;
-  }
-
-  .logo img {
-    cursor: pointer;
-  }
-
-  .header-nav {
+  .header-middle {
     flex-direction: column;
     align-items: start;
     gap: 2em;
   }
 
-  .header-buttons {
+  .header-right {
     margin-top: auto;
     margin-bottom: 2em;
     justify-content: center;
   }
 
-  .content {
-    margin-top: 15%;
-  }
-
   .menuButton {
-    display: unset;
+    display: block;
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    height: 50px;
+    cursor: pointer;
   }
 
   .closeButton {
-    display: unset;
+    display: block;
     margin-left: auto;
-    height: 50px;
+    height: var(--space-xl);
     padding-right: 0;
+    cursor: pointer;
+  }
+
+  .content {
+    margin-top: 15%;
   }
 
 }

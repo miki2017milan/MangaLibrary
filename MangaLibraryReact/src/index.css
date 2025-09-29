@@ -13,29 +13,21 @@
   --bg-light: #253041;
   --text: #d4d9e6;
   --text-muted: #b2b7c4;
-  --highlight: oklch(0.5 0.02 268);
-  --border: oklch(0.4 0.02 268);
-  --border-muted: oklch(0.3 0.02 268);
+  --text-highligth: #ffffff;
   --primary: #3577FF;
-  --secondary: oklch(0.76 0.1 88);
-  --danger: oklch(0.7 0.05 30);
-  --warning: oklch(0.7 0.05 100);
-  --success: oklch(0.7 0.05 160);
-  --info: oklch(0.7 0.05 260);
 
   --ff: "Overpass", serif;
-  --p: 1rem/1.5em var(--ff);
-  --h1: 600 3rem/1.2em var(--ff);
-  --h2: 600 1.9rem/1.2em var(--ff);
+  --p: 1rem/1.5rem var(--ff);
+  --h1: 600 3rem/2rem var(--ff);
+  --h2: 600 2rem/1.5rem var(--ff);
 
-  --header-height: 72px;
-  --spacing1: 4px;
-  --spacing2: 8px;
-  --spacing3: 12px;
-  --spacing4: 16px;
-  --spacing5: 20px;
-  --spacing6: 40px;
-  --spacing7: 80px;
+  --space-xxs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-s: 0.75rem;
+  --space-m: 1rem;
+  --space-l: 1.25rem;
+  --space-xl: 2.5rem;
+  --space-xxl: 5rem;
 }
 
 body {
