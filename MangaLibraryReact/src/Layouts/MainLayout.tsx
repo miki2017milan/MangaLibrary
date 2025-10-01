@@ -6,19 +6,23 @@ import { Outlet } from "react-router-dom";
 function MainLayout() {
     const [ showHeader, setShowHeader ] = useState(false);
 
-    const toggleShowHeader = () => {
-        setShowHeader(prev => !prev);
+    const closeHeader = () => {
+        setShowHeader(false);
+    };
+
+    const openHeader = () => {
+        setShowHeader(true);
     };
 
     return (
-        <div className="main-layout">
-            <Header toggleShowHeader={toggleShowHeader} show={showHeader} ></Header>
-            <div className="overlay" onClick={() => toggleShowHeader()}></div>
+        <>
+            <Header closeHeader={closeHeader} show={showHeader} ></Header>
             <div className="content">
-                <img className="menuButton" src="menu-button.webp" onClick={() => toggleShowHeader()}/>
+                <img className="menuButton" src="/menu-button.webp" onClick={() => openHeader()}/>
                 <Outlet></Outlet>
             </div>
-        </div>
+            <div className="overlay" onClick={() => closeHeader()}></div>
+        </>
     );
 }
 

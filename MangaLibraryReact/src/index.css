@@ -13,7 +13,7 @@
   --bg-light: #253041;
   --text: #d4d9e6;
   --text-muted: #b2b7c4;
-  --text-highligth: #ffffff;
+  --text-highlight: #ffffff;
   --primary: #3577FF;
 
   --ff: "Overpass", serif;
@@ -34,7 +34,7 @@ body {
   font: var(--p);
   color: var(--text);
   background-color: var(--bg-dark);
-  overflow: hidden;
+  overflow: visible;
 }
 
 h1 {
