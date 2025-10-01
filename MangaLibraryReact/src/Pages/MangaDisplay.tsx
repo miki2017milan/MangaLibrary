@@ -1,66 +1,113 @@
-// import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
-type staff = {
-  name: string;
-  role: string;
-};
+import axios from "axios";
+import DOMPurify from "dompurify";
 
-type mangaResponse = {
+type MangaResponse = {
   titleEnglish: string;
   titleNative: string;
   genres: string[];
   description: string;
   cover: string;
   bannerImage: string;
-  staff: staff[];
+  staff: { name: string; role: string }[];
+};
+
+function loadingPage() {
+  return (
+    <>
+      <div className="mangaBanner loading" />
+      <div className="mangaDisplayContent">
+        <div className="coverImage loading" />
+      </div>
+    </>
+  );
+}
+
+function errorPage() {
+  return (
+    <>
+      <h1>Error 404!</h1> <h2>Manga not found</h2>
+    </>
+  );
+}
+
+const fetchManga = async (id: string): Promise<MangaResponse> => {
+  const res = await axios.get<MangaResponse>(
+    `http://localhost:5181/api/mangas?id=${id}`
+  );
+  return res.data;
 };
 
 export default function MangaDisplay() {
-  // let { mangaId } = useParams();
+  const { mangaId } = useParams<{ mangaId: string }>();
 
-  const manga: mangaResponse = {
-    titleEnglish: "To your Eternity",
-    titleNative: "ベルセルク",
-    genres: ["Action", "Drama", "Mystery", "Comedy", "Thriller", "Horror"],
-    description:
-      "Everyone faces uncertainty at some point in their lives. Even a brilliant surgeon like Kenzo Tenma is no exception. But there’s no way he could have known that his decision to stop chasing professional success and instead concentrate on his oath to save peoples’ lives would result in the birth of an abomination. The questions of good and evil now take on a terrifyingly real dimension.Years later, in Germany during the tumultuous post-reunification period, middle-aged childless couples are being killed one after another. The serial killer’s identity is known. The reasons why he kills are not. Dr. Tenma sets out on a journey to find the killer’s twin sister, who may hold some clues to solving the enigma of the “Monster.” (Source: Viz Media)",
-    cover: "/test.jpg",
-    bannerImage:
-      "https://s4.anilist.co/file/anilistcdn/media/manga/banner/105778-xpU0zxrlU2Ux.jpg",
-    staff: [
-      { name: "Naoki Urasawa", role: "Story & Art" },
-      { name: "Naoki Urasawa", role: "Story & Art" },
-      { name: "Naoki Urasawa", role: "Story & Art" },
-      { name: "Naoki Urasawa", role: "Story & Art" },
-      { name: "Naoki Urasawa", role: "Story & Art" },
-    ],
-  };
+  const {
+    data: manga,
+    error,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["manga", mangaId],
+    queryFn: () => fetchManga(mangaId!),
+    enabled: !!mangaId,
+    retry: (failureCount, error: any) => {
+      if (error?.response?.status === 400) return false;
+      return failureCount < 3;
+    },
+  });
+
+  if (isLoading) {
+    return loadingPage();
+  }
+
+  if (isError) {
+    const err = error as any;
+    if (err?.response?.status === 400) {
+      return errorPage();
+    }
+    return <p style={{ color: "red" }}>Unexpected error</p>;
+  }
 
   return (
     <>
-      {manga.bannerImage != null ? (
+      {manga?.bannerImage && (
         <img className="mangaBanner" src={manga.bannerImage} />
-      ) : (
-        <></>
       )}
       <div className="mangaDisplayContent">
-        <img className="coverImage" src={manga.cover} />
+        <img
+          className="coverImage"
+          src={manga?.cover}
+          alt={manga?.titleEnglish + "cover"}
+        />
         <div className="mangaText">
-          <h2 className="mangaTitleEnglish">{manga.titleEnglish}</h2>
-          <h3 className="mangaTitleNative">{manga.titleNative}</h3>
+          <h2 className="mangaTitleEnglish">{manga?.titleEnglish}</h2>
+          <h3 className="mangaTitleNative">{manga?.titleNative}</h3>
           <ul className="mangaGenres">
-            {manga.genres.map((i) => (
-              <li className="genreTag">{i}</li>
+            {manga?.genres.map((i) => (
+              <li key={i} className="genreTag">
+                {i}
+              </li>
             ))}
           </ul>
-          <p className="mangaDescription">{manga.description}</p>
+          {manga?.description && (
+            <div
+              className="mangaDescription"
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(
+                  manga.description.replace(/<\/?a\b[^>]*>/gi, "")
+                ),
+              }}
+            ></div>
+          )}
         </div>
 
         <ul className="staff">
-          {manga.staff.map((i) => (
-            <li>
-              <p className="staffName">{i.name}</p>
-              <p className="staffRole">{i.role}</p>
+          {manga?.staff.map((member, i) => (
+            <li key={i} className="test">
+              <p className="staffName">{member.name}</p>
+              <p className="staffRole">{member.role}</p>
             </li>
           ))}
         </ul>

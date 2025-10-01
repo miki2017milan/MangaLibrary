@@ -8,13 +8,13 @@
 
 /* Vars */
 :root {
-  --bg: #151F2E;
+  --bg: #151f2e;
   --bg-dark: #0b1622;
   --bg-light: #253041;
   --text: #d4d9e6;
   --text-muted: #b2b7c4;
   --text-highlight: #ffffff;
-  --primary: #3577FF;
+  --primary: #3577ff;
 
   --ff: "Overpass", serif;
   --p: 1rem/1.5rem var(--ff);
@@ -34,7 +34,7 @@ body {
   font: var(--p);
   color: var(--text);
   background-color: var(--bg-dark);
-  overflow: visible;
+  overflow: auto;
 }
 
 h1 {

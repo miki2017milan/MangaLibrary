@@ -53,8 +53,8 @@
 }
 
 .header-middle a:hover {
- color: #ffffff;
- transform: scale(1.05);
+  color: #ffffff;
+  transform: scale(1.05);
 }
 
 /* .searchbar {
@@ -126,8 +126,6 @@
   align-items: center;
   flex-direction: column;
   text-align: center;
-  min-height: 100vh;
-  min-height: 100dvh;
 }
 
 .content h1 {
@@ -167,10 +165,24 @@
   object-fit: cover;
 }
 
+.loading {
+  background: linear-gradient(-45deg, #253041 40%, #dddddd 50%, #253041 60%);
+  background-size: 300%;
+  background-position-x: 120%;
+  animation: shimmer 1s infinite linear;
+}
+
+@keyframes shimmer {
+  to {
+    background-position-x: -20%;
+  }
+}
+
 .coverImage {
   grid-column: 1;
   grid-row: 1;
   height: 650px;
+  min-width: 450px;
   width: auto;
   border-radius: var(--space-s);
 }
@@ -222,19 +234,19 @@
   font-weight: 600;
 }
 
-.genreTag:nth-child(5n+1) {
+.genreTag:nth-child(5n + 1) {
   background-color: #59ad35;
 }
-.genreTag:nth-child(5n+2) {
+.genreTag:nth-child(5n + 2) {
   background-color: #02a9ff;
 }
-.genreTag:nth-child(5n+3) {
+.genreTag:nth-child(5n + 3) {
   background-color: #9256f3;
 }
-.genreTag:nth-child(5n+4) {
+.genreTag:nth-child(5n + 4) {
   background-color: #f779a4;
 }
-.genreTag:nth-child(5n+5) {
+.genreTag:nth-child(5n + 5) {
   background-color: #e85d75;
 }
 
@@ -263,7 +275,7 @@
   font-weight: 600;
 }
 
-@media screen and (max-width: 1750px){
+@media screen and (max-width: 1750px) {
   .mangaDisplayContent {
     grid-template-columns: min-content 45vw;
   }
@@ -292,7 +304,7 @@
   }
 
   .header.show {
-    left: 0
+    left: 0;
   }
 
   .header.show ~ .overlay {
@@ -366,6 +378,7 @@
 
   .coverImage {
     width: 80vw;
+    min-height: 700px;
     height: auto;
     margin-bottom: var(--space-xl);
   }
@@ -381,9 +394,8 @@
   .staff li {
     font-size: var(--space-s);
   }
-  
+
   .staffName {
     font-size: var(--space-m);
   }
-
 }
