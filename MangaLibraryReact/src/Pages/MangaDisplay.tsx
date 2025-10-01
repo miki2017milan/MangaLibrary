@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 
 type staff = {
   name: string;
@@ -16,7 +16,7 @@ type mangaResponse = {
 };
 
 export default function MangaDisplay() {
-  let { mangaId } = useParams();
+  // let { mangaId } = useParams();
 
   const manga: mangaResponse = {
     titleEnglish: "To your Eternity",
