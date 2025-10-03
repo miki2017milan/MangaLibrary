@@ -34,7 +34,7 @@ function DropdownItem({
       {content}
       <img
         className={selected ? "" : "nodisplay"}
-        src="/logo.webp"
+        src="/check.png"
         alt="noimage"
       />
     </li>

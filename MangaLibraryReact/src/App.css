@@ -250,18 +250,69 @@
   font-weight: 600;
 }
 
-.filter {
+.searchContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-l);
+  width: min(1200px, 80vw);
+}
+
+.searchNavbar {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--space-xl);
+  gap: var(--space-l);
+  width: min-content;
+}
+
+.filterForms {
+  display: flex;
+  gap: 1.75rem;
+}
+
+.filterForm {
   display: flex;
   flex-direction: column;
   align-items: start;
   gap: var(--space-xs);
 }
 
-.searchContent {
+.searchFilters {
   display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-m);
+  list-style: none;
+}
+
+.searchFilters li {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  gap: var(--space-xl);
+  font-size: 0.8rem;
+  width: 120px;
+  color: var(--text-highlight);
+  background-color: var(--primary);
+  padding: 0.25rem 1rem;
+  font-weight: 700;
+  border-radius: 1rem;
+}
+
+.searchFilters .searchTag {
+  width: unset;
+  gap: var(--space-s);
+}
+
+.searchFilters .closeImage {
+  width: 10px;
+  cursor: pointer;
+}
+
+.searchFilters .tagImage {
+  width: 14px;
+}
+
+.searchResult {
   margin-top: var(--space-xl);
 }
 
@@ -290,7 +341,7 @@
 .dropdownButton {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0rem;
   align-items: center;
 
   width: 200px;
@@ -305,8 +356,9 @@
 }
 
 .dropdownButton img {
-  width: 15px;
+  width: var(--space-m);
   cursor: pointer;
+  padding: 0.25rem 0;
 }
 
 .dropdownButton input {

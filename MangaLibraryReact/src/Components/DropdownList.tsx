@@ -1,17 +1,25 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import DropdownItem from "./DropdownItem";
+import React from "react";
 
 type Props = {
   name: string;
   content: string[];
+  selectedItems: string[];
+  setSelectedItems: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
-export default function DropdownList({ name, content }: Props) {
+export default function DropdownList({
+  name,
+  content,
+  selectedItems,
+  setSelectedItems,
+}: Props) {
   const [open, setOpen] = useState(false);
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [searchWord, setSearchWord] = useState<string>("");
   const dropdownRef = useRef<HTMLDivElement>(null);
+  console.log("dropdown alarm");
 
   const removeSelectedItem = useCallback((item: string) => {
     setSelectedItems((prev) => prev.filter((i) => i !== item));
