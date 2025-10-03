@@ -16,7 +16,8 @@
   --text-highlight: #ffffff;
   --primary: #3577ff;
 
-  --ff: "Overpass", serif;
+  --ff: Overpass, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen, Ubuntu,
+    Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   --p: 1rem/1.5rem var(--ff);
   --h1: 600 3rem/2rem var(--ff);
   --h2: 600 2rem/1.5rem var(--ff);

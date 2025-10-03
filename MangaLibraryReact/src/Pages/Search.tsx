@@ -1,9 +1,13 @@
+import Genres from "../Components/Genres";
+import SearchBar from "../Components/SearchBar";
+
 export default function Search() {
-    return (
-        <>
-            <h1>Welcome to the Manga Search!</h1>
-            <br />
-            <p>Here you can search.</p>
-        </>
-    );
+  return (
+    <>
+      <div className="searchContent">
+        <SearchBar></SearchBar>
+        <Genres></Genres>
+      </div>
+    </>
+  );
 }
