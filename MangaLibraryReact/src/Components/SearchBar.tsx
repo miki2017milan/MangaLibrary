@@ -6,7 +6,7 @@ type Props = {
 };
 
 function SearchBar({ searchFilter, setSearchFilter }: Props) {
-  console.log("searchabr alarm");
+  // console.log("searchabr alarm");
   return (
     <div className="searchbar">
       <img src="search.webp" />

@@ -16,7 +16,7 @@ function DropdownItem({
   removeSelectedItem,
   appendSelectedItem,
 }: props) {
-  console.log("rerender alarm item" + content);
+  // console.log("rerender alarm item" + content);
 
   const className = clsx("dropdownItem", {
     selected,

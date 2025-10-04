@@ -19,7 +19,6 @@ export default function DropdownList({
   const [open, setOpen] = useState(false);
   const [searchWord, setSearchWord] = useState<string>("");
   const dropdownRef = useRef<HTMLDivElement>(null);
-  console.log("dropdown alarm");
 
   const removeSelectedItem = useCallback((item: string) => {
     setSelectedItems((prev) => prev.filter((i) => i !== item));

@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-
 import axios from "axios";
-import DOMPurify from "dompurify";
+
+import MangaGenres from "../Components/MangaGenres";
+import MangaDescription from "../Components/MangaDescription";
 
 type MangaResponse = {
   titleEnglish: string;
@@ -84,23 +85,8 @@ export default function MangaDisplay() {
         <div className="mangaText">
           <h2 className="mangaTitleEnglish">{manga?.titleEnglish}</h2>
           <h3 className="mangaTitleNative">{manga?.titleNative}</h3>
-          <ul className="mangaGenres">
-            {manga?.genres.map((i) => (
-              <li key={i} className="genreTag">
-                {i}
-              </li>
-            ))}
-          </ul>
-          {manga?.description && (
-            <div
-              className="mangaDescription"
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(
-                  manga.description.replace(/<\/?a\b[^>]*>/gi, "")
-                ),
-              }}
-            ></div>
-          )}
+          <MangaGenres genres={manga?.genres}></MangaGenres>
+          <MangaDescription description={manga?.description}></MangaDescription>
         </div>
 
         <ul className="staff">
