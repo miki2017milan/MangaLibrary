@@ -21,7 +21,7 @@ const fetchMangaData = async (
   searchParams: URLSearchParams
 ): Promise<MangaSearchResponse[]> => {
   const res = await axios.get<MangaSearchResponse[]>(
-    "http://localhost:5181/api/mangas/search",
+    "http://192.168.0.47:5181/api/mangas/search",
     {
       params: searchParams,
     }
@@ -41,10 +41,13 @@ function useDebounce<T>(value: T, delay = 500) {
 }
 
 export default function Search() {
-  const [searchFilter, setSearchFilter] = useState("");
-  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
-
   const [searchParams, setSearchParams] = useSearchParams();
+  const [searchFilter, setSearchFilter] = useState<string>(
+    searchParams.get("title") != null ? searchParams.get("title")! : ""
+  );
+  const [selectedGenres, setSelectedGenres] = useState<string[]>(
+    searchParams.getAll("genre")
+  );
   const delayedSearch = useDebounce(searchFilter, 500);
   const navigate = useNavigate();
 
@@ -82,15 +85,8 @@ export default function Search() {
     setSearchParams(createParamsFromFilters());
   }, [delayedSearch, selectedGenres, setSearchParams]);
 
-  useEffect(() => {
-    setSearchFilter(
-      searchParams.get("title") != null ? searchParams.get("title")! : ""
-    );
-    setSelectedGenres(searchParams.getAll("genre"));
-  }, [searchParams]);
-
   if (isError) {
-    if ((error as any)?.response.status != 404)
+    if ((error as any)?.response?.status != 404)
       return (
         <p style={{ color: "red" }}>
           Error {error.name}: {error.message}

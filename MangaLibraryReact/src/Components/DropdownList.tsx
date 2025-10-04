@@ -70,12 +70,21 @@ export default function DropdownList({
           )}
         </div>
         <input
+          type="search"
           onChange={updateSearchWord}
           onClick={() => setOpen(true)}
           onBlur={() => setSearchWord("")}
           value={searchWord}
         />
-        <img src="/downarrow.png" alt="" onClick={() => setOpen(!open)} />
+        {selectedItems.length > 0 ? (
+          <img
+            src="/closeFilter.png"
+            alt=""
+            onClick={() => setSelectedItems([])}
+          />
+        ) : (
+          <img src="/downarrow.png" alt="" onClick={() => setOpen(!open)} />
+        )}
       </div>
       <AnimatePresence>
         {open && (

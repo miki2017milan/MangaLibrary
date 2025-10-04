@@ -16,6 +16,14 @@ function SearchBar({ searchFilter, setSearchFilter }: Props) {
         onChange={(e) => setSearchFilter(e.target.value)}
         value={searchFilter}
       />
+
+      {searchFilter != "" && (
+        <img
+          className="close"
+          src="closeFilter.png"
+          onClick={() => setSearchFilter("")}
+        />
+      )}
     </div>
   );
 }

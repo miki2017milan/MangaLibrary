@@ -36,7 +36,7 @@ function errorPage() {
 
 const fetchManga = async (id: string): Promise<MangaResponse> => {
   const res = await axios.get<MangaResponse>(
-    `http://localhost:5181/api/mangas?id=${id}`
+    `http://192.168.0.47:5181/api/mangas?id=${id}`
   );
   return res.data;
 };
