@@ -5,7 +5,7 @@ using ServiceContracts.DTO;
 namespace MangaLibraryAPI.Controllers;
 
 [Route("/api/mangas")]
-public class MangaController : Controller
+public class MangaController : ControllerBase
 {
     private readonly IMangaService _mangaService;
 
@@ -17,15 +17,23 @@ public class MangaController : Controller
     [HttpGet("")]
     public async Task<ActionResult<MangaResponse>> GetMangaFromId([FromQuery] string? id)
     {
-        var manga = await _mangaService.GetMangaById(id);
+        MangaResponse? manga;
+        try
+        {
+            manga = await _mangaService.GetMangaById(id);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
 
         return manga is null ? NotFound() : manga;
     }
     
-    [HttpGet("search/{searchWord}")]
-    public async Task<ActionResult<List<MangaSearchResponse>>> SearchMangas(string? searchWord)
+    [HttpGet("search")]
+    public async Task<ActionResult<List<MangaSearchResponse>>> SearchMangas([FromQuery(Name = "genre")] List<string>? genres, [FromQuery(Name = "title")] string? searchWord)
     {
-        var mangas = await _mangaService.SearchMangasWithTitle(searchWord);
+        var mangas = await _mangaService.QueryMangas(genres, searchWord);
         return mangas is null ? NotFound() : mangas;
     }
 }
