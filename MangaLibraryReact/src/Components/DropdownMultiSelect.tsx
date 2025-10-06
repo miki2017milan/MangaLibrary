@@ -1,16 +1,14 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import DropdownItem from "./DropdownItem";
-import React from "react";
 
 type Props = {
   name: string;
   content: string[];
   selectedItems: string[];
-  setSelectedItems: React.Dispatch<React.SetStateAction<string[]>>;
+  setSelectedItems: (items: string[]) => void;
 };
 
-export default function DropdownList({
+export default function DropdownMultiSelect({
   name,
   content,
   selectedItems,
@@ -20,29 +18,23 @@ export default function DropdownList({
   const [searchWord, setSearchWord] = useState<string>("");
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const removeSelectedItem = useCallback((item: string) => {
-    setSelectedItems((prev) => prev.filter((i) => i !== item));
-  }, []);
+  const removeSelectedItem = (item: string) => {
+    setSelectedItems(selectedItems.filter((i) => i !== item));
+  };
 
-  const appendSelectedItem = useCallback((item: string) => {
-    setSelectedItems((prev) => [...prev, item]);
+  const addSelectedItem = (item: string) => {
+    setSelectedItems([...selectedItems, item]);
     setSearchWord("");
-  }, []);
+  };
 
-  const updateSearchWord = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchWord(e.target.value);
-    },
-    []
-  );
+  const isSearchWordInItem = (item: string) => {
+    return item.toLowerCase().includes(searchWord.toLowerCase());
+  };
 
   useEffect(() => {
     // close dropdown if click outside
     function close(e: MouseEvent) {
-      if (
-        dropdownRef.current != null &&
-        !dropdownRef.current.contains(e.target as Node)
-      ) {
+      if (dropdownRef.current != null && !dropdownRef.current.contains(e.target as Node)) {
         setOpen(false);
       }
     }
@@ -71,7 +63,7 @@ export default function DropdownList({
         </div>
         <input
           type="search"
-          onChange={updateSearchWord}
+          onChange={(e) => setSearchWord(e.target.value)}
           onClick={() => setOpen(true)}
           onBlur={() => setSearchWord("")}
           value={searchWord}
@@ -80,12 +72,16 @@ export default function DropdownList({
           <img
             src="/closeFilter.png"
             alt=""
-            onClick={() => setSelectedItems([])}
+            onClick={() => {
+              setSelectedItems([]);
+              setOpen(false);
+            }}
           />
         ) : (
           <img src="/downarrow.png" alt="" onClick={() => setOpen(!open)} />
         )}
       </div>
+
       <AnimatePresence>
         {open && (
           <motion.ul
@@ -96,15 +92,23 @@ export default function DropdownList({
             className="dropdownContent"
           >
             <h3>{name}</h3>
-            {content.map((item) => (
-              <DropdownItem
-                content={item}
-                selected={selectedItems.includes(item)}
-                searchWord={searchWord}
-                removeSelectedItem={removeSelectedItem}
-                appendSelectedItem={appendSelectedItem}
-              />
-            ))}
+            {content.map(
+              (item) =>
+                isSearchWordInItem(item) && (
+                  <li
+                    className="dropdownItem"
+                    onMouseDown={() => {
+                      // OnMouseDown instead of onClick becuase it fires befor the blur of the input field
+                      selectedItems.includes(item)
+                        ? removeSelectedItem(item)
+                        : addSelectedItem(item);
+                    }}
+                  >
+                    {item}
+                    {selectedItems.includes(item) && <img src="/check.png" alt="noimage" />}
+                  </li>
+                )
+            )}
           </motion.ul>
         )}
       </AnimatePresence>

@@ -3,11 +3,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-import DropdownList from "../Components/DropdownList";
-import SearchBar from "../Components/SearchBar";
-import FilterTags from "./FilterTags";
 import MangaGenres from "../Components/MangaGenres";
 import MangaDescription from "../Components/MangaDescription";
+import FilterContext, { sortByValues } from "../Components/FilterContext";
+import Filters from "../Components/Filters";
 
 type MangaSearchResponse = {
   id: string;
@@ -17,15 +16,10 @@ type MangaSearchResponse = {
   cover: string;
 };
 
-const fetchMangaData = async (
-  searchParams: URLSearchParams
-): Promise<MangaSearchResponse[]> => {
-  const res = await axios.get<MangaSearchResponse[]>(
-    "http://192.168.0.47:5181/api/mangas/search",
-    {
-      params: searchParams,
-    }
-  );
+const fetchMangaData = async (searchParams: URLSearchParams): Promise<MangaSearchResponse[]> => {
+  const res = await axios.get<MangaSearchResponse[]>("http://localhost:5181/api/mangas/search", {
+    params: searchParams,
+  });
   return res.data;
 };
 
@@ -45,8 +39,20 @@ export default function Search() {
   const [searchFilter, setSearchFilter] = useState<string>(
     searchParams.get("title") != null ? searchParams.get("title")! : ""
   );
-  const [selectedGenres, setSelectedGenres] = useState<string[]>(
-    searchParams.getAll("genre")
+  const [selectedGenres, setSelectedGenres] = useState<string[]>(searchParams.getAll("genre"));
+  const [showAdultContent, setAdultContent] = useState<boolean>(
+    searchParams.get("adultContent") == null
+      ? false
+      : searchParams.get("adultContent") == "true"
+      ? true
+      : false
+  );
+  const [sortBy, setSortBy] = useState<string>(
+    searchParams.get("sortBy") == null
+      ? ""
+      : searchParams.get("sortBy")! in sortByValues
+      ? searchParams.get("sortBy")!
+      : ""
   );
   const delayedSearch = useDebounce(searchFilter, 500);
   const navigate = useNavigate();
@@ -61,6 +67,10 @@ export default function Search() {
     selectedGenres.forEach((genre) => {
       params.append("genre", genre);
     });
+
+    if (showAdultContent) params.append("adultContent", "true");
+
+    if (sortBy != "") params.append("sortBy", sortBy);
 
     return params;
   }
@@ -83,83 +93,79 @@ export default function Search() {
 
   useEffect(() => {
     setSearchParams(createParamsFromFilters());
-  }, [delayedSearch, selectedGenres, setSearchParams]);
+  }, [delayedSearch, selectedGenres, showAdultContent, sortBy, setSearchParams]);
+
+  const navbar = () => {
+    return (
+      <FilterContext.Provider
+        value={{
+          searchFilter: searchFilter,
+          setSearchFilter: (searchFilter: string) => setSearchFilter(searchFilter),
+          selectedGenres: selectedGenres,
+          setSelectedGenres: (genres: string[]) => setSelectedGenres(genres),
+          showAdultContent: showAdultContent,
+          setAdultContent: (status: boolean) => setAdultContent(status),
+          sortBy: sortBy,
+          setSortBy: (sortBy: string) => setSortBy(sortBy),
+        }}
+      >
+        <Filters></Filters>
+      </FilterContext.Provider>
+    );
+  };
+
+  const errorPage = (text: string) => {
+    return (
+      <div className="searchContent">
+        {navbar()}
+        <h1>{text}</h1>
+      </div>
+    );
+  };
 
   if (isError) {
-    if ((error as any)?.response?.status != 404)
-      return (
-        <p style={{ color: "red" }}>
-          Error {error.name}: {error.message}
-        </p>
-      );
+    var text = error.message;
+    if ((error as any)?.response?.status == 404) text = "No manga found!";
+    return errorPage(text);
   }
 
-  var genres = ["Mystery", "Drama", "Comedy", "Horror", "Thriller", "Shounen"];
+  const loadingPage = () => {
+    return (
+      <div className="searchContent">
+        {navbar()}
+        <ul className="searchResult">
+          {Array.from({ length: 10 }).map((_, i) => (
+            <li key={i} className="mangaResult loading"></li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
+
+  if (isLoading) {
+    return loadingPage();
+  }
 
   return (
     <div className="searchContent">
-      <div className="searchNavbar">
-        <div className="filterForms">
-          <div className="filterForm">
-            <h3>Search</h3>
-            <SearchBar
-              searchFilter={searchFilter}
-              setSearchFilter={setSearchFilter}
-            ></SearchBar>
-          </div>
+      {navbar()}
 
-          <div className="filterForm">
-            <h3>Genres</h3>
-            <DropdownList
-              name="Genres"
-              content={genres}
-              selectedItems={selectedGenres}
-              setSelectedItems={setSelectedGenres}
-            ></DropdownList>
-          </div>
-        </div>
-
-        <FilterTags
-          searchFilter={searchFilter}
-          resetSearchFilter={() => setSearchFilter("")}
-          selectedGenres={selectedGenres}
-          removeGenre={(item: string) =>
-            setSelectedGenres((prev) => prev.filter((i) => i !== item))
-          }
-        ></FilterTags>
-      </div>
-
-      {(error as any)?.response.status == 404 ? (
-        <>
-          <h1>No manga found!</h1>
-        </>
-      ) : (
-        <ul className="searchResult">
-          {isLoading
-            ? Array.from({ length: 10 }).map((_, i) => (
-                <li key={i} className="mangaResult loading"></li>
-              ))
-            : mangas?.map((manga, i) => (
-                <li className="mangaResult" key={i}>
-                  <img
-                    src={manga.cover}
-                    alt=""
-                    className="loading"
-                    onClick={() => navigate("/manga/" + manga.id)}
-                  />
-                  <div className="text">
-                    <h2 onClick={() => navigate("/manga/" + manga.id)}>
-                      {manga.titleEnglish}
-                    </h2>
-                    <MangaGenres genres={manga.genres}></MangaGenres>
-                    <MangaDescription
-                      description={manga.description}
-                    ></MangaDescription>
-                  </div>
-                </li>
-              ))}
-        </ul>
-      )}
+      <ul className="searchResult">
+        {mangas?.map((manga, i) => (
+          <li className="mangaResult" key={i}>
+            <img
+              src={manga.cover}
+              className="loading"
+              onClick={() => navigate("/manga/" + manga.id)}
+            />
+            <div className="text">
+              <h2 onClick={() => navigate("/manga/" + manga.id)}>{manga.titleEnglish}</h2>
+              <MangaGenres genres={manga.genres}></MangaGenres>
+              <MangaDescription description={manga.description}></MangaDescription>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
