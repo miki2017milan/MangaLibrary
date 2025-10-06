@@ -6,7 +6,8 @@ public class MangaSearchResponse
 {
     public string? Id { get; set; }
     public string? TitleEnglish { get; set; }
-    public List<string?>? Genres { get; set; }
+    public string? Description { get; set; }
+    public List<string>? Genres { get; set; }
     public string? Cover { get; set; }
 }
 
@@ -18,6 +19,7 @@ public static class MangaSearchResponseExtensions
         {
             Id = manga.Id,
             TitleEnglish = manga.TitleEnglish,
+            Description = manga.Description,
             Genres = manga.Genres,
             Cover = manga.Cover,
         };

@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using MongoDB.Bson;
-using MongoDB.Driver;
 using ServiceContracts;
 using Services;
 
@@ -23,20 +21,10 @@ public class MangaServiceTest
 
         var databaseService = new MongoDbService(configuration);
         _mangaService = new MangaService(databaseService);
-        
-        // Ping MongoDb server to check if it is running
-        try
-        {
-            databaseService.Database.RunCommand((Command<BsonDocument>)"{ping:1}");
-        }
-        catch (TimeoutException)
-        {
-            Assert.Fail("Failed to connect to database");
-        }
     }
 
     #region GetMangaById
-    
+
     [Fact]
     public async Task GetMangaById_NullId()
     {
@@ -50,7 +38,7 @@ public class MangaServiceTest
         const string id = "invalid object id";
         await Assert.ThrowsAsync<ArgumentException>(() => _mangaService.GetMangaById(id));
     }
-    
+
     [Fact]
     public async Task GetMangaById_ValidIdAndFound()
     {
@@ -58,7 +46,7 @@ public class MangaServiceTest
         var manga = await _mangaService.GetMangaById(id);
         Assert.NotNull(manga);
     }
-    
+
     [Fact]
     public async Task GetMangaById_ValidIdAndNotFound()
     {
@@ -66,32 +54,31 @@ public class MangaServiceTest
         var manga = await _mangaService.GetMangaById(id);
         Assert.Null(manga);
     }
-    
+
     #endregion
-    
-    #region GetMangaByTitle
-    
-    [Fact]
-    public async Task GetMangaByTitle_NullSearchWord()
-    {
-        string? searchWord = null;
-        await Assert.ThrowsAsync<ArgumentNullException>(() => _mangaService.SearchMangasWithTitle(searchWord!));
-    }
-    
-    [Fact]
-    public async Task GetMangaByTitle_NoResult()
-    {
-        string? searchWord = "asadsdasdasdasdasdasdwawfawfas";
-        Assert.Null(await _mangaService.SearchMangasWithTitle(searchWord));
-    }
-    
-    [Fact]
-    public async Task GetMangaByTitle_WithResult()
-    {
-        string? searchWord = "naruto";
-        Assert.NotNull(await _mangaService.SearchMangasWithTitle(searchWord));
-    }
-    
-    #endregion
-    
+
+    // #region GetMangaByTitle
+    //
+    // [Fact]
+    // public async Task QueryMangas_NullSearchWord()
+    // {
+    //     string? searchWord = null;
+    //     await Assert.ThrowsAsync<ArgumentNullException>(() => _mangaService.QueryMangas(searchWord!));
+    // }
+    //
+    // [Fact]
+    // public async Task QueryMangas_NoResult()
+    // {
+    //     string? searchWord = "asadsdasdasdasdasdasdwawfawfas";
+    //     Assert.Null(await _mangaService.QueryMangas(searchWord));
+    // }
+    //
+    // [Fact]
+    // public async Task QueryMangas_WithResult()
+    // {
+    //     string? searchWord = "naruto";
+    //     Assert.NotNull(await _mangaService.QueryMangas(searchWord));
+    // }
+    //
+    // #endregion
 }

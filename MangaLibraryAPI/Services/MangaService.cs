@@ -8,40 +8,54 @@ namespace Services;
 
 public class MangaService(MongoDbService dbService) : IMangaService
 {
-    private readonly IMongoCollection<Manga> _mangas = dbService.Database.GetCollection<Manga>("mangas");
-    
-    public async Task<MangaResponse?> GetMangaById(string? id)
-    {
-        if (string.IsNullOrEmpty(id)) throw new ArgumentNullException(nameof(id));
-        if (!ObjectId.TryParse(id, out _)) throw new ArgumentException("Invalid id. Must be valid ObjectId.");
+    private readonly IMongoCollection<Manga> _mangas = dbService.Mangas;
 
+    public async Task<MangaResponse?> GetMangaById(string id)
+    {
         var manga = await _mangas.Find(manga => manga.Id == id).FirstOrDefaultAsync();
-        
+
         return manga?.ToMangaResponse();
     }
 
-    public async Task<List<MangaSearchResponse>?> SearchMangasWithTitle(string? searchWord)
+    private async Task<List<MangaSearchResponse>?> GetFilteredMangas(FilterDefinition<Manga> filter,
+        FilterDefinition<Manga> genreFilter)
     {
-        if (string.IsNullOrEmpty(searchWord)) throw new ArgumentNullException(nameof(searchWord));
+        var mangas = await _mangas.Find(Builders<Manga>.Filter.And(filter, genreFilter)).Limit(10).ToListAsync();
+
+        return mangas.Count != 0 ? mangas.Select(manga => manga.ToMangaSearchResponse()).ToList() : null;
+    }
+
+    public async Task<List<MangaSearchResponse>?> QueryMangas(List<string>? genres, string? searchWord)
+    {
+        var genreFilter = Builders<Manga>.Filter.Empty;
+        if (genres != null && genres.Count != 0)
+        {
+            genreFilter = Builders<Manga>.Filter.All(manga => manga.Genres, genres);
+        }
+
+        if (string.IsNullOrEmpty(searchWord))
+        {
+            var defaultMangas = await _mangas.Find(genreFilter).Limit(10).ToListAsync();
+            return defaultMangas.Count == 0
+                ? null
+                : defaultMangas.Select(manga => manga.ToMangaSearchResponse()).ToList();
+        }
 
         // search for exact matches
         var textFilterExact = Builders<Manga>.Filter.Text("\"" + searchWord + "\"");
-        var mangas = await _mangas.Find(textFilterExact).Limit(10).ToListAsync();
-        
-        if(mangas.Count != 0) return mangas.Select(manga => manga.ToMangaSearchResponse()).ToList();
-        
+        var mangas = await GetFilteredMangas(textFilterExact, genreFilter);
+        if (mangas != null) return mangas;
+
         // search for word matches
         var textFilter = Builders<Manga>.Filter.Text(searchWord);
-        mangas = await _mangas.Find(textFilter).Limit(10).ToListAsync();
+        mangas = await GetFilteredMangas(textFilter, genreFilter);
+        if (mangas != null) return mangas;
 
-        if (mangas.Count != 0) return mangas.Select(manga => manga.ToMangaSearchResponse()).ToList();
-        
         // search for if titles contains search word
-        var containsFilter =  Builders<Manga>.Filter.Regex("titleEnglish", new BsonRegularExpression($".*{searchWord}.*", "i"));
-        mangas = await _mangas.Find(containsFilter).Limit(10).ToListAsync();
-        
-        if (mangas.Count == 0) return null;
-        
-        return mangas.Select(manga => manga.ToMangaSearchResponse()).ToList();
+        var containsFilter =
+            Builders<Manga>.Filter.Regex("titleEnglish", new BsonRegularExpression($".*{searchWord}.*", "i"));
+        mangas = await GetFilteredMangas(containsFilter, genreFilter);
+
+        return mangas ?? null;
     }
 }

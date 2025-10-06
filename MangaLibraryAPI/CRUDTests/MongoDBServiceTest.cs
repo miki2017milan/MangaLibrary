@@ -1,5 +1,5 @@
+using Entities;
 using Microsoft.Extensions.Configuration;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using Services;
 
@@ -19,11 +19,11 @@ public class MongoDbServiceTest
             .AddInMemoryCollection(myConfiguration)
             .Build();
 
-        var database = new MongoDbService(configuration).Database;
+        var mangas = new MongoDbService(configuration).Mangas;
 
         try
         {
-            await database.RunCommandAsync((Command<BsonDocument>)"{ping:1}");
+            await mangas.FindAsync(Builders<Manga>.Filter.Empty);
         }
         catch (TimeoutException)
         {

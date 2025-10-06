@@ -10,7 +10,16 @@ builder.Services.Add(new ServiceDescriptor(
     ServiceLifetime.Transient
 ));
 
+const string myAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(myAllowSpecificOrigins,
+        a => { a.WithOrigins("http://localhost:5173", "http://192.168.0.47:5173"); });
+});
+
 var app = builder.Build();
 
+app.UseCors(myAllowSpecificOrigins);
 app.MapControllers();
+
 app.Run();

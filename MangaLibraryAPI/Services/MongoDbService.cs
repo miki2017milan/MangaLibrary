@@ -1,3 +1,4 @@
+using Entities;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
@@ -10,8 +11,10 @@ public class MongoDbService
         var connectionString = configuration.GetConnectionString("DbConnection");
         var mongoUrl = MongoUrl.Create(connectionString);
         var client = new MongoClient(mongoUrl);
-        Database = client.GetDatabase(mongoUrl.DatabaseName);
+        var database = client.GetDatabase(mongoUrl.DatabaseName);
+
+        Mangas = database.GetCollection<Manga>("mangas");
     }
 
-    public IMongoDatabase Database { get; }
+    public IMongoCollection<Manga> Mangas { get; }
 }
