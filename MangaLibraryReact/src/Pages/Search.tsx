@@ -81,7 +81,7 @@ export default function Search() {
     isLoading,
     isError,
   } = useQuery<MangaSearchResponse[]>({
-    queryKey: ["mangas", delayedSearch.trim(), selectedGenres.sort()],
+    queryKey: ["mangas", delayedSearch.trim(), selectedGenres.sort(), showAdultContent, sortBy],
     queryFn: () => {
       return fetchMangaData(createParamsFromFilters());
     },
