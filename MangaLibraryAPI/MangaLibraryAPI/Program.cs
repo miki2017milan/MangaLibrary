@@ -1,14 +1,19 @@
+using Entities;
+using Microsoft.EntityFrameworkCore;
 using ServiceContracts;
 using Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
-builder.Services.AddSingleton<MongoDbService>();
 builder.Services.Add(new ServiceDescriptor(
     typeof(IMangaService),
     typeof(MangaService),
     ServiceLifetime.Transient
 ));
+builder.Services.AddDbContext<MangaLibraryDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DbConnection"));
+});
 
 const string myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>

@@ -1,24 +1,15 @@
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace Entities;
 
 public class Manga
 {
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string? Id { get; set; }
-
-    [BsonElement("titleEnglish")] public string? TitleEnglish { get; set; }
-
-    [BsonElement("titleNative")] public string? TitleNative { get; set; }
-
-    [BsonElement("genres")] public List<string>? Genres { get; set; }
-
-    [BsonElement("cover")] public string? Cover { get; set; }
-
-    [BsonElement("bannerImage")] public string? BannerImage { get; set; }
-
-    [BsonElement("description")] public string? Description { get; set; }
-
-    [BsonElement("staff")] public List<Dictionary<string, string>>? Staff { get; set; }
+    [Key] public Guid Id { get; set; }
+    [StringLength(256)] public required string Title { get; set; }
+    [StringLength(256)] public string? TitleNative { get; set; }
+    public List<string>? Genres { get; set; }
+    [StringLength(256)] public string? Cover { get; set; }
+    [StringLength(256)] public string? BannerImage { get; set; }
+    [StringLength(1024)] public string? Description { get; set; }
+    public List<Guid>? Staff { get; set; }
 }
