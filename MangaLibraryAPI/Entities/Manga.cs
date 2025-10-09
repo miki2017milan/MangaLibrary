@@ -1,15 +1,51 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities;
 
 public class Manga
 {
-    [Key] public Guid Id { get; set; }
-    [StringLength(256)] public required string Title { get; set; }
-    [StringLength(256)] public string? TitleNative { get; set; }
-    public List<string>? Genres { get; set; }
-    [StringLength(256)] public string? Cover { get; set; }
-    [StringLength(256)] public string? BannerImage { get; set; }
-    [StringLength(1024)] public string? Description { get; set; }
-    public List<Guid>? Staff { get; set; }
+    [Key, Column(name: "id")] public Guid Id { get; set; }
+
+    [StringLength(256), Column(name: "title")]
+    public required string Title { get; set; }
+
+    [StringLength(256), Column(name: "titleNative")]
+    public string? TitleNative { get; set; }
+
+    [Column(name: "genres")] public List<string>? Genres { get; set; }
+
+    [Column(name: "tags")] public List<string>? Tags { get; set; }
+
+    [StringLength(8), Column(name: "format")]
+    public string? Format { get; set; }
+
+    [Column(name: "releaseYear")] public int? ReleaseYear { get; set; }
+
+    [Column(name: "releaseMonth")] public int? ReleaseMonth { get; set; }
+
+    [Column(name: "releaseDay")] public int? ReleaseDay { get; set; }
+
+    [Column(name: "adultContent")] public bool? AdultContent { get; set; }
+
+    [StringLength(2), Column(name: "countryOfOrigin")]
+    public string? CountryOfOrigin { get; set; }
+
+    [StringLength(256), Column(name: "cover")]
+    public string? Cover { get; set; }
+
+    [StringLength(256), Column(name: "banner")]
+    public string? BannerImage { get; set; }
+
+    [StringLength(1024), Column(name: "description")]
+    public string? Description { get; set; }
+
+    [Column(name: "staff", TypeName = "jsonb")]
+    public List<MangaStaff>? Staff { get; set; }
+}
+
+public struct MangaStaff
+{
+    [StringLength(256), Required] public string Name { get; set; }
+    [StringLength(256), Required] public string Role { get; set; }
 }

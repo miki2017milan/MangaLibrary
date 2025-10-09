@@ -4,9 +4,9 @@ namespace ServiceContracts;
 
 public interface IMangaService
 {
-    Task<MangaResponse?> GetMangaById(string id);
-    Task<MangaResponse?> CreateManga(MangaCreateRequest mangaCreateRequest);
-    Task<MangaResponse?> UpdateManga(MangaCreateRequest mangaCreateRequest);
-    Task DeleteManga(string id);
+    Task<MangaResponse?> GetMangaById(Guid id);
+    Task<MangaResponse> CreateManga(MangaRequest mangaRequest);
+    Task<MangaResponse?> UpdateManga(Guid? id, MangaRequest mangaRequest);
+    Task DeleteManga(Guid id);
     Task<List<MangaResponse>?> QueryMangas(List<string>? genres, string? searchWord);
 }

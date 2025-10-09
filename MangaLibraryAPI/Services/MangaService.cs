@@ -1,28 +1,61 @@
+using Entities;
 using ServiceContracts;
 using ServiceContracts.DTO;
 
 namespace Services;
 
-public class MangaService() : IMangaService
+public class MangaService(MangaLibraryDbContext dbContext) : IMangaService
 {
-    public Task<MangaResponse?> GetMangaById(string id)
+    public async Task<MangaResponse?> GetMangaById(Guid id)
     {
-        throw new NotImplementedException();
+        var manga = await dbContext.Mangas.FindAsync(id);
+
+        return manga?.ToMangaResponse();
     }
 
-    public Task<MangaResponse?> CreateManga(MangaCreateRequest mangaCreateRequest)
+    public async Task<MangaResponse> CreateManga(MangaRequest mangaRequest)
     {
-        throw new NotImplementedException();
+        var manga = await dbContext.Mangas.AddAsync(mangaRequest.ToManga());
+
+        await dbContext.SaveChangesAsync();
+        return manga.Entity.ToMangaResponse();
     }
 
-    public Task<MangaResponse?> UpdateManga(MangaCreateRequest mangaCreateRequest)
+    public async Task<MangaResponse?> UpdateManga(Guid? id, MangaRequest mangaRequest)
     {
-        throw new NotImplementedException();
+        var manga = await dbContext.Mangas.FindAsync(id);
+
+        if (manga == null) return null;
+
+        manga.Title = mangaRequest.Title!;
+        manga.TitleNative = mangaRequest.TitleNative;
+        manga.Genres = mangaRequest.Genres;
+        manga.Tags = mangaRequest.Tags;
+        manga.Format = mangaRequest.Format;
+        manga.ReleaseYear = mangaRequest.ReleaseYear;
+        manga.ReleaseMonth = mangaRequest.ReleaseMonth;
+        manga.ReleaseDay = mangaRequest.ReleaseDay;
+        manga.AdultContent = mangaRequest.AdultContent;
+        manga.CountryOfOrigin = mangaRequest.CountryOfOrigin;
+        manga.Cover = mangaRequest.Cover;
+        manga.BannerImage = mangaRequest.BannerImage;
+        manga.Description = mangaRequest.Description;
+        manga.Staff = mangaRequest.Staff;
+
+        await dbContext.SaveChangesAsync();
+
+        return manga.ToMangaResponse();
     }
 
-    public Task DeleteManga(string id)
+    public async Task DeleteManga(Guid id)
     {
-        throw new NotImplementedException();
+        var manga = await dbContext.Mangas.FindAsync(id);
+
+        if (manga != null)
+        {
+            dbContext.Mangas.Remove(manga);
+            await dbContext.SaveChangesAsync();
+        }
     }
 
     public Task<List<MangaResponse>?> QueryMangas(List<string>? genres, string? searchWord)

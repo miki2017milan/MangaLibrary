@@ -4,32 +4,37 @@ using ServiceContracts.DTO;
 
 namespace MangaLibraryAPI.Controllers;
 
-[Route("/api/[controller]")]
+[Route("/api/[controller]", Name = "mangas")]
 [ApiController]
 public class MangasController(IMangaService mangaService) : ControllerBase
 {
     [HttpGet("{id}")]
     public async Task<ActionResult<MangaResponse>> GetMangaFromId([FromRoute] Guid id)
     {
-        return NoContent();
+        var manga = await mangaService.GetMangaById(id);
+        return manga != null ? manga : NotFound();
     }
 
     [HttpPost]
-    public async Task<ActionResult<MangaResponse>> CreateManga([FromBody] MangaCreateRequest mangaCreateRequest)
+    public async Task<ActionResult<MangaResponse>> CreateManga([FromBody] MangaRequest? mangaRequest)
     {
-        return NoContent();
+        var manga = await mangaService.CreateManga(mangaRequest!);
+        return CreatedAtAction(nameof(GetMangaFromId), new { manga.Id }, manga);
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult<MangaResponse>> UpdateManga([FromRoute] Guid id,
-        [FromBody] MangaUpdateRequest mangaUpdateRequest)
+    [HttpPut("{id?}")]
+    public async Task<ActionResult<MangaResponse>> UpdateManga([FromRoute] Guid? id,
+        [FromBody] MangaRequest? mangaRequest)
     {
-        return NoContent();
+        var manga = await mangaService.UpdateManga(id, mangaRequest!);
+        if (manga == null) return await CreateManga(mangaRequest);
+        return manga;
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteManga([FromRoute] Guid id)
     {
+        await mangaService.DeleteManga(id);
         return NoContent();
     }
 
