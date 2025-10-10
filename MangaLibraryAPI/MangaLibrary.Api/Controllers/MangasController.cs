@@ -22,6 +22,13 @@ public class MangasController(IMangaService mangaService) : ControllerBase
         return CreatedAtAction(nameof(GetMangaFromId), new { manga.Id }, manga);
     }
 
+    [HttpPost("list")]
+    public async Task<ActionResult> CreateMangaFromList([FromBody] List<MangaRequest>? mangaRequest)
+    {
+        await mangaService.CreateMangaFromList(mangaRequest!);
+        return Ok();
+    }
+
     [HttpPut("{id?}")]
     public async Task<ActionResult<MangaResponse>> UpdateManga([FromRoute] Guid? id,
         [FromBody] MangaRequest? mangaRequest)

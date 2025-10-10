@@ -1,12 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaLibraryAPI", "MangaLibraryAPI\MangaLibraryAPI.csproj", "{B67ED42D-10DF-449F-A055-F2AF185A410C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{0C59B681-68C1-4D08-B5CF-B0F993CC0FC8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceContracts", "ServiceContracts\ServiceContracts.csproj", "{8E77D030-1D85-49A1-A0AA-E6B5316D1A59}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{73586823-8E45-4BA6-A331-DC1CC6CD07FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaLibrary.Api", "MangaLibrary.Api\MangaLibrary.Api.csproj", "{B67ED42D-10DF-449F-A055-F2AF185A410C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,17 +12,5 @@ Global
 		{B67ED42D-10DF-449F-A055-F2AF185A410C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B67ED42D-10DF-449F-A055-F2AF185A410C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B67ED42D-10DF-449F-A055-F2AF185A410C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0C59B681-68C1-4D08-B5CF-B0F993CC0FC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0C59B681-68C1-4D08-B5CF-B0F993CC0FC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0C59B681-68C1-4D08-B5CF-B0F993CC0FC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0C59B681-68C1-4D08-B5CF-B0F993CC0FC8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8E77D030-1D85-49A1-A0AA-E6B5316D1A59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8E77D030-1D85-49A1-A0AA-E6B5316D1A59}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8E77D030-1D85-49A1-A0AA-E6B5316D1A59}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8E77D030-1D85-49A1-A0AA-E6B5316D1A59}.Release|Any CPU.Build.0 = Release|Any CPU
-		{73586823-8E45-4BA6-A331-DC1CC6CD07FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73586823-8E45-4BA6-A331-DC1CC6CD07FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73586823-8E45-4BA6-A331-DC1CC6CD07FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73586823-8E45-4BA6-A331-DC1CC6CD07FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

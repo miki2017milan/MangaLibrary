@@ -1,8 +1,11 @@
+using Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Entities;
+namespace MangaLibraryAPI.Entities;
 
-public class MangaLibraryDbContext(DbContextOptions<MangaLibraryDbContext> options) : DbContext(options)
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>(options)
 {
     public DbSet<Manga> Mangas { get; set; }
 

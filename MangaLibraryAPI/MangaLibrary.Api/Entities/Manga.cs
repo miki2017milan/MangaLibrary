@@ -37,7 +37,7 @@ public class Manga
     [StringLength(256), Column(name: "banner")]
     public string? BannerImage { get; set; }
 
-    [StringLength(1024), Column(name: "description")]
+    [StringLength(65536), Column(name: "description")]
     public string? Description { get; set; }
 
     [Column(name: "staff", TypeName = "jsonb")]
@@ -47,5 +47,5 @@ public class Manga
 public struct MangaStaff
 {
     [StringLength(256), Required] public string Name { get; set; }
-    [StringLength(256), Required] public string Role { get; set; }
+    [StringLength(256)] public string Role { get; set; }
 }

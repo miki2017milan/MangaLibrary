@@ -1,10 +1,11 @@
 using Entities;
+using MangaLibraryAPI.Entities;
 using ServiceContracts;
 using ServiceContracts.DTO;
 
 namespace Services;
 
-public class MangaService(MangaLibraryDbContext dbContext) : IMangaService
+public class MangaService(ApplicationDbContext dbContext) : IMangaService
 {
     public async Task<MangaResponse?> GetMangaById(Guid id)
     {
@@ -19,6 +20,16 @@ public class MangaService(MangaLibraryDbContext dbContext) : IMangaService
 
         await dbContext.SaveChangesAsync();
         return manga.Entity.ToMangaResponse();
+    }
+
+    public async Task CreateMangaFromList(List<MangaRequest> mangaRequest)
+    {
+        foreach (var manga in mangaRequest)
+        {
+            await dbContext.Mangas.AddAsync(manga.ToManga());
+        }
+
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task<MangaResponse?> UpdateManga(Guid? id, MangaRequest mangaRequest)
