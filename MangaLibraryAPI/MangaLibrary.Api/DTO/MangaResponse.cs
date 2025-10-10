@@ -1,6 +1,6 @@
 using Entities;
 
-namespace ServiceContracts.DTO;
+namespace MangaLibraryAPI.DTO;
 
 public class MangaResponse
 {

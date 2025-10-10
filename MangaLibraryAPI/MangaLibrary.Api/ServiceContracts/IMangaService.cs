@@ -1,6 +1,6 @@
-﻿using ServiceContracts.DTO;
+﻿using MangaLibraryAPI.DTO;
 
-namespace ServiceContracts;
+namespace MangaLibraryAPI.ServiceContracts;
 
 public interface IMangaService
 {

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Entities;
 using Microsoft.Extensions.Options;
 
-namespace ServiceContracts.DTO;
+namespace MangaLibraryAPI.DTO;
 
 public class MangaRequest
 {

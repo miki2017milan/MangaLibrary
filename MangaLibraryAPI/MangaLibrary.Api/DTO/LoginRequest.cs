@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ServiceContracts.DTO;
+namespace MangaLibraryAPI.DTO;
 
 public class LoginRequest
 {

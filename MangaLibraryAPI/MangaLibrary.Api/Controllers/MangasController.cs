@@ -1,6 +1,7 @@
+using MangaLibraryAPI.DTO;
+using MangaLibraryAPI.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
 using ServiceContracts;
-using ServiceContracts.DTO;
 
 namespace MangaLibraryAPI.Controllers;
 

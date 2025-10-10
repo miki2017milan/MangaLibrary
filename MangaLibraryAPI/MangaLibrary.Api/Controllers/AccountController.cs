@@ -1,7 +1,7 @@
 using Entities;
+using MangaLibraryAPI.DTO;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using ServiceContracts.DTO;
 
 namespace MangaLibraryAPI.Controllers;
 

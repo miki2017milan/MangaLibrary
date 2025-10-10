@@ -1,9 +1,8 @@
-using Entities;
+using MangaLibraryAPI.DTO;
 using MangaLibraryAPI.Entities;
-using ServiceContracts;
-using ServiceContracts.DTO;
+using MangaLibraryAPI.ServiceContracts;
 
-namespace Services;
+namespace MangaLibraryAPI.Services;
 
 public class MangaService(ApplicationDbContext dbContext) : IMangaService
 {

@@ -1,11 +1,11 @@
 using Entities;
 using MangaLibraryAPI.Entities;
+using MangaLibraryAPI.ServiceContracts;
+using MangaLibraryAPI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using ServiceContracts;
-using Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
