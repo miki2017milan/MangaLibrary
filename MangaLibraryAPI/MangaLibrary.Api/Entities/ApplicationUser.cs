@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
-namespace Entities;
+namespace MangaLibraryAPI.Entities;
 
 public class ApplicationUser : IdentityUser<Guid>
 {
