@@ -9,6 +9,8 @@ type FilterContextType = {
   setAdultContent: (status: boolean) => void;
   sortBy: string;
   setSortBy: (sortBy: string) => void;
+  listView: boolean;
+  setListView: (listView: boolean) => void;
 };
 
 const FilterContext = createContext<FilterContextType>({
@@ -20,6 +22,8 @@ const FilterContext = createContext<FilterContextType>({
   setAdultContent: () => {},
   sortBy: "",
   setSortBy: () => {},
+  listView: true,
+  setListView: () => {},
 });
 
 export var sortByValues = ["alphaASC", "alphaDEC", "releaseASC", "releaseDEC"];

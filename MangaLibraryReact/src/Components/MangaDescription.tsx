@@ -9,9 +9,7 @@ export default function MangaGenres({ description }: Props) {
     description != null && (
       <p
         dangerouslySetInnerHTML={{
-          __html: DOMPurify.sanitize(
-            description.replace(/<\/?a\b[^>]*>/gi, "")
-          ),
+          __html: DOMPurify.sanitize(description),
         }}
       ></p>
     )

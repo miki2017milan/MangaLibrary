@@ -6,6 +6,7 @@ import { useContext } from "react";
 import FilterContext, { sortByLabels, sortByValues } from "./FilterContext";
 import DropdownToggle from "./DropdownToggle";
 import DropdownSingleSelect from "./DropdownSingleSelect";
+import ToggleView from "./ToggleView";
 
 export default function Filters() {
   const filters = useContext(FilterContext);
@@ -13,6 +14,7 @@ export default function Filters() {
   return (
     <div className="searchNavbar">
       <div className="filterForms">
+        <ToggleView listView={filters.listView} setListView={filters.setListView} />
         <FilterOption name="Search">
           <SearchBar />
         </FilterOption>

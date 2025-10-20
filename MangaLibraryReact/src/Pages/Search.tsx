@@ -17,7 +17,7 @@ type MangaSearchResponse = {
 };
 
 const fetchMangaData = async (searchParams: URLSearchParams): Promise<MangaSearchResponse[]> => {
-  const res = await axios.get<MangaSearchResponse[]>("http://localhost:5181/api/mangas/search", {
+  const res = await axios.get<MangaSearchResponse[]>("https://localhost:6060/api/mangas/query", {
     params: searchParams,
   });
   return res.data;
@@ -54,6 +54,7 @@ export default function Search() {
       ? searchParams.get("sortBy")!
       : ""
   );
+  const [listView, setListView] = useState<boolean>(true);
   const delayedSearch = useDebounce(searchFilter, 500);
   const navigate = useNavigate();
 
@@ -107,6 +108,8 @@ export default function Search() {
           setAdultContent: (status: boolean) => setAdultContent(status),
           sortBy: sortBy,
           setSortBy: (sortBy: string) => setSortBy(sortBy),
+          listView: listView,
+          setListView: (listView: boolean) => setListView(listView),
         }}
       >
         <Filters></Filters>
@@ -150,7 +153,7 @@ export default function Search() {
     <div className="searchContent">
       {navbar()}
 
-      <ul className="searchResult">
+      <ul className={listView ? "searchResult list" : "searchResult grid"}>
         {mangas?.map((manga, i) => (
           <li className="mangaResult" key={i}>
             <img

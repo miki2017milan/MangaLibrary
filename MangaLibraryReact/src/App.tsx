@@ -8,6 +8,8 @@ import MangaDisplay from "./Pages/MangaDisplay";
 import NotFound from "./Pages/NotFound";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./Pages/Login";
+import Register from "./Pages/Register";
 
 export default function App() {
   return (
@@ -18,6 +20,8 @@ export default function App() {
           <Route path="search" element={<Search />} />
           <Route path="manga/:mangaId" element={<MangaDisplay />} />
           <Route path="library" element={<Library />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
