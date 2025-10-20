@@ -1,17 +1,33 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function Register() {
   const password = useRef<HTMLInputElement>(null);
   const passwordConfirm = useRef<HTMLInputElement>(null);
+  const email = useRef<HTMLInputElement>(null);
   const [matches, setMatches] = useState(true);
 
   const registerUser = () => {
-    console.log(password.current?.value, passwordConfirm.current?.value);
     if (password.current?.value != passwordConfirm.current?.value) {
       setMatches(false);
       return;
     }
+
+    const url = "http://localhost:6060/api/account/register";
+    const data = {
+      email: email.current?.value,
+      password: password.current?.value,
+    };
+
+    axios.post(url, data)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
   };
 
   return (
@@ -19,7 +35,7 @@ export default function Register() {
       <h2>Register</h2>
       <div className="formFields">
         <p>Email</p>
-        <input type="email" />
+        <input ref={email} type="email" />
         <p>Password</p>
         <input ref={password} type="password" />
         <p>Confirm Password</p>
