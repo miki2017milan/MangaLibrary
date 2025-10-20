@@ -39,6 +39,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.Name = "AccessCookie";
     options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 
 // Configure Cors

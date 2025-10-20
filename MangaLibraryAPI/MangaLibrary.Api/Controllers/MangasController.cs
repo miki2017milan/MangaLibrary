@@ -1,7 +1,6 @@
 using MangaLibraryAPI.DTO;
 using MangaLibraryAPI.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
-using ServiceContracts;
 
 namespace MangaLibraryAPI.Controllers;
 
@@ -50,6 +49,6 @@ public class MangasController(IMangaService mangaService) : ControllerBase
     public async Task<ActionResult<IEnumerable<MangaResponse>>> QueryMangas(
         [FromQuery(Name = "genre")] List<string>? genres, [FromQuery(Name = "title")] string? searchWord)
     {
-        return NoContent();
+        return (await mangaService.QueryMangas(genres, searchWord))!;
     }
 }

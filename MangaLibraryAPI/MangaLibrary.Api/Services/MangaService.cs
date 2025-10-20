@@ -1,6 +1,7 @@
 using MangaLibraryAPI.DTO;
 using MangaLibraryAPI.Entities;
 using MangaLibraryAPI.ServiceContracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace MangaLibraryAPI.Services;
 
@@ -68,8 +69,9 @@ public class MangaService(ApplicationDbContext dbContext) : IMangaService
         }
     }
 
-    public Task<List<MangaResponse>?> QueryMangas(List<string>? genres, string? searchWord)
+    public async Task<List<MangaResponse>?> QueryMangas(List<string>? genres, string? searchWord)
     {
-        throw new NotImplementedException();
+        var mangas = await dbContext.Mangas.Take(10).ToListAsync();
+        return mangas.Select(m => m.ToMangaResponse()).ToList();
     }
 }
