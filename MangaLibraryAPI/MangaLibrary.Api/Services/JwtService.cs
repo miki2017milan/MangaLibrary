@@ -1,4 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using MangaLibraryAPI.DTO;
@@ -24,7 +25,7 @@ public class JwtService(IConfiguration configuration) : IJwtService
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()), // Subject identifier
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // Jwt Token unique id
-            new(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()), // Created at timestamp
+            new(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString(CultureInfo.CurrentCulture)), // Created at timestamp
         };
 
         if (!string.IsNullOrEmpty(configuration["Jwt:Key"]))

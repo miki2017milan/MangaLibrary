@@ -28,7 +28,7 @@ public class AccountController(
 
         var jwtToken = jwtService.CreateJwtToken(user);
 
-        return NoContent();
+        return Ok(jwtToken);
     }
 
     [HttpPost("login")]
@@ -38,9 +38,14 @@ public class AccountController(
             isPersistent: false,
             lockoutOnFailure: false);
 
-        return !result.Succeeded
-            ? Problem("Login failed: Email or password are incorrect", statusCode: 401)
-            : NoContent();
+        if (!result.Succeeded) return Problem("Login failed: Email or password are incorrect", statusCode: 401);
+
+        var user = await userManager.FindByEmailAsync(userDetails.Email!);
+        if (user == null) return NotFound("User not found");
+
+        var jwtToken = jwtService.CreateJwtToken(user);
+
+        return Ok(jwtToken);
     }
 
     [HttpGet]
