@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "./AuthProvider";
 
 interface HeaderProps {
   show: boolean;
@@ -6,6 +7,8 @@ interface HeaderProps {
 }
 
 export default function Header({ show, closeHeader }: HeaderProps) {
+  const auth = useAuth();
+
   return (
     <nav className={show ? "header show" : "header"}>
       <ul className="header-content">
@@ -22,12 +25,18 @@ export default function Header({ show, closeHeader }: HeaderProps) {
           <Link to="/library">My Library</Link>
         </li>
         <li className="header-right">
-          <div className="login">
-            <Link to="/login">Login</Link>
-          </div>
-          <div className="signup">
-            <Link to="/register">Sign up</Link>
-          </div>
+          {auth.displayName == "" ? (
+            <>
+              <div className="login">
+                <Link to="/login">Login</Link>
+              </div>
+              <div className="signup">
+                <Link to="/register">Sign up</Link>
+              </div>
+            </>
+          ) : (
+            <Link to="/profile">{auth.displayName}</Link>
+          )}
         </li>
       </ul>
     </nav>

@@ -14,7 +14,7 @@ public class JwtService(IConfiguration configuration) : IJwtService
 {
     public AuthenticationResponse CreateJwtToken(ApplicationUser user)
     {
-        if (!string.IsNullOrEmpty(configuration["Jwt:ExpirationMinutes"]))
+        if (string.IsNullOrEmpty(configuration["Jwt:ExpirationMinutes"]))
         {
             throw new Exception("ExpirationMinutes must be set");
         }
@@ -25,10 +25,11 @@ public class JwtService(IConfiguration configuration) : IJwtService
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()), // Subject identifier
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // Jwt Token unique id
-            new(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString(CultureInfo.CurrentCulture)), // Created at timestamp
+            new(JwtRegisteredClaimNames.Iat,
+                DateTime.UtcNow.ToString(CultureInfo.CurrentCulture)), // Created at timestamp
         };
 
-        if (!string.IsNullOrEmpty(configuration["Jwt:Key"]))
+        if (string.IsNullOrEmpty(configuration["Jwt:Key"]))
         {
             throw new Exception("Key must be set");
         }

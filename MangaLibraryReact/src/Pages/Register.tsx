@@ -1,33 +1,29 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import { useAuth } from "../Components/AuthProvider";
 
 export default function Register() {
   const password = useRef<HTMLInputElement>(null);
   const passwordConfirm = useRef<HTMLInputElement>(null);
   const email = useRef<HTMLInputElement>(null);
+  const username = useRef<HTMLInputElement>(null);
   const [matches, setMatches] = useState(true);
+  const auth = useAuth();
 
   const registerUser = () => {
-    if (password.current?.value != passwordConfirm.current?.value) {
-      setMatches(false);
-      return;
+    if (
+      email.current?.value &&
+      password.current?.value &&
+      passwordConfirm.current?.value &&
+      username.current?.value
+    ) {
+      auth.register(
+        email.current.value,
+        username.current.value,
+        password.current.value,
+        passwordConfirm.current.value
+      );
     }
-
-    const url = "http://localhost:6060/api/account/register";
-    const data = {
-      email: email.current?.value,
-      password: password.current?.value,
-    };
-
-    axios.post(url, data)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
   };
 
   return (
@@ -36,6 +32,8 @@ export default function Register() {
       <div className="formFields">
         <p>Email</p>
         <input ref={email} type="email" />
+        <p>Username</p>
+        <input ref={username} type="name" />
         <p>Password</p>
         <input ref={password} type="password" />
         <p>Confirm Password</p>

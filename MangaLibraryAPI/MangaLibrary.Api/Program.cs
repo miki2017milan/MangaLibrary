@@ -49,10 +49,15 @@ builder.Services.AddCors(options =>
     options.AddPolicy(myAllowSpecificOrigins,
         a =>
         {
-            if (allowedOrigins != null && !string.IsNullOrEmpty(allowedOrigins))
-            {
-                a.WithOrigins(allowedOrigins);
-            }
+            a.WithOrigins("http://localhost:5173/register")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+            ;
+            // if (allowedOrigins != null && !string.IsNullOrEmpty(allowedOrigins))
+            // {
+            //     a.WithOrigins("http://localhost:5173");
+            // }
         });
 });
 

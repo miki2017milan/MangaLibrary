@@ -1,6 +1,6 @@
 using MangaLibraryAPI.DTO;
 using MangaLibraryAPI.Entities;
-using MangaLibraryAPI.Services;
+using MangaLibraryAPI.ServiceContracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +11,7 @@ namespace MangaLibraryAPI.Controllers;
 public class AccountController(
     UserManager<ApplicationUser> userManager,
     SignInManager<ApplicationUser> signInManager,
-    JwtService jwtService)
+    IJwtService jwtService)
     : ControllerBase
 {
     [HttpPost("register")]
@@ -46,6 +46,12 @@ public class AccountController(
         var jwtToken = jwtService.CreateJwtToken(user);
 
         return Ok(jwtToken);
+    }
+
+    [HttpGet("profile")]
+    public async Task<ActionResult<ApplicationUserResponse>> GetUserProfile()
+    {
+        return null;
     }
 
     [HttpGet]
