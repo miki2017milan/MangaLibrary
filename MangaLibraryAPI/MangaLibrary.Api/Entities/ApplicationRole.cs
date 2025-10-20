@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace Entities;
+namespace MangaLibraryAPI.Entities;
 
 public class ApplicationRole : IdentityRole<Guid>
 {

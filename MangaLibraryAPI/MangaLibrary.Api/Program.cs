@@ -1,4 +1,3 @@
-using Entities;
 using MangaLibraryAPI.Entities;
 using MangaLibraryAPI.ServiceContracts;
 using MangaLibraryAPI.Services;

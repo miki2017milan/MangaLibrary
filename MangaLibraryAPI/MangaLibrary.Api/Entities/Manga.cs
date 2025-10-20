@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Entities;
+namespace MangaLibraryAPI.Entities;
 
 public class Manga
 {
@@ -35,7 +35,7 @@ public class Manga
     public string? Cover { get; set; }
 
     [StringLength(256), Column(name: "banner")]
-    public string? BannerImage { get; set; }
+    public string? Banner { get; set; }
 
     [StringLength(65536), Column(name: "description")]
     public string? Description { get; set; }

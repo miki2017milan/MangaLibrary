@@ -1,4 +1,4 @@
-using Entities;
+using MangaLibraryAPI.Entities;
 
 namespace MangaLibraryAPI.DTO;
 
@@ -39,7 +39,7 @@ public static class MangaResponseExtensions
             AdultContent = manga.AdultContent,
             CountryOfOrigin = manga.CountryOfOrigin,
             Cover = manga.Cover,
-            BannerImage = manga.BannerImage,
+            BannerImage = manga.Banner,
             Description = manga.Description,
             Staff = manga.Staff
         };

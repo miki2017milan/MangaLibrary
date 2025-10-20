@@ -22,16 +22,6 @@ public class MangaService(ApplicationDbContext dbContext) : IMangaService
         return manga.Entity.ToMangaResponse();
     }
 
-    public async Task CreateMangaFromList(List<MangaRequest> mangaRequest)
-    {
-        foreach (var manga in mangaRequest)
-        {
-            await dbContext.Mangas.AddAsync(manga.ToManga());
-        }
-
-        await dbContext.SaveChangesAsync();
-    }
-
     public async Task<MangaResponse?> UpdateManga(Guid? id, MangaRequest mangaRequest)
     {
         var manga = await dbContext.Mangas.FindAsync(id);
@@ -49,7 +39,7 @@ public class MangaService(ApplicationDbContext dbContext) : IMangaService
         manga.AdultContent = mangaRequest.AdultContent;
         manga.CountryOfOrigin = mangaRequest.CountryOfOrigin;
         manga.Cover = mangaRequest.Cover;
-        manga.BannerImage = mangaRequest.BannerImage;
+        manga.Banner = mangaRequest.BannerImage;
         manga.Description = mangaRequest.Description;
         manga.Staff = mangaRequest.Staff;
 

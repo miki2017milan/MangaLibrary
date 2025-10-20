@@ -1,7 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Entities;
 using MangaLibraryAPI.DTO;
 using MangaLibraryAPI.Entities;
 using MangaLibraryAPI.ServiceContracts;

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Entities;
+using MangaLibraryAPI.Entities;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 

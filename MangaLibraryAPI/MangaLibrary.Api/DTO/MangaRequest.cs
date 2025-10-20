@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Entities;
+using MangaLibraryAPI.Entities;
 using Microsoft.Extensions.Options;
 
 namespace MangaLibraryAPI.DTO;
@@ -28,7 +28,7 @@ public class MangaRequest
             Title = Title!, TitleNative = TitleNative, Genres = Genres, Tags = Tags, Format = Format,
             ReleaseYear = ReleaseYear, ReleaseMonth = ReleaseMonth, ReleaseDay = ReleaseDay,
             AdultContent = AdultContent, CountryOfOrigin = CountryOfOrigin, Cover = Cover,
-            BannerImage = BannerImage,
+            Banner = BannerImage,
             Description = Description, Staff = Staff
         };
     }

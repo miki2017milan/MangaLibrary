@@ -1,4 +1,3 @@
-using Entities;
 using MangaLibraryAPI.Entities;
 
 namespace ServiceContracts.DTO;
