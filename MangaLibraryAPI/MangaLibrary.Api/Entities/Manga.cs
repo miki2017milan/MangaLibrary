@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace MangaLibraryAPI.Entities;
 
@@ -44,8 +45,13 @@ public class Manga
     public List<MangaStaff>? Staff { get; set; }
 }
 
-public struct MangaStaff
+public class MangaStaff
 {
-    [StringLength(256), Required] public string Name { get; set; }
-    [StringLength(256)] public string Role { get; set; }
+    [StringLength(256), Required]
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = string.Empty;
+
+    [JsonPropertyName("role")]
+    [StringLength(256)]
+    public string Role { get; set; } = string.Empty;
 }

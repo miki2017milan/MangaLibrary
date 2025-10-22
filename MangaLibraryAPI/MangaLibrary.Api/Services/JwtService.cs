@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using MangaLibraryAPI.DTO;
@@ -19,14 +18,14 @@ public class JwtService(IConfiguration configuration) : IJwtService
             throw new Exception("ExpirationMinutes must be set");
         }
 
-        var expiration = DateTime.UtcNow.Date.AddMinutes(Convert.ToDouble(configuration["Jwt:ExpirationMinutes"]));
+        var expiration = DateTime.UtcNow.AddMinutes(Convert.ToDouble(configuration["Jwt:ExpirationMinutes"]));
 
         var claims = new Claim[]
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()), // Subject identifier
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // Jwt Token unique id
             new(JwtRegisteredClaimNames.Iat,
-                DateTime.UtcNow.ToString(CultureInfo.CurrentCulture)), // Created at timestamp
+                DateTime.UtcNow.ToString()), // Created at timestamp
         };
 
         if (string.IsNullOrEmpty(configuration["Jwt:Key"]))

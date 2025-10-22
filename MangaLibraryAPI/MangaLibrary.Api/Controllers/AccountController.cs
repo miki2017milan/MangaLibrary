@@ -15,7 +15,7 @@ public class AccountController(
     : ControllerBase
 {
     [HttpPost("register")]
-    public async Task<ActionResult> RegisterUser(RegisterRequest userDetails)
+    public async Task<ActionResult> RegisterUser([FromBody] RegisterRequest userDetails)
     {
         var user = new ApplicationUser
             { Email = userDetails.Email, UserName = userDetails.Email, DisplayName = userDetails.DisplayName! };
@@ -32,7 +32,7 @@ public class AccountController(
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult> LoginUser(LoginRequest userDetails)
+    public async Task<ActionResult> LoginUser([FromBody] LoginRequest userDetails)
     {
         var result = await signInManager.PasswordSignInAsync(userDetails.Email!, userDetails.Password!,
             isPersistent: false,

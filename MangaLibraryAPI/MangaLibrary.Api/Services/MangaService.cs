@@ -10,7 +10,7 @@ public class MangaService(ApplicationDbContext dbContext) : IMangaService
     public async Task<MangaResponse?> GetMangaById(Guid id)
     {
         var manga = await dbContext.Mangas.FindAsync(id);
-
+        
         return manga?.ToMangaResponse();
     }
 

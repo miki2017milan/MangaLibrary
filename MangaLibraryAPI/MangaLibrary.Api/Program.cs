@@ -33,31 +33,18 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options => { opti
     .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
     .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
 
-// Configure Cookies
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.Cookie.Name = "AccessCookie";
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-});
-
 // Configure Cors
 const string myAllowSpecificOrigins = "_myAllowSpecificOrigins";
-var allowedOrigins = builder.Configuration["AllowedOrigin"];
+var allowedOrigins = builder.Configuration["AllowedOrigin"] ?? "";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(myAllowSpecificOrigins,
         a =>
         {
-            a.WithOrigins("http://localhost:5173/register")
+            a.WithOrigins(allowedOrigins)
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials();
-            ;
-            // if (allowedOrigins != null && !string.IsNullOrEmpty(allowedOrigins))
-            // {
-            //     a.WithOrigins("http://localhost:5173");
-            // }
         });
 });
 

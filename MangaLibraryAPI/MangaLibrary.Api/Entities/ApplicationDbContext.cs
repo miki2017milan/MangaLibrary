@@ -12,6 +12,13 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Manga>().ToTable("mangas");
+        modelBuilder.Entity<Manga>(entity =>
+        {
+            entity.ToTable("mangas");
+
+            // Explicitly configure Staff as JSONB
+            entity.Property(e => e.Staff)
+                .HasColumnType("jsonb");
+        });
     }
 }
