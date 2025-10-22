@@ -419,13 +419,13 @@
   opacity: 1;
 }
 
-.searchResult {
+.searchResult.list {
   margin-top: var(--space-xl);
   list-style: none;
   width: 100%;
 }
 
-.mangaResult {
+.list .mangaResult {
   display: flex;
   background-color: var(--bg);
   border-radius: var(--space-m);
@@ -458,6 +458,25 @@
   min-width: 300px;
   border-radius: var(--space-m);
   cursor: pointer;
+}
+
+.searchResult.grid {
+  margin-top: var(--space-xl);
+  list-style: none;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-m);
+}
+
+.grid .mangaResult {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg);
+  border-radius: var(--space-m);
+  padding: 1rem;
+  margin-bottom: 2rem;
+  width: 100%;
 }
 
 .searchbar {

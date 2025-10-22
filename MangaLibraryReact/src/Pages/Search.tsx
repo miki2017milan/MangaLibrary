@@ -36,24 +36,18 @@ function useDebounce<T>(value: T, delay = 500) {
 
 export default function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchFilter, setSearchFilter] = useState<string>(
-    searchParams.get("title") != null ? searchParams.get("title")! : ""
-  );
+
+  // Filters
+  const [searchFilter, setSearchFilter] = useState<string>(searchParams.get("title") ?? "");
   const [selectedGenres, setSelectedGenres] = useState<string[]>(searchParams.getAll("genre"));
-  const [showAdultContent, setAdultContent] = useState<boolean>(
-    searchParams.get("adultContent") == null
-      ? false
-      : searchParams.get("adultContent") == "true"
-      ? true
-      : false
-  );
+  const [showAdultContent, setAdultContent] = useState<boolean>(searchParams.get("adultContent") === "true");
   const [sortBy, setSortBy] = useState<string>(
-    searchParams.get("sortBy") == null
-      ? ""
-      : searchParams.get("sortBy")! in sortByValues
+    searchParams.get("sortBy") &&
+      searchParams.get("sortBy")! in sortByValues
       ? searchParams.get("sortBy")!
       : ""
   );
+
   const [listView, setListView] = useState<boolean>(true);
   const delayedSearch = useDebounce(searchFilter, 500);
   const navigate = useNavigate();
@@ -136,7 +130,7 @@ export default function Search() {
     return (
       <div className="searchContent">
         {navbar()}
-        <ul className="searchResult">
+        <ul className={listView ? "searchResult list" : "searchResult grid"}>
           {Array.from({ length: 10 }).map((_, i) => (
             <li key={i} className="mangaResult loading"></li>
           ))}
