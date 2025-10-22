@@ -35,9 +35,8 @@ function errorPage() {
 }
 
 const fetchManga = async (id: string): Promise<MangaResponse> => {
-  const res = await axios.get<MangaResponse>(
-    `http://192.168.0.47:5181/api/mangas?id=${id}`
-  );
+  const res = await axios.get<MangaResponse>(`https://localhost:6060/api/mangas/${id}`);
+  console.log(res);
   return res.data;
 };
 
@@ -71,17 +70,13 @@ export default function MangaDisplay() {
     return <p style={{ color: "red" }}>Unexpected error</p>;
   }
 
+  console.log(manga?.staff);
+
   return (
     <>
-      {manga?.bannerImage && (
-        <img className="mangaBanner" src={manga.bannerImage} />
-      )}
+      {manga?.bannerImage && <img className="mangaBanner loading" src={manga.bannerImage} />}
       <div className="mangaDisplayContent">
-        <img
-          className="coverImage"
-          src={manga?.cover}
-          alt={manga?.titleEnglish + "cover"}
-        />
+        <img className="coverImage" src={manga?.cover} alt={manga?.titleEnglish + "cover"} />
         <div className="mangaText">
           <h2 className="mangaTitleEnglish">{manga?.titleEnglish}</h2>
           <h3 className="mangaTitleNative">{manga?.titleNative}</h3>

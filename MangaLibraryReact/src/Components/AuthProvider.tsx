@@ -63,10 +63,10 @@ export function AuthProvider({ children }: Props) {
   ) => {
     try {
       const response = await axios.post(accountUrl + "/register", {
-        email,
-        newDisplayName,
-        password,
-        passwordConfirm,
+        email: email,
+        displayName: newDisplayName,
+        password: password,
+        confirmPassword: passwordConfirm,
       });
 
       const { token } = response.data;
@@ -75,7 +75,7 @@ export function AuthProvider({ children }: Props) {
 
       return { succsess: true };
     } catch (error: any) {
-      return { succsess: false, errors: error.response?.data?.message || "Register Failed" };
+      return { succsess: false, errors: error.response?.data || "Register Failed" };
     }
   };
 
@@ -87,13 +87,12 @@ export function AuthProvider({ children }: Props) {
       });
 
       const { token } = response.data;
-      console.log(response.data);
       localStorage.setItem("token", token);
       checkAuth();
 
       return { succsess: true };
     } catch (error: any) {
-      return { succsess: false, errors: error.response?.data?.message || "Login Failed" };
+      return { succsess: false, errors: error.response?.data || "Login Failed" };
     }
   };
 

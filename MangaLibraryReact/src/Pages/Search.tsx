@@ -40,15 +40,16 @@ export default function Search() {
   // Filters
   const [searchFilter, setSearchFilter] = useState<string>(searchParams.get("title") ?? "");
   const [selectedGenres, setSelectedGenres] = useState<string[]>(searchParams.getAll("genre"));
-  const [showAdultContent, setAdultContent] = useState<boolean>(searchParams.get("adultContent") === "true");
+  const [showAdultContent, setAdultContent] = useState<boolean>(
+    searchParams.get("adultContent") === "true"
+  );
   const [sortBy, setSortBy] = useState<string>(
-    searchParams.get("sortBy") &&
-      searchParams.get("sortBy")! in sortByValues
+    searchParams.get("sortBy") && searchParams.get("sortBy")! in sortByValues
       ? searchParams.get("sortBy")!
       : ""
   );
 
-  const [listView, setListView] = useState<boolean>(true);
+  const [listView, setListView] = useState<boolean>(false);
   const delayedSearch = useDebounce(searchFilter, 500);
   const navigate = useNavigate();
 

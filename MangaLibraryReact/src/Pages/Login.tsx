@@ -1,15 +1,47 @@
-import { useRef } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Components/AuthProvider";
+import FormField from "../Components/FormField";
 
 export default function Login() {
-  const password = useRef<HTMLInputElement>(null);
-  const email = useRef<HTMLInputElement>(null);
-  const auth = useAuth();
+  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [passwordFail, setPasswordFail] = useState<string>("");
+  const [emailFail, setEmailFail] = useState<string>("");
 
-  const loginUser = () => {
-    if (email.current?.value && password.current?.value) {
-      console.log(auth.login(email.current.value, password.current.value));
+  const auth = useAuth();
+  const navigate = useNavigate();
+
+  const loginUser = async () => {
+    var valid = true;
+
+    if (!email.match(/^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$/gm)) {
+      setEmailFail("Email not valid");
+      valid = false;
+    }
+
+    if (email == "") {
+      setEmailFail("Email required");
+      valid = false;
+    }
+
+    if (password == "") {
+      valid = false;
+      setPasswordFail("Password required");
+    }
+
+    if (valid) {
+      const { succsess, errors } = await auth.login(email, password);
+      if (succsess) {
+        navigate("/library");
+        return;
+      }
+
+      if (errors.detail === "Login failed: Email or password are incorrect") {
+        setEmailFail("Email or password are incorrect");
+        setPasswordFail("Email or password are incorrect");
+      }
+      return;
     }
   };
 
@@ -17,10 +49,24 @@ export default function Login() {
     <div className="form">
       <h2>Login</h2>
       <div className="formFields">
-        <p>Email</p>
-        <input ref={email} type="email" />
-        <p>Password</p>
-        <input ref={password} type="password" />
+        <FormField
+          title="Email"
+          failState={emailFail}
+          onChange={(e: any) => {
+            setEmailFail("");
+            setEmail(e.target.value);
+          }}
+          type="email"
+        />
+        <FormField
+          title="Password"
+          failState={passwordFail}
+          onChange={(e: any) => {
+            setPasswordFail("");
+            setPassword(e.target.value);
+          }}
+          type="password"
+        />
         <button onClick={loginUser}>Login</button>
         <p className="forgot">Forgot password?</p>
       </div>

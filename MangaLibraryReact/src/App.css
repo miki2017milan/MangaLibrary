@@ -100,11 +100,11 @@
 .form {
   margin-top: var(--space-xxl);
   background-color: var(--bg);
-  padding: var(--space-xl) var(--space-xxl);
+  padding: var(--space-xl) var(--space-xl);
   border-radius: var(--space-xs);
   display: flex;
   flex-direction: column;
-  width: 450px;
+  width: 500px;
 }
 
 .form .formFields {
@@ -158,12 +158,27 @@
 }
 
 .form .formFields .failInput {
-  border: #962424 solid 2px;
+  border: var(--fail) solid 2px;
+  color: var(--fail);
 }
 
 .form .formFields .failText {
-  color: #962424;
+  color: var(--fail);
   margin-bottom: var(--space-m);
+}
+
+.form ul {
+  list-style: none;
+  margin-bottom: var(--space-m);
+}
+
+.form ul li {
+  display: flex;
+}
+
+.form ul img {
+  width: 20px;
+  height: 20px;
 }
 
 .content {
@@ -214,7 +229,7 @@
 .loading {
   background: linear-gradient(-45deg, var(--bg) 40%, #dddddd 50%, var(--bg) 60%);
   background-size: 300%;
-  background-position-x: 120%;
+  background-position-x: 130%;
   animation: shimmer 1s infinite linear;
 }
 
@@ -258,7 +273,6 @@
 }
 
 .mangaDescription {
-  margin-top: auto;
   margin-bottom: var(--space-s);
   text-align: start;
   font-size: 1.5rem;
@@ -435,7 +449,7 @@
   width: 100%;
 }
 
-.mangaResult .text {
+.list .mangaResult .text {
   display: flex;
   flex-direction: column;
   align-items: start;
@@ -443,20 +457,19 @@
   gap: 1rem;
 }
 
-.mangaResult .text h2 {
+.list .mangaResult .text h2 {
   line-height: 2rem;
   cursor: pointer;
 }
 
-.mangaResult .text p {
+.list .mangaResult .text p {
   text-align: start;
   overflow: hidden;
   overflow-y: scroll;
 }
 
-.mangaResult img {
+.list .mangaResult img {
   min-width: 300px;
-  border-radius: var(--space-m);
   cursor: pointer;
 }
 
@@ -466,17 +479,40 @@
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-m);
+  gap: var(--space-xl);
+  justify-content: center;
 }
 
 .grid .mangaResult {
   display: flex;
   flex-direction: column;
-  background-color: var(--bg);
-  border-radius: var(--space-m);
-  padding: 1rem;
   margin-bottom: 2rem;
-  width: 100%;
+  width: 200px;
+  height: 340px;
+  justify-content: space-between;
+  border-radius: 1rem;
+}
+
+.grid .mangaResult .mangaGenres {
+  display: none;
+}
+
+.grid .mangaResult .mangaDescription {
+  display: none;
+}
+
+.grid .mangaResult .text h2 {
+  font-size: 1.2rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-top: 1rem;
+}
+
+.grid .mangaResult img {
+  width: auto;
+  height: 100%;
+  border-radius: 1rem;
 }
 
 .searchbar {
