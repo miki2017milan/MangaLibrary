@@ -22,7 +22,6 @@ public class AccountController(
             { Email = userDetails.Email, UserName = userDetails.Email, DisplayName = userDetails.DisplayName! };
 
         var result = await userManager.CreateAsync(user, userDetails.Password!);
-
         if (!result.Succeeded) return BadRequest(result.Errors);
 
         return Ok(jwtService.CreateJwtToken(user));
@@ -32,10 +31,10 @@ public class AccountController(
     public async Task<ActionResult> LoginUser([FromBody] LoginRequest userDetails)
     {
         var user = await userManager.FindByEmailAsync(userDetails.Email!);
-        if (user == null) return Problem("Login failed", statusCode: 401);
+        if (user == null) return Problem("Email or Password are wrong", statusCode: 401);
 
         var isPasswordValid = await userManager.CheckPasswordAsync(user, userDetails.Password!);
-        if (!isPasswordValid) return Problem("Login failed", statusCode: 401);
+        if (!isPasswordValid) return Problem("Email or Password are wrong", statusCode: 401);
 
         return Ok(jwtService.CreateJwtToken(user));
     }
@@ -48,6 +47,6 @@ public class AccountController(
         var user = await userManager.FindByIdAsync(userId.ToString());
 
         if (user is null) return NotFound();
-        return Ok(user);
+        return Ok(user.ToApplicationUserResponse());
     }
 }

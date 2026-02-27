@@ -1,67 +1,115 @@
+using Dapper;
+using MangaLibraryAPI.Database;
 using MangaLibraryAPI.DTO;
 using MangaLibraryAPI.Entities;
 using MangaLibraryAPI.ServiceContracts;
-using Microsoft.EntityFrameworkCore;
 
 namespace MangaLibraryAPI.Services;
 
-public class MangaService(ApplicationDbContext dbContext) : IMangaService
+public class MangaService(IDbConnectionFactory connectionFactory) : IMangaService
 {
     public async Task<MangaResponse?> GetMangaById(Guid id)
     {
-        var manga = await dbContext.Mangas.FindAsync(id);
-        
+        using var connection = await connectionFactory.CreateDbConnectionAsync();
+        var manga = await connection.QueryFirstOrDefaultAsync<Manga>("SELECT * FROM mangas WHERE id = @id", new { id });
+
         return manga?.ToMangaResponse();
     }
 
-    public async Task<MangaResponse> CreateManga(MangaRequest mangaRequest)
+    public async Task<MangaResponse?> CreateManga(MangaRequest mangaRequest)
     {
-        var manga = await dbContext.Mangas.AddAsync(mangaRequest.ToManga());
+        using var connection = await connectionFactory.CreateDbConnectionAsync();
 
-        await dbContext.SaveChangesAsync();
-        return manga.Entity.ToMangaResponse();
+        var guid = Guid.NewGuid();
+        var rows = await connection.ExecuteAsync(
+            """
+            INSERT INTO mangas (id, title, title_native, genres, tags, format, release_year, release_month, release_day, adult_content, country_of_origin, cover, banner, description, staff) 
+            VALUES (@Id, @Title, @TitleNative, @Genres, @Tags, @Format::manga_format, @ReleaseYear, @ReleaseMonth, @ReleaseDay, @AdultContent, @CountryOfOrigin, @Cover, @Banner, @Description, @Staff::jsonb)
+            """,
+            new
+            {
+                Id = guid,
+                mangaRequest.Title,
+                mangaRequest.TitleNative,
+                mangaRequest.Genres,
+                mangaRequest.Tags,
+                mangaRequest.Format,
+                mangaRequest.ReleaseYear,
+                mangaRequest.ReleaseMonth,
+                mangaRequest.ReleaseDay,
+                mangaRequest.AdultContent,
+                mangaRequest.CountryOfOrigin,
+                mangaRequest.Cover,
+                mangaRequest.Banner,
+                mangaRequest.Description,
+                mangaRequest.Staff
+            });
+
+        if (rows == 0) return null;
+
+        var manga = mangaRequest.ToManga();
+        manga.Id = guid;
+        return manga.ToMangaResponse();
     }
 
     public async Task<MangaResponse?> UpdateManga(Guid? id, MangaRequest mangaRequest)
     {
-        var manga = await dbContext.Mangas.FindAsync(id);
+        using var connection = await connectionFactory.CreateDbConnectionAsync();
 
-        if (manga == null) return null;
+        int rows = await connection.ExecuteAsync(
+            """
+            UPDATE mangas SET
+                title = @Title,
+                title_native = @TitleNative,
+                genres = @Genres,
+                tags = @Tags,
+                format = @Format,
+                release_year = @ReleaseYear,
+                release_month = @ReleaseMonth,
+                release_day = @ReleaseDay,
+                adult_content = @AdultContent,
+                country_of_origin = @CountryOfOrigin,
+                cover = @Cover,
+                banner = @Banner,
+                description = @Description,
+                staff = @Staff::jsonb
+            WHERE id = @Id
+            """,
+            new
+            {
+                Id = id,
+                mangaRequest.Title,
+                mangaRequest.TitleNative,
+                mangaRequest.Genres,
+                mangaRequest.Tags,
+                mangaRequest.Format,
+                mangaRequest.ReleaseYear,
+                mangaRequest.ReleaseMonth,
+                mangaRequest.ReleaseDay,
+                mangaRequest.AdultContent,
+                mangaRequest.CountryOfOrigin,
+                mangaRequest.Cover,
+                mangaRequest.Banner,
+                mangaRequest.Description,
+                mangaRequest.Staff
+            });
 
-        manga.Title = mangaRequest.Title!;
-        manga.TitleNative = mangaRequest.TitleNative;
-        manga.Genres = mangaRequest.Genres;
-        manga.Tags = mangaRequest.Tags;
-        manga.Format = mangaRequest.Format;
-        manga.ReleaseYear = mangaRequest.ReleaseYear;
-        manga.ReleaseMonth = mangaRequest.ReleaseMonth;
-        manga.ReleaseDay = mangaRequest.ReleaseDay;
-        manga.AdultContent = mangaRequest.AdultContent;
-        manga.CountryOfOrigin = mangaRequest.CountryOfOrigin;
-        manga.Cover = mangaRequest.Cover;
-        manga.Banner = mangaRequest.BannerImage;
-        manga.Description = mangaRequest.Description;
-        manga.Staff = mangaRequest.Staff;
+        if (rows == 0) return null;
 
-        await dbContext.SaveChangesAsync();
-
+        var manga = mangaRequest.ToManga();
+        manga.Id = id ?? Guid.Empty;
         return manga.ToMangaResponse();
     }
 
     public async Task DeleteManga(Guid id)
     {
-        var manga = await dbContext.Mangas.FindAsync(id);
+        using var connection = await connectionFactory.CreateDbConnectionAsync();
 
-        if (manga != null)
-        {
-            dbContext.Mangas.Remove(manga);
-            await dbContext.SaveChangesAsync();
-        }
+        await connection.ExecuteAsync("DELETE FROM mangas WHERE id = @Id", new { Id = id });
     }
 
     public async Task<List<MangaResponse>?> QueryMangas(List<string>? genres, string? searchWord)
     {
-        var mangas = await dbContext.Mangas.Take(10).ToListAsync();
-        return mangas.Select(m => m.ToMangaResponse()).ToList();
+        return null;
     }
 }

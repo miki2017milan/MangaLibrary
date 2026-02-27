@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using MangaLibraryAPI.Entities;
-using Microsoft.Extensions.Options;
 
 namespace MangaLibraryAPI.DTO;
 
@@ -8,8 +7,8 @@ public class MangaRequest
 {
     [Required] public string? Title { get; set; }
     public string? TitleNative { get; set; }
-    public List<string>? Genres { get; set; }
-    public List<string>? Tags { get; set; }
+    public String[]? Genres { get; set; }
+    public String[]? Tags { get; set; }
     public string? Format { get; set; }
     public int? ReleaseYear { get; set; }
     public int? ReleaseMonth { get; set; }
@@ -17,9 +16,9 @@ public class MangaRequest
     public bool? AdultContent { get; set; }
     public string? CountryOfOrigin { get; set; }
     [Url] public string? Cover { get; set; }
-    [Url] public string? BannerImage { get; set; }
+    [Url] public string? Banner { get; set; }
     public string? Description { get; set; }
-    [ValidateEnumeratedItems] public List<MangaStaff>? Staff { get; set; }
+    public List<MangaStaff>? Staff { get; set; }
 
     public Manga ToManga()
     {
@@ -28,8 +27,7 @@ public class MangaRequest
             Title = Title!, TitleNative = TitleNative, Genres = Genres, Tags = Tags, Format = Format,
             ReleaseYear = ReleaseYear, ReleaseMonth = ReleaseMonth, ReleaseDay = ReleaseDay,
             AdultContent = AdultContent, CountryOfOrigin = CountryOfOrigin, Cover = Cover,
-            Banner = BannerImage,
-            Description = Description, Staff = Staff
+            Banner = Banner, Description = Description, Staff = Staff
         };
     }
 }

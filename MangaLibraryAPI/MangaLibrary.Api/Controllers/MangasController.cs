@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MangaLibraryAPI.Controllers;
 
-[Route("/api/[controller]", Name = "mangas")]
+[Route("/api/[controller]")]
 [ApiController]
 public class MangasController(IMangaService mangaService) : ControllerBase
 {
@@ -21,6 +21,7 @@ public class MangasController(IMangaService mangaService) : ControllerBase
     public async Task<ActionResult<MangaResponse>> CreateManga([FromBody] MangaRequest? mangaRequest)
     {
         var manga = await mangaService.CreateManga(mangaRequest!);
+        if (manga is null) return Problem("Failed to create manga");
         return CreatedAtAction(nameof(GetMangaFromId), new { manga.Id }, manga);
     }
 
@@ -30,7 +31,7 @@ public class MangasController(IMangaService mangaService) : ControllerBase
     {
         var manga = await mangaService.UpdateManga(id, mangaRequest);
         if (manga == null) return await CreateManga(mangaRequest);
-        return manga;
+        return Ok(manga);
     }
 
     [HttpDelete("{id}")]

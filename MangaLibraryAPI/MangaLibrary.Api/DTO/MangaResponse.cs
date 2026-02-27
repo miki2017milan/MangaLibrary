@@ -7,8 +7,8 @@ public class MangaResponse
     public Guid? Id { get; set; }
     public string? TitleEnglish { get; set; }
     public string? TitleNative { get; set; }
-    public List<string>? Genres { get; set; }
-    public List<string>? Tags { get; set; }
+    public String[]? Genres { get; set; }
+    public String[]? Tags { get; set; }
     public string? Format { get; set; }
     public int? ReleaseYear { get; set; }
     public int? ReleaseMonth { get; set; }
@@ -16,7 +16,7 @@ public class MangaResponse
     public bool? AdultContent { get; set; }
     public string? CountryOfOrigin { get; set; }
     public string? Cover { get; set; }
-    public string? BannerImage { get; set; }
+    public string? Banner { get; set; }
     public string? Description { get; set; }
     public List<MangaStaff>? Staff { get; set; }
 }
@@ -39,7 +39,7 @@ public static class MangaResponseExtensions
             AdultContent = manga.AdultContent,
             CountryOfOrigin = manga.CountryOfOrigin,
             Cover = manga.Cover,
-            BannerImage = manga.Banner,
+            Banner = manga.Banner,
             Description = manga.Description,
             Staff = manga.Staff
         };
