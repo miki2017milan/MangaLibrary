@@ -12,7 +12,9 @@ public class MangasController(IMangaService mangaService) : ControllerBase
     public async Task<ActionResult<MangaResponse>> GetMangaFromId([FromRoute] Guid id)
     {
         var manga = await mangaService.GetMangaById(id);
-        return manga != null ? manga : NotFound();
+
+        if (manga is null) return NotFound();
+        return Ok(manga);
     }
 
     [HttpPost]
@@ -24,9 +26,9 @@ public class MangasController(IMangaService mangaService) : ControllerBase
 
     [HttpPut("{id?}")]
     public async Task<ActionResult<MangaResponse>> UpdateManga([FromRoute] Guid? id,
-        [FromBody] MangaRequest? mangaRequest)
+        [FromBody] MangaRequest mangaRequest)
     {
-        var manga = await mangaService.UpdateManga(id, mangaRequest!);
+        var manga = await mangaService.UpdateManga(id, mangaRequest);
         if (manga == null) return await CreateManga(mangaRequest);
         return manga;
     }

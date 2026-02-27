@@ -5,7 +5,6 @@ using MangaLibraryAPI.DTO;
 using MangaLibraryAPI.Entities;
 using MangaLibraryAPI.ServiceContracts;
 using Microsoft.IdentityModel.Tokens;
-using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
 namespace MangaLibraryAPI.Services;
 
@@ -23,9 +22,11 @@ public class JwtService(IConfiguration configuration) : IJwtService
         var claims = new Claim[]
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()), // Subject identifier
-            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // Jwt Token unique id
+            new(JwtRegisteredClaimNames.Jti,
+                Guid.NewGuid().ToString()), // Jwt Token unique id
             new(JwtRegisteredClaimNames.Iat,
-                DateTime.UtcNow.ToString()), // Created at timestamp
+                DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(),
+                ClaimValueTypes.Integer64), // Created at timestamp
         };
 
         if (string.IsNullOrEmpty(configuration["Jwt:Key"]))
@@ -33,11 +34,12 @@ public class JwtService(IConfiguration configuration) : IJwtService
             throw new Exception("Key must be set");
         }
 
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!));
+        var securityKey =
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!));
         var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-        var issuer = configuration["Issuer"];
-        var audience = configuration["Audience"];
+        var issuer = configuration["Jwt:Issuer"];
+        var audience = configuration["Jwt:Audience"];
         var tokenGenerator = new JwtSecurityToken(issuer, audience, claims, expires: expiration,
             signingCredentials: signingCredentials);
 

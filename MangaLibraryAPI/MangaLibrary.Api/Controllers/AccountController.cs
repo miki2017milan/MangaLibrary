@@ -1,6 +1,8 @@
+using System.Security.Claims;
 using MangaLibraryAPI.DTO;
 using MangaLibraryAPI.Entities;
 using MangaLibraryAPI.ServiceContracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +12,6 @@ namespace MangaLibraryAPI.Controllers;
 [ApiController]
 public class AccountController(
     UserManager<ApplicationUser> userManager,
-    SignInManager<ApplicationUser> signInManager,
     IJwtService jwtService)
     : ControllerBase
 {
@@ -24,40 +25,29 @@ public class AccountController(
 
         if (!result.Succeeded) return BadRequest(result.Errors);
 
-        await signInManager.SignInAsync(user, false);
-
-        var jwtToken = jwtService.CreateJwtToken(user);
-
-        return Ok(jwtToken);
+        return Ok(jwtService.CreateJwtToken(user));
     }
 
     [HttpPost("login")]
     public async Task<ActionResult> LoginUser([FromBody] LoginRequest userDetails)
     {
-        var result = await signInManager.PasswordSignInAsync(userDetails.Email!, userDetails.Password!,
-            isPersistent: false,
-            lockoutOnFailure: false);
-
-        if (!result.Succeeded) return Problem("Login failed: Email or password are incorrect", statusCode: 401);
-
         var user = await userManager.FindByEmailAsync(userDetails.Email!);
-        if (user == null) return NotFound("User not found");
+        if (user == null) return Problem("Login failed", statusCode: 401);
 
-        var jwtToken = jwtService.CreateJwtToken(user);
+        var isPasswordValid = await userManager.CheckPasswordAsync(user, userDetails.Password!);
+        if (!isPasswordValid) return Problem("Login failed", statusCode: 401);
 
-        return Ok(jwtToken);
+        return Ok(jwtService.CreateJwtToken(user));
     }
 
+    [Authorize]
     [HttpGet("profile")]
     public async Task<ActionResult<ApplicationUserResponse>> GetUserProfile()
     {
-        return null;
-    }
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var user = await userManager.FindByIdAsync(userId.ToString());
 
-    [HttpGet]
-    public async Task<ActionResult> LogoutUser()
-    {
-        await signInManager.SignOutAsync();
-        return NoContent();
+        if (user is null) return NotFound();
+        return Ok(user);
     }
 }
