@@ -10,13 +10,31 @@ import { ReadingStatus } from '../models/readingstatus.type';
 export class MangaService {
   http = inject(HttpClient);
 
+  url = 'http://localhost:5050/api/mangas/';
+
   getMangaFromApi(id: string | null) {
-    const url = 'http://localhost:5050/api/mangas/' + id;
-    return this.http.get<Manga>(url);
+    return this.http.get<Manga>(this.url + id);
   }
 
-  getReadingStatusFromApi(id: string | null) {
-    const url = 'http://localhost:5050/api/status/' + id;
-    return this.http.get<ReadingStatus>(url);
+  getReadingStatusForManga(id: string | null) {
+    return this.http.get<ReadingStatus>(this.url + id + '/reading-status');
+  }
+
+  getRatingFromApi(id: string | null) {
+    return this.http.get<Record<number, number>>(this.url + id + '/rating');
+  }
+
+  getReadingStatusForUser(id: string | null) {
+    return this.http.get<{ status: string; rating: number }>(
+      'http://localhost:5050/api/users/manga/' + id,
+    );
+  }
+
+  addReadingStatus(id: string | null, status: string) {
+    return this.http.post('http://localhost:5050/api/users/manga/' + id, { status: status });
+  }
+
+  addRating(id: string | null, rating: number) {
+    return this.http.put('http://localhost:5050/api/users/manga/' + id, { rating: rating });
   }
 }

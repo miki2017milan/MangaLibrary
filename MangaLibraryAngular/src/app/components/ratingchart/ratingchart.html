@@ -1,0 +1,13 @@
+<div class="ratingChart">
+  <h2>RATING</h2>
+
+  <div class="rating">
+    @for (entry of ratingEntries(); track entry.key) {
+      <div class="barGroup">
+        <p class="number">{{ entry.value }}</p>
+        <div class="bar" [style.--h]="(entry.value / total()) * 100 + '%'"></div>
+        <p>{{ entry.key }}</p>
+      </div>
+    }
+  </div>
+</div>

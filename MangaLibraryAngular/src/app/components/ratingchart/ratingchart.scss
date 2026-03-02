@@ -1,0 +1,75 @@
+@use '../../variables' as *;
+
+.ratingChart {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+
+  h2 {
+    font-size: 1.3rem;
+    margin-bottom: $space-m;
+  }
+}
+
+.rating {
+  display: flex;
+  background-color: $bg;
+  height: 120px;
+  gap: 2rem;
+  padding: 1rem;
+  border-radius: 0.2rem;
+
+  .barGroup {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: center;
+
+    &:nth-child(1) .bar {
+      background-color: #d2482d;
+    }
+    &:nth-child(2) .bar {
+      background-color: #d2642d;
+    }
+    &:nth-child(3) .bar {
+      background-color: #d2802d;
+    }
+    &:nth-child(4) .bar {
+      background-color: #d29c2d;
+    }
+    &:nth-child(5) .bar {
+      background-color: #d2b82d;
+    }
+    &:nth-child(6) .bar {
+      background-color: #9ab82d;
+    }
+    &:nth-child(7) .bar {
+      background-color: #6db22d;
+    }
+    &:nth-child(8) .bar {
+      background-color: #4db22d;
+    }
+    &:nth-child(9) .bar {
+      background-color: #2db24d;
+    }
+    &:nth-child(10) .bar {
+      background-color: #2db280;
+    }
+  }
+
+  .bar {
+    height: var(--h);
+    min-height: 10px;
+    background-color: var(--color);
+    border-radius: 0.5rem;
+    width: 10px;
+  }
+
+  .number {
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  &:hover .number {
+    opacity: 1;
+  }
+}

@@ -101,4 +101,62 @@ li {
       transition: 150ms ease;
     }
   }
+
+  .profile {
+    margin-right: 1.5rem;
+    position: relative;
+
+    .displayName {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+
+      p {
+        font-size: 1.4rem;
+      }
+
+      img {
+        height: 8px;
+        margin-bottom: 0.3rem;
+      }
+    }
+
+    ul {
+      height: fit-content;
+      display: flex;
+      gap: 0.7rem;
+      flex-direction: column;
+      align-items: start;
+      list-style: none;
+      position: absolute;
+      background-color: $bg;
+      padding: 1rem;
+      border-radius: 0 0 0.2rem 0.2rem;
+
+      animation: slideDown 0.2s ease forwards;
+
+      li {
+        width: fit-content;
+        font-size: 1.3rem;
+        cursor: pointer;
+        padding: 0.4rem;
+        border-radius: 0.2rem;
+
+        &:hover {
+          background-color: $bg-light;
+        }
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    }
+  }
 }

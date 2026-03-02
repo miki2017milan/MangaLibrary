@@ -84,21 +84,6 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => { options.Password.
     .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
     .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
 
-// Configure Cors
-const string myAllowSpecificOrigins = "_myAllowSpecificOrigins";
-var allowedOrigins = builder.Configuration["AllowedOrigin"] ?? "";
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(myAllowSpecificOrigins,
-        a =>
-        {
-            a.WithOrigins(allowedOrigins)
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials();
-        });
-});
-
 var app = builder.Build();
 
 app.UseHsts();
@@ -107,10 +92,6 @@ app.UseHttpsRedirection();
 if (app.Environment.IsDevelopment())
 {
     app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-}
-else
-{
-    app.UseCors(myAllowSpecificOrigins);
 }
 
 app.UseRouting();

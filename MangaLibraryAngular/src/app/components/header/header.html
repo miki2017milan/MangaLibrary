@@ -5,7 +5,7 @@
         <img src="logo.webp" />
         <h2>Manga Library</h2>
       </div>
-      <img class="closeButton" src="/close-button.webp" (click)="clicktest()"/>
+      <img class="closeButton" src="/close-button.webp" />
     </li>
 
     <li class="header-middle">
@@ -15,12 +15,28 @@
     </li>
 
     <li class="header-right">
-      <div class="login">
-        <p routerLink="/login">Login</p>
-      </div>
-      <div class="signup">
-        <p routerLink="/register">Sign up</p>
-      </div>
+      @if (!accountService.isAuthenticated()) {
+        <div class="login">
+          <p routerLink="/login">Login</p>
+        </div>
+        <div class="signup">
+          <p routerLink="/register">Sign up</p>
+        </div>
+      } @else {
+        <div class="profile">
+          <div class="displayName" (click)="toggle()">
+            <p>{{ displayName() }}</p>
+            <img src="downarrow.png" />
+          </div>
+
+          @if (isOpen()) {
+            <ul>
+              <li>Profile</li>
+              <li (click)="accountService.logout()">Logout</li>
+            </ul>
+          }
+        </div>
+      }
     </li>
   </ul>
 </nav>

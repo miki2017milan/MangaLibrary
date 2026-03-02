@@ -25,7 +25,7 @@ export class Readingstatus implements OnInit {
 
   ngOnInit(): void {
     this.mangaService
-      .getReadingStatusFromApi(this.id)
+      .getReadingStatusForManga(this.id)
       .pipe(
         catchError((err) => {
           this.loading.set(false);

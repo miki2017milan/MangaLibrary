@@ -9,6 +9,21 @@ namespace MangaLibraryAPI.Services;
 
 public class UserMangaService(IDbConnectionFactory connectionFactory) : IUserMangaService
 {
+    public async Task<UserManga?> GetUserManga(Guid mangaId, Guid userId)
+    {
+        using var connection = await connectionFactory.CreateDbConnectionAsync();
+
+
+        var manga = await connection.QueryFirstOrDefaultAsync<UserManga>(
+            """
+            Select * from user_manga
+            where user_id = @userId and manga_id = @mangaId
+            """,
+            new { userId, mangaId });
+
+        return manga;
+    }
+
     public async Task<UserManga?> AddMangaToUser(UserManga readingStatus)
     {
         using var connection = await connectionFactory.CreateDbConnectionAsync();
@@ -34,17 +49,29 @@ public class UserMangaService(IDbConnectionFactory connectionFactory) : IUserMan
     {
         using var connection = await connectionFactory.CreateDbConnectionAsync();
 
-        var rows = await connection.ExecuteAsync(
-            """
-            UPDATE user_manga
-            SET status = @Status, rating = @Rating
-            WHERE manga_id = @MangaId and user_id = @UserId
-            """,
-            readingStatus);
+        var rows = 0;
+        if (string.IsNullOrEmpty(readingStatus.Status))
+        {
+            rows = await connection.ExecuteAsync(
+                """
+                UPDATE user_manga
+                SET rating = @Rating
+                WHERE manga_id = @MangaId and user_id = @UserId
+                """,
+                readingStatus);
+        }
+        else
+        {
+            rows = await connection.ExecuteAsync(
+                """
+                UPDATE user_manga
+                SET status = @Status, rating = @Rating
+                WHERE manga_id = @MangaId and user_id = @UserId
+                """,
+                readingStatus);
+        }
 
-        if (rows == 0) return null;
-
-        return readingStatus;
+        return rows == 0 ? null : readingStatus;
     }
 
     public async Task RemoveMangaFromUser(Guid mangaId, Guid userId)
@@ -55,11 +82,11 @@ public class UserMangaService(IDbConnectionFactory connectionFactory) : IUserMan
             new { mangaId, userId });
     }
 
-    public async Task<IEnumerable<MangaReadingStatus>?> GetMangasFromUser(Guid userId)
+    public async Task<IEnumerable<UserMangaReadingStatus>?> GetMangasFromUser(Guid userId)
     {
         using var connection = await connectionFactory.CreateDbConnectionAsync();
 
-        var mangas = await connection.QueryAsync<MangaReadingStatus>(
+        var mangas = await connection.QueryAsync<UserMangaReadingStatus>(
             """
             Select manga_id, title, cover, status
             from user_manga, mangas

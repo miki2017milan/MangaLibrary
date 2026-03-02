@@ -1,0 +1,108 @@
+@use '../../variables' as *;
+
+.dropdown {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+}
+
+.add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $primary;
+  padding: 0.3rem;
+  border-radius: 0.2rem;
+  cursor: pointer;
+  gap: 0.5rem;
+  width: 100%;
+  p {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: white;
+  }
+
+  img {
+    height: 10px;
+    filter: brightness(0) invert(1);
+    margin-bottom: 0.2rem;
+  }
+}
+
+ul {
+  list-style: none;
+  position: absolute;
+  top: 100%;
+  background-color: lighten($bg, $amount: 10);
+  padding: 1rem;
+  margin-top: 0.5rem;
+  border-radius: 0.2rem;
+  text-align: start;
+
+  animation: slideDown 0.2s ease forwards;
+
+  li {
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.2rem;
+    border-radius: 0.2rem;
+
+    &:hover {
+      background-color: $bg;
+    }
+
+    &:nth-child(1) {
+      color: $completed;
+    }
+
+    &:nth-child(2) {
+      color: $planning;
+    }
+
+    &:nth-child(3) {
+      color: $reading;
+    }
+
+    &:nth-child(4) {
+      color: $paused;
+    }
+
+    &:nth-child(5) {
+      color: $dropped;
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.completed {
+  background-color: $completed;
+}
+.planning {
+  background-color: $planning;
+}
+.reading {
+  background-color: $reading;
+}
+.dropped {
+  background-color: $dropped;
+}
+.paused {
+  background-color: $paused;
+}
+
+.status {
+  font-size: 1.4rem;
+  padding: 0.3rem;
+  border-radius: 0.2rem;
+}

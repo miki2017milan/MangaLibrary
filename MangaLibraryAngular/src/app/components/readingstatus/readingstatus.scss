@@ -1,5 +1,16 @@
 @use '../../variables' as *;
 
+.readingStatus {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+
+  h2 {
+    font-size: 1.3rem;
+    margin-bottom: $space-m;
+  }
+}
+
 .status {
   display: flex;
   gap: 1.2rem;
@@ -34,46 +45,46 @@
 
   .completed {
     .title {
-      background-color: #59ad35;
+      background-color: $completed;
     }
     .number {
-      color: #59ad35;
+      color: $completed;
     }
   }
 
   .planning {
     .title {
-      background-color: #02a9ff;
+      background-color: $planning;
     }
     .number {
-      color: #02a9ff;
+      color: $planning;
     }
   }
 
   .reading {
     .title {
-      background-color: #9256f3;
+      background-color: $reading;
     }
     .number {
-      color: #9256f3;
+      color: $reading;
     }
   }
 
   .paused {
     .title {
-      background-color: #f779a4;
+      background-color: $paused;
     }
     .number {
-      color: #f779a4;
+      color: $paused;
     }
   }
 
   .dropped {
     .title {
-      background-color: #e85d75;
+      background-color: $dropped;
     }
     .number {
-      color: #e85d75;
+      color: $dropped;
     }
   }
 }

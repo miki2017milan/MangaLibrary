@@ -1,6 +1,6 @@
 namespace MangaLibraryAPI.DTO;
 
-public class MangaReadingStatus
+public class UserMangaReadingStatus
 {
     public Guid MangaId { get; set; }
     public string Title { get; set; }

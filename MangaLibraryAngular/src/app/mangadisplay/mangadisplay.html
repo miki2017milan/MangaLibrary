@@ -14,10 +14,7 @@
   <div class="topContent">
     <div class="cover">
       <img [src]="m.cover" />
-      <div class="add">
-        <p>Add to Library</p>
-        <img src="downarrow.png" alt="" />
-      </div>
+      <app-addtolibrary></app-addtolibrary>
     </div>
 
     <div class="mangaText">
@@ -68,46 +65,29 @@
           </p>
         }
       </div>
+
+      @if (hasManga()) {
+        <div class="category yourRating">
+          <h2 class="title">YOUR RATING</h2>
+          @if (!rating()) {
+            <div class="ratingInput">
+              <input type="text" #ratingValue (keyup.enter)="addRating(ratingValue.value)" />
+              <p>/ 10</p>
+              <img src="add.jpg" (click)="addRating(ratingValue.value)" />
+            </div>
+          } @else {
+            <div class="ratingInput">
+              <p>{{ rating() }} / 10</p>
+            </div>
+          }
+        </div>
+      }
     </div>
 
     <div class="main">
       <div class="activity">
-        <div class="readingStatus">
-          <h2>READING STATUS</h2>
-          <app-readingstatus></app-readingstatus>
-        </div>
-
-        <div class="rating">
-          <h2>RATING</h2>
-
-          <div class="ratingChart">
-            <div class="barGroup">
-              <p class="number">900</p>
-              <div class="bar" style="--h: 10%; --color: #e8401c"></div>
-              <p class="number">1</p>
-            </div>
-            <div class="barGroup">
-              <p class="number">1800</p>
-              <div class="bar" style="--h: 20%; --color: #f5a623"></div>
-              <p class="number">2</p>
-            </div>
-            <div class="barGroup">
-              <p class="number">3600</p>
-              <div class="bar" style="--h: 40%; --color: #f5d623"></div>
-              <p class="number">3</p>
-            </div>
-            <div class="barGroup">
-              <p class="number">1800</p>
-              <div class="bar" style="--h: 20%; --color: #a8d12a"></div>
-              <p class="number">4</p>
-            </div>
-            <div class="barGroup">
-              <p class="number">900</p>
-              <div class="bar" style="--h: 10%; --color: #3dba4e"></div>
-              <p class="number">5</p>
-            </div>
-          </div>
-        </div>
+        <app-readingstatus></app-readingstatus>
+        <app-ratingchart></app-ratingchart>
       </div>
 
       <div class="staff">

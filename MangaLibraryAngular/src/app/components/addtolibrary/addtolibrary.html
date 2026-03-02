@@ -1,0 +1,20 @@
+@if (!status()) {
+  <div class="dropdown">
+    <div class="add" (click)="toggle()">
+      <p>Add to Library</p>
+      <img src="downarrow.png" />
+    </div>
+
+    @if (isOpen()) {
+      <ul>
+        <li (click)="add('completed')">Add as Completed</li>
+        <li (click)="add('planning')">Add as Planning</li>
+        <li (click)="add('reading')">Add as Reading</li>
+        <li (click)="add('dropped')">Add as Dropped</li>
+        <li (click)="add('paused')">Add as Paused</li>
+      </ul>
+    }
+  </div>
+} @else {
+  <h2 class="status" [class]="status()?.toLowerCase()">{{ status() }}</h2>
+}

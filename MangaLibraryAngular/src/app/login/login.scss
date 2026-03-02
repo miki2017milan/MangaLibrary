@@ -1,0 +1,58 @@
+@use '../variables' as *;
+
+.content {
+  margin-top: $space-xxl;
+  background-color: $bg;
+  padding: $space-xl;
+  border-radius: 0.2rem;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    margin: $space-xl 0;
+
+    label {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    input {
+      margin-bottom: 2rem;
+      border: none;
+      border-bottom: 1px solid $text;
+      background: none;
+      height: 30px;
+      color: $text;
+      font: $p;
+      font-size: 1.2rem;
+    }
+
+    button {
+      background-color: $primary;
+      color: white;
+      font-size: 1.3rem;
+      font-weight: 600;
+      border-radius: 0.2rem;
+      border: none;
+      padding: 0.3rem;
+      width: 100px;
+      align-self: center;
+      cursor: pointer;
+
+      transition: scale 0.1s;
+      &:hover {
+        scale: 1.05;
+      }
+    }
+  }
+}
+
+.error {
+  color: $fail;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
