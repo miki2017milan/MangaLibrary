@@ -211,13 +211,13 @@
 
 .mangaDisplayContent {
   display: grid;
-  grid-template-columns: min-content min(1200px, 80vw);
+  grid-template-columns: min-content min(1200px, 45vw);
   grid-template-rows: 650px auto;
 
   background-color: var(--bg);
   padding: var(--space-xl);
   border-radius: var(--space-m);
-  margin-top: var(--space-xl);
+  margin-top: var(--space-xxl);
 }
 
 .mangaBanner {

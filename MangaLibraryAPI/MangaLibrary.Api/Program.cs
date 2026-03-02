@@ -18,7 +18,7 @@ builder.Services.AddControllers();
 // Configure custom services
 builder.Services.AddTransient<IMangaService, MangaService>();
 builder.Services.AddTransient<IJwtService, JwtService>();
-builder.Services.AddTransient<IReadingStatusService, ReadingStatusService>();
+builder.Services.AddTransient<IUserMangaService, UserMangaService>();
 
 // Configure Npgsql data source connection pool to share between EF Core for Identity Core
 // and Dapper for business logic
@@ -104,7 +104,6 @@ var app = builder.Build();
 app.UseHsts();
 app.UseHttpsRedirection();
 
-app.UseRouting();
 if (app.Environment.IsDevelopment())
 {
     app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
@@ -113,6 +112,8 @@ else
 {
     app.UseCors(myAllowSpecificOrigins);
 }
+
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();

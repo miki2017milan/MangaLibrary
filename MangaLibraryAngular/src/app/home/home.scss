@@ -1,0 +1,9 @@
+@use '../variables' as *;
+
+h1 {
+    color: $text-highlight;
+    font-size: clamp(1.5rem, calc(4vw + 1rem), 5rem);
+    line-height: 3rem;
+    margin-top: $space-xxl;
+    margin-bottom: $space-xl;
+  }

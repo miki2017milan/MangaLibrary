@@ -1,0 +1,79 @@
+@use '../../variables' as *;
+
+.status {
+  display: flex;
+  gap: 1.2rem;
+  background-color: $bg;
+  padding: 2rem;
+  height: 120px;
+  align-items: center;
+  border-radius: 0.2rem;
+
+  .title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.2rem;
+  }
+
+  .count {
+    display: flex;
+    justify-content: center;
+    gap: 0.3rem;
+    margin-top: 0.5rem;
+  }
+
+  .users {
+    font-size: 1.1rem;
+  }
+
+  .number {
+    font-weight: 600;
+  }
+
+  .completed {
+    .title {
+      background-color: #59ad35;
+    }
+    .number {
+      color: #59ad35;
+    }
+  }
+
+  .planning {
+    .title {
+      background-color: #02a9ff;
+    }
+    .number {
+      color: #02a9ff;
+    }
+  }
+
+  .reading {
+    .title {
+      background-color: #9256f3;
+    }
+    .number {
+      color: #9256f3;
+    }
+  }
+
+  .paused {
+    .title {
+      background-color: #f779a4;
+    }
+    .number {
+      color: #f779a4;
+    }
+  }
+
+  .dropped {
+    .title {
+      background-color: #e85d75;
+    }
+    .number {
+      color: #e85d75;
+    }
+  }
+}

@@ -47,4 +47,22 @@ public class MangasController(IMangaService mangaService) : ControllerBase
     {
         return (await mangaService.QueryMangas(genres, searchWord))!;
     }
+
+    [HttpGet("{id}/reading-status")]
+    public async Task<ActionResult<Dictionary<string, int>>> GetReadingStatusByManga(
+        [FromRoute] Guid id)
+    {
+        var stati = await mangaService.GetReadingStatusByManga(id);
+
+        return Ok(stati);
+    }
+
+    [HttpGet("{id}/rating")]
+    public async Task<ActionResult<Dictionary<string, int>>> GetRatingByManga(
+        [FromRoute] Guid id)
+    {
+        var stati = await mangaService.GetRatingByManga(id);
+
+        return Ok(stati);
+    }
 }

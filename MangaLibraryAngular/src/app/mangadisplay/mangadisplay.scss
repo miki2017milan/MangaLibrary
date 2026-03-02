@@ -1,0 +1,264 @@
+@use '../variables' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+$cover-height: min($space-m * 27, 25vw);
+$cover-width: min($space-m * 27 * 0.69, 25 * 0.69);
+
+.topContent {
+  display: flex;
+
+  background-color: $bg;
+  padding: $space-xl 15vw;
+}
+
+.bannerImage {
+  height: 220px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.cover {
+  img {
+    height: $cover-height;
+    width: $cover-width;
+  }
+
+  .add {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 1.5rem;
+    margin-top: $space-l;
+    background-color: $primary;
+    padding: 0.5rem 1rem;
+    border-radius: 0.2rem;
+    cursor: pointer;
+
+    p {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: white;
+    }
+
+    img {
+      height: 10px;
+      filter: brightness(0) invert(1);
+    }
+  }
+}
+
+.mangaText {
+  margin-left: $space-m;
+
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  text-align: start;
+  gap: $space-s;
+
+  .title {
+    display: flex;
+    align-items: center;
+    gap: $space-m;
+    h2 {
+      font-size: $space-xl;
+      line-height: $space-xl;
+      padding-top: $space-xs;
+    }
+
+    img {
+      height: 50px;
+    }
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: $text-muted;
+  }
+
+  .mangaDescription {
+    text-align: start;
+    font-size: $space-l;
+    margin-bottom: $space-l;
+    padding: $space-s;
+    padding-bottom: 0;
+    height: calc($cover-height * 0.8);
+
+    position: relative;
+    overflow-y: scroll;
+    &::after {
+      content: '';
+      position: sticky;
+      bottom: 0;
+      display: block;
+      width: 100%;
+      height: 75px;
+      background: linear-gradient(to bottom, transparent, $bg);
+      opacity: 1;
+      transition: opacity 0.2s;
+    }
+    &:hover::after {
+      opacity: 0;
+    }
+  }
+}
+
+.content {
+  display: flex;
+  margin: $space-xl 15vw;
+}
+
+.data {
+  display: flex;
+  flex-direction: column;
+  gap: $space-m;
+  text-align: start;
+  background-color: $bg;
+  padding: $space-l 2rem;
+  border-radius: 0.2rem;
+
+  .category {
+    h2 {
+      font-size: 1.1rem;
+    }
+
+    p {
+      color: $text-muted;
+    }
+  }
+}
+
+.showButton {
+  color: $text-highlight;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+}
+
+.activity {
+  display: flex;
+  margin: $space-xl;
+  justify-content: space-between;
+  gap: 1rem;
+
+  .readingStatus {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+
+    h2 {
+      font-size: 1.3rem;
+      margin-bottom: $space-m;
+    }
+  }
+
+  .rating {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+
+    h2 {
+      font-size: 1.3rem;
+      margin-bottom: $space-m;
+    }
+  }
+  .ratingChart {
+    display: flex;
+    background-color: $bg;
+    height: 120px;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 0.2rem;
+
+    .barGroup {
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
+    }
+
+    .bar {
+      height: var(--h);
+      min-height: 10px;
+      background-color: var(--color);
+      border-radius: 0.5rem;
+    }
+
+    .number {
+      opacity: 0;
+      transition: opacity 1s;
+    }
+    &:hover .number {
+      opacity: 1;
+    }
+  }
+}
+
+.staff {
+  text-align: start;
+  padding: $space-xl;
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    gap: $space-l;
+    margin-top: $space-m;
+
+    li {
+      display: flex;
+      flex-direction: column;
+      background-color: $bg;
+      height: fit-content;
+      border-radius: 0.4rem;
+      padding: $space-m;
+
+      .staffName {
+        font-size: 1.2rem;
+        color: $text-highlight;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.errorMessage {
+  margin-top: $space-xxl;
+}
+
+.loading {
+  background: linear-gradient(-45deg, $bg 40%, #999999 50%, $bg 60%);
+  background-size: 300%;
+  background-position-x: 130%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes shimmer {
+  to {
+    background-position-x: -20%;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .mangaDisplayContent {
+    padding: $space-xl 5rem;
+  }
+
+  .content {
+    margin: $space-xl 5rem;
+  }
+}

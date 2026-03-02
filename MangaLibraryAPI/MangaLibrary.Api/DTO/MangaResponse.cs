@@ -5,7 +5,7 @@ namespace MangaLibraryAPI.DTO;
 public class MangaResponse
 {
     public Guid? Id { get; set; }
-    public string? TitleEnglish { get; set; }
+    public string? Title { get; set; }
     public string? TitleNative { get; set; }
     public String[]? Genres { get; set; }
     public String[]? Tags { get; set; }
@@ -28,7 +28,7 @@ public static class MangaResponseExtensions
         return new MangaResponse
         {
             Id = manga.Id,
-            TitleEnglish = manga.Title,
+            Title = manga.Title,
             TitleNative = manga.TitleNative,
             Genres = manga.Genres,
             Tags = manga.Tags,

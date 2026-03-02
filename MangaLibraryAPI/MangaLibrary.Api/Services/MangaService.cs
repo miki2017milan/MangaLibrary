@@ -112,4 +112,40 @@ public class MangaService(IDbConnectionFactory connectionFactory) : IMangaServic
     {
         return null;
     }
+
+    public async Task<Dictionary<string, int>?> GetReadingStatusByManga(Guid mangaId)
+    {
+        using var connection = await connectionFactory.CreateDbConnectionAsync();
+
+        var stati = await connection.QueryAsync<ReadingStatusDictionary>(
+            """
+            Select status, Count(status)
+            from user_manga
+            where manga_id = @mangaId
+            group by status 
+            """, new { mangaId });
+
+        return stati.ToDictionary(s => s.Status, s => s.Count);
+    }
+
+    public async Task<Dictionary<int, int>?> GetRatingByManga(Guid mangaId)
+    {
+        using var connection = await connectionFactory.CreateDbConnectionAsync();
+
+        var stati = await connection.QueryAsync<RatingHistogram>(
+            """
+            Select r.rating, coalesce(v.value, 0) as value
+            from 
+            (VALUES (1),(2),(3),(4),(5),(6),(7),(8),(9),(10)) r(rating)
+            left Join 
+            (Select rating, Count(*) as value
+            from user_manga
+            where manga_id = @mangaId
+            group by rating) v
+            On v.rating = r.rating
+            order by r.rating 
+            """, new { mangaId });
+
+        return stati.ToDictionary(s => s.Rating, s => s.Value);
+    }
 }

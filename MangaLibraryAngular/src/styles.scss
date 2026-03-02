@@ -1,0 +1,33 @@
+@use 'app/variables' as *;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  font-size: 14px;
+}
+
+body {
+  font: $p;
+  color: $text;
+  background-color: $bg-dark;
+  overflow: auto;
+}
+
+h1 {
+  font: $h1;
+}
+
+h2 {
+  font: $h2;
+}
+
+a {
+  text-decoration: none;
+}
+
+image {
+  width: 100%;
+  height: auto;
+}

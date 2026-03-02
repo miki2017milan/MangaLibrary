@@ -1,0 +1,26 @@
+<nav [class.showing]="isShowing()">
+  <ul>
+    <li class="header-left">
+      <div routerLink="/">
+        <img src="logo.webp" />
+        <h2>Manga Library</h2>
+      </div>
+      <img class="closeButton" src="/close-button.webp" (click)="clicktest()"/>
+    </li>
+
+    <li class="header-middle">
+      <p routerLink="/">Home</p>
+      <p routerLink="/search">Search</p>
+      <p routerLink="/library">Library</p>
+    </li>
+
+    <li class="header-right">
+      <div class="login">
+        <p routerLink="/login">Login</p>
+      </div>
+      <div class="signup">
+        <p routerLink="/register">Sign up</p>
+      </div>
+    </li>
+  </ul>
+</nav>
