@@ -5,5 +5,5 @@ namespace MangaLibraryAPI.ServiceContracts;
 
 public interface IJwtService
 {
-    public AuthenticationResponse CreateJwtToken(ApplicationUser user);
+    public Task<AuthenticationResponse> CreateJwtToken(ApplicationUser user);
 }

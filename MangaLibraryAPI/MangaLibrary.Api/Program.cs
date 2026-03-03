@@ -95,6 +95,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseRouting();
 
+using (var scope = app.Services.CreateScope())
+{
+    await RoleSeeder.SeedAsync(scope.ServiceProvider);
+}
+
 app.UseAuthentication();
 app.UseAuthorization();
 

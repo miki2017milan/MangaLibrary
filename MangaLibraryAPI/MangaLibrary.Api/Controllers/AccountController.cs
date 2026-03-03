@@ -24,7 +24,9 @@ public class AccountController(
         var result = await userManager.CreateAsync(user, userDetails.Password!);
         if (!result.Succeeded) return BadRequest(result.Errors);
 
-        return Ok(jwtService.CreateJwtToken(user));
+        await userManager.AddToRoleAsync(user, "User");
+
+        return Ok(await jwtService.CreateJwtToken(user));
     }
 
     [HttpPost("login")]
@@ -36,7 +38,7 @@ public class AccountController(
         var isPasswordValid = await userManager.CheckPasswordAsync(user, userDetails.Password!);
         if (!isPasswordValid) return Problem("Email or Password are wrong", statusCode: 401);
 
-        return Ok(jwtService.CreateJwtToken(user));
+        return Ok(await jwtService.CreateJwtToken(user));
     }
 
     [Authorize]

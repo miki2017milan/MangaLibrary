@@ -4,13 +4,14 @@ using System.Text;
 using MangaLibraryAPI.DTO;
 using MangaLibraryAPI.Entities;
 using MangaLibraryAPI.ServiceContracts;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 namespace MangaLibraryAPI.Services;
 
-public class JwtService(IConfiguration configuration) : IJwtService
+public class JwtService(IConfiguration configuration, UserManager<ApplicationUser> userManager) : IJwtService
 {
-    public AuthenticationResponse CreateJwtToken(ApplicationUser user)
+    public async Task<AuthenticationResponse> CreateJwtToken(ApplicationUser user)
     {
         if (string.IsNullOrEmpty(configuration["Jwt:ExpirationMinutes"]))
         {
@@ -28,6 +29,14 @@ public class JwtService(IConfiguration configuration) : IJwtService
                 DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(),
                 ClaimValueTypes.Integer64), // Created at timestamp
         };
+
+        var roles = await userManager.GetRolesAsync(user);
+
+        foreach (var role in roles)
+        {
+            claims = claims.Append(new Claim(ClaimTypes.Role, role)).ToArray();
+        }
+
 
         if (string.IsNullOrEmpty(configuration["Jwt:Key"]))
         {
