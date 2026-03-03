@@ -15,9 +15,9 @@ public class UserMangaController(IUserMangaService userMangaService) : Controlle
     [HttpGet("manga")]
     public async Task<ActionResult<IEnumerable<UserMangaReadingStatus>>> GetMangasByUser()
     {
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var mangas =
-            await userMangaService.GetMangasFromUser(
-                Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!));
+            await userMangaService.GetMangasFromUser(userId);
 
         return Ok(mangas);
     }
@@ -26,9 +26,9 @@ public class UserMangaController(IUserMangaService userMangaService) : Controlle
     [HttpGet("manga/{mangaId}")]
     public async Task<ActionResult<UserMangaReadingStatus>> GetUserManga([FromRoute] Guid mangaId)
     {
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var manga =
-            await userMangaService.GetUserManga(mangaId,
-                Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!));
+            await userMangaService.GetUserManga(mangaId, userId);
 
         return Ok(manga);
     }
@@ -67,6 +67,15 @@ public class UserMangaController(IUserMangaService userMangaService) : Controlle
         }
 
         return Problem("Cannot add rating to a manga not added ot the user.", statusCode: 400);
+    }
+
+    [Authorize]
+    [HttpDelete("manga/{mangaId}")]
+    public async Task<ActionResult> DeleteUserManga([FromRoute] Guid mangaId)
+    {
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        await userMangaService.RemoveMangaFromUser(mangaId, userId);
+        return NoContent();
     }
 
     [HttpPost("{userId}/manga/{mangaId}")]

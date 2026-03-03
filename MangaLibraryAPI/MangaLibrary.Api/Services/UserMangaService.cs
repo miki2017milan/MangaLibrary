@@ -14,7 +14,6 @@ public class UserMangaService(IDbConnectionFactory connectionFactory) : IUserMan
     {
         using var connection = await connectionFactory.CreateDbConnectionAsync();
 
-
         var manga = await connection.QueryFirstOrDefaultAsync<UserManga>(
             """
             Select * from user_manga
