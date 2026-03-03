@@ -2,6 +2,7 @@ using Dapper;
 using MangaLibraryAPI.Database;
 using MangaLibraryAPI.DTO;
 using MangaLibraryAPI.Entities;
+using MangaLibraryAPI.Exceptions;
 using MangaLibraryAPI.ServiceContracts;
 
 namespace MangaLibraryAPI.Services;
@@ -13,7 +14,9 @@ public class MangaService(IDbConnectionFactory connectionFactory) : IMangaServic
         using var connection = await connectionFactory.CreateDbConnectionAsync();
         var manga = await connection.QueryFirstOrDefaultAsync<Manga>("SELECT * FROM mangas WHERE id = @id", new { id });
 
-        return manga?.ToMangaResponse();
+        if (manga is null) throw new MangaNotFoundException(id);
+
+        return manga.ToMangaResponse();
     }
 
     public async Task<MangaResponse?> CreateManga(MangaRequest mangaRequest)
@@ -21,7 +24,8 @@ public class MangaService(IDbConnectionFactory connectionFactory) : IMangaServic
         using var connection = await connectionFactory.CreateDbConnectionAsync();
 
         var guid = Guid.NewGuid();
-        var rows = await connection.ExecuteAsync(
+
+        await connection.ExecuteAsync(
             """
             INSERT INTO mangas (id, title, title_native, genres, tags, format, release_year, release_month, release_day, adult_content, country_of_origin, cover, banner, description, staff) 
             VALUES (@Id, @Title, @TitleNative, @Genres, @Tags, @Format::manga_format, @ReleaseYear, @ReleaseMonth, @ReleaseDay, @AdultContent, @CountryOfOrigin, @Cover, @Banner, @Description, @Staff::jsonb)
@@ -45,7 +49,6 @@ public class MangaService(IDbConnectionFactory connectionFactory) : IMangaServic
                 mangaRequest.Staff
             });
 
-        if (rows == 0) return null;
 
         var manga = mangaRequest.ToManga();
         manga.Id = guid;

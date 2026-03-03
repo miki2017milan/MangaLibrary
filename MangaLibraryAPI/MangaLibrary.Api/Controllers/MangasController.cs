@@ -13,20 +13,18 @@ public class MangasController(IMangaService mangaService) : ControllerBase
     {
         var manga = await mangaService.GetMangaById(id);
 
-        if (manga is null) return NotFound();
         return Ok(manga);
     }
 
     [HttpPost]
-    public async Task<ActionResult<MangaResponse>> CreateManga([FromBody] MangaRequest? mangaRequest)
+    public async Task<ActionResult<MangaResponse>> CreateManga([FromBody] MangaRequest mangaRequest)
     {
-        var manga = await mangaService.CreateManga(mangaRequest!);
-        if (manga is null) return Problem("Failed to create manga");
-        return CreatedAtAction(nameof(GetMangaFromId), new { manga.Id }, manga);
+        var manga = await mangaService.CreateManga(mangaRequest);
+        return CreatedAtAction(nameof(GetMangaFromId), new { manga!.Id }, manga);
     }
 
-    [HttpPut("{id?}")]
-    public async Task<ActionResult<MangaResponse>> UpdateManga([FromRoute] Guid? id,
+    [HttpPut("{id}")]
+    public async Task<ActionResult<MangaResponse>> UpdateManga([FromRoute] Guid id,
         [FromBody] MangaRequest mangaRequest)
     {
         var manga = await mangaService.UpdateManga(id, mangaRequest);

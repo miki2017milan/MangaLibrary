@@ -11,8 +11,66 @@ namespace MangaLibraryAPI.Controllers;
 [ApiController]
 public class UserMangaController(IUserMangaService userMangaService) : ControllerBase
 {
+    [Authorize]
+    [HttpGet("manga")]
+    public async Task<ActionResult<IEnumerable<UserMangaReadingStatus>>> GetMangasByUser()
+    {
+        var mangas =
+            await userMangaService.GetMangasFromUser(
+                Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!));
+
+        return Ok(mangas);
+    }
+
+    [Authorize]
+    [HttpGet("manga/{mangaId}")]
+    public async Task<ActionResult<UserMangaReadingStatus>> GetUserManga([FromRoute] Guid mangaId)
+    {
+        var manga =
+            await userMangaService.GetUserManga(mangaId,
+                Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!));
+
+        return Ok(manga);
+    }
+
+    [Authorize]
+    [HttpPost("manga/{mangaId}")]
+    public async Task<ActionResult<UserManga>> AddUserManga([FromBody] UserMangaRequest userMangaRequest,
+        [FromRoute] Guid mangaId)
+    {
+        var userManga = userMangaRequest.ToUserManga();
+        userManga.MangaId = mangaId;
+        userManga.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var createdUserManga = await userMangaService.AddMangaToUser(userManga);
+
+        return Created("", createdUserManga);
+    }
+
+    [Authorize]
+    [HttpPut("manga/{mangaId}")]
+    public async Task<ActionResult<UserManga>> UpdateUserManga([FromBody] UserMangaUpdate userMangaUpdate,
+        [FromRoute] Guid mangaId)
+    {
+        var userManga = userMangaUpdate.ToUserManga();
+        userManga.MangaId = mangaId;
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        userManga.UserId = userId;
+        var updatedUserManga = await userMangaService.UpdateUserManga(userManga);
+
+        if (updatedUserManga is not null) return Ok(updatedUserManga);
+
+        if (!string.IsNullOrEmpty(userMangaUpdate.Status))
+        {
+            return await AddUserManga(
+                new UserMangaRequest() { Rating = userMangaUpdate.Rating, Status = userMangaUpdate.Status }, mangaId,
+                userId);
+        }
+
+        return Problem("Cannot add rating to a manga not added ot the user.", statusCode: 400);
+    }
+
     [HttpPost("{userId}/manga/{mangaId}")]
-    public async Task<ActionResult<UserManga>> AddMangaToUser([FromBody] UserMangaRequest userMangaRequest,
+    public async Task<ActionResult<UserManga>> AddUserManga([FromBody] UserMangaRequest userMangaRequest,
         [FromRoute] Guid userId, [FromRoute] Guid mangaId)
     {
         var userManga = userMangaRequest.ToUserManga();
@@ -36,74 +94,20 @@ public class UserMangaController(IUserMangaService userMangaService) : Controlle
 
         if (updatedUserManga is not null) return Ok(updatedUserManga);
 
-        if (string.IsNullOrEmpty(userMangaUpdate.Status))
-            return Problem("Cannot add rating to a manga not added ot the user.");
-        return await AddMangaToUser(
-            new UserMangaRequest() { Rating = userMangaUpdate.Rating, Status = userMangaUpdate.Status }, mangaId,
-            userId);
+        if (!string.IsNullOrEmpty(userMangaUpdate.Status))
+        {
+            return await AddUserManga(
+                new UserMangaRequest() { Rating = userMangaUpdate.Rating, Status = userMangaUpdate.Status }, mangaId,
+                userId);
+        }
+
+        return Problem("Cannot add rating to a manga not added ot the user.", statusCode: 400);
     }
 
     [HttpDelete("{userId}/manga/{mangaId}")]
-    public async Task<ActionResult> DeleteReadingStatus([FromRoute] Guid mangaId, [FromRoute] Guid userId)
+    public async Task<ActionResult> DeleteUserManga([FromRoute] Guid mangaId, [FromRoute] Guid userId)
     {
         await userMangaService.RemoveMangaFromUser(mangaId, userId);
         return NoContent();
-    }
-
-    [Authorize]
-    [HttpGet("manga")]
-    public async Task<ActionResult<IEnumerable<UserMangaReadingStatus>>> GetMangasByUser()
-    {
-        var mangas =
-            await userMangaService.GetMangasFromUser(
-                Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!));
-
-        return Ok(mangas);
-    }
-
-    [Authorize]
-    [HttpGet("manga/{mangaId}")]
-    public async Task<ActionResult<UserMangaReadingStatus>> GetMangasByUser([FromRoute] Guid mangaId)
-    {
-        var manga =
-            await userMangaService.GetUserManga(mangaId,
-                Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!));
-
-        return Ok(manga);
-    }
-
-    [Authorize]
-    [HttpPost("manga/{mangaId}")]
-    public async Task<ActionResult<UserManga>> AddMangaToUser([FromBody] UserMangaRequest userMangaRequest,
-        [FromRoute] Guid mangaId)
-    {
-        var userManga = userMangaRequest.ToUserManga();
-        userManga.MangaId = mangaId;
-        userManga.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        var createdUserManga = await userMangaService.AddMangaToUser(userManga);
-
-        if (createdUserManga is null) return Problem("Error when adding the manga to the user", statusCode: 400);
-
-        return Created("", createdUserManga);
-    }
-
-    [Authorize]
-    [HttpPut("manga/{mangaId}")]
-    public async Task<ActionResult<UserManga>> UpdateUserManga([FromBody] UserMangaUpdate userMangaUpdate,
-        [FromRoute] Guid mangaId)
-    {
-        var userManga = userMangaUpdate.ToUserManga();
-        userManga.MangaId = mangaId;
-        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        userManga.UserId = userId;
-        var updatedUserManga = await userMangaService.UpdateUserManga(userManga);
-
-        if (updatedUserManga is not null) return Ok(updatedUserManga);
-
-        if (string.IsNullOrEmpty(userMangaUpdate.Status))
-            return Problem("Cannot add rating to a manga not added ot the user.", statusCode: 400);
-        return await AddMangaToUser(
-            new UserMangaRequest() { Rating = userMangaUpdate.Rating, Status = userMangaUpdate.Status }, mangaId,
-            userId);
     }
 }

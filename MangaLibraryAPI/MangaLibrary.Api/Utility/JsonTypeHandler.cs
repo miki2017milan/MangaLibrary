@@ -2,7 +2,7 @@ using System.Data;
 using System.Text.Json;
 using Dapper;
 
-namespace MangaLibraryAPI.Services;
+namespace MangaLibraryAPI.Utility;
 
 public class JsonTypeHandler<T> : SqlMapper.TypeHandler<T>
 {

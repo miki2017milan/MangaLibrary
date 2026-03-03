@@ -2,8 +2,10 @@ using System.Text;
 using Dapper;
 using MangaLibraryAPI.Database;
 using MangaLibraryAPI.Entities;
+using MangaLibraryAPI.Filters;
 using MangaLibraryAPI.ServiceContracts;
 using MangaLibraryAPI.Services;
+using MangaLibraryAPI.Utility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +15,11 @@ using Npgsql;
 var builder = WebApplication.CreateBuilder(args);
 DefaultTypeMap.MatchNamesWithUnderscores = true;
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<MangaExceptionFilter>();
+    options.Filters.Add<UserMangaExceptionFilter>();
+});
 
 // Configure custom services
 builder.Services.AddTransient<IMangaService, MangaService>();
@@ -48,20 +54,6 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-    options.Events = new JwtBearerEvents
-    {
-        OnAuthenticationFailed = context =>
-        {
-            Console.WriteLine("Auth failed: " + context.Exception.Message);
-            Console.WriteLine("Raw Authorization header: " + context.Request.Headers["Authorization"]);
-            return Task.CompletedTask;
-        },
-        OnTokenValidated = context =>
-        {
-            Console.WriteLine("Token validated successfully");
-            return Task.CompletedTask;
-        },
-    };
     options.TokenValidationParameters = new TokenValidationParameters()
     {
         ValidateAudience = true,
@@ -83,6 +75,13 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => { options.Password.
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
     .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
+
+// Configure Model State error response
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = CustomModelStateResponse.Factory;
+    });
 
 var app = builder.Build();
 

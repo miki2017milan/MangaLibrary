@@ -2,6 +2,7 @@ using Dapper;
 using MangaLibraryAPI.Database;
 using MangaLibraryAPI.DTO;
 using MangaLibraryAPI.Entities;
+using MangaLibraryAPI.Exceptions;
 using MangaLibraryAPI.ServiceContracts;
 using Npgsql;
 
@@ -24,33 +25,33 @@ public class UserMangaService(IDbConnectionFactory connectionFactory) : IUserMan
         return manga;
     }
 
-    public async Task<UserManga?> AddMangaToUser(UserManga readingStatus)
+    public async Task<UserManga?> AddMangaToUser(UserManga userManga)
     {
         using var connection = await connectionFactory.CreateDbConnectionAsync();
 
         try
         {
-            var rows = await connection.ExecuteAsync(
+            await connection.ExecuteAsync(
                 """
                 INSERT INTO user_manga(manga_id, user_id, status, rating)
                 VALUES (@MangaId, @UserId, @Status, @Rating)
                 """,
-                readingStatus);
+                userManga);
         }
         catch (PostgresException ex) when (ex.SqlState == "23505")
         {
-            return null;
+            throw new DuplicateUserManga(userManga.MangaId, userManga.UserId);
         }
 
-        return readingStatus;
+        return userManga;
     }
 
-    public async Task<UserManga?> UpdateUserManga(UserManga readingStatus)
+    public async Task<UserManga?> UpdateUserManga(UserManga userManga)
     {
         using var connection = await connectionFactory.CreateDbConnectionAsync();
 
         var rows = 0;
-        if (string.IsNullOrEmpty(readingStatus.Status))
+        if (string.IsNullOrEmpty(userManga.Status))
         {
             rows = await connection.ExecuteAsync(
                 """
@@ -58,7 +59,7 @@ public class UserMangaService(IDbConnectionFactory connectionFactory) : IUserMan
                 SET rating = @Rating
                 WHERE manga_id = @MangaId and user_id = @UserId
                 """,
-                readingStatus);
+                userManga);
         }
         else
         {
@@ -68,10 +69,12 @@ public class UserMangaService(IDbConnectionFactory connectionFactory) : IUserMan
                 SET status = @Status, rating = @Rating
                 WHERE manga_id = @MangaId and user_id = @UserId
                 """,
-                readingStatus);
+                userManga);
         }
 
-        return rows == 0 ? null : readingStatus;
+        if (rows == 0) return null;
+
+        return userManga;
     }
 
     public async Task RemoveMangaFromUser(Guid mangaId, Guid userId)
