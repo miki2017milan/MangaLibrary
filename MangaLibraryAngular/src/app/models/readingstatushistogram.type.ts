@@ -1,4 +1,4 @@
-export type ReadingStatus = {
+export type ReadingStatusHistogram = {
   completed: number;
   planning: number;
   reading: number;

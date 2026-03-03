@@ -1,0 +1,17 @@
+@if (userManga()?.status) {
+  <div class="category yourRating">
+    <h2 class="title">YOUR RATING</h2>
+    @if (!userManga()?.rating) {
+      <div class="ratingInput">
+        <input type="text" #ratingValue (keyup.enter)="addRating(ratingValue.value)" />
+        <p>/ 10</p>
+        <img src="add.jpg" (click)="addRating(ratingValue.value)" />
+      </div>
+    } @else {
+      <div class="ratingInput">
+        <p>{{ userManga()?.rating }} / 10</p>
+        <img class="remove" src="close-button.webp" (click)="removeRating()" />
+      </div>
+    }
+  </div>
+}

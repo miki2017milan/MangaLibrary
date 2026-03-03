@@ -1,7 +1,7 @@
 @if (!status()) {
   <div class="dropdown">
     <div class="add" (click)="toggle()">
-      <p>Add to Library</p>
+      <p>Add to library</p>
       <img src="downarrow.png" />
     </div>
 
@@ -16,5 +16,31 @@
     }
   </div>
 } @else {
-  <h2 class="status" [class]="status()?.toLowerCase()">{{ status() }}</h2>
+  <div class="dropdown">
+    <div class="add" [class]="status().toLowerCase()" (click)="toggle()">
+      <p class="status">{{ status() }}</p>
+      <img src="downarrow.png" />
+    </div>
+
+    @if (isOpen()) {
+      <ul>
+        <li [class.nodisplay]="userManga()?.status == 'completed'" (click)="change('completed')">
+          Change to Completed
+        </li>
+        <li [class.nodisplay]="userManga()?.status == 'planning'" (click)="change('planning')">
+          Change to Planning
+        </li>
+        <li [class.nodisplay]="userManga()?.status == 'reading'" (click)="change('reading')">
+          Change to Reading
+        </li>
+        <li [class.nodisplay]="userManga()?.status == 'dropped'" (click)="change('dropped')">
+          Change to Dropped
+        </li>
+        <li [class.nodisplay]="userManga()?.status == 'paused'" (click)="change('paused')">
+          Change to Paused
+        </li>
+        <li class="Remove" (click)="remove()">Remove from library</li>
+      </ul>
+    }
+  </div>
 }

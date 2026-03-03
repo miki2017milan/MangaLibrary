@@ -7,64 +7,40 @@ import { Readingstatus } from '../components/readingstatus/readingstatus';
 import { Ratingchart } from '../components/ratingchart/ratingchart';
 import { Addtolibrary } from '../components/addtolibrary/addtolibrary';
 import { AccountService } from '../services/account-service';
-import { FormControl } from '@angular/forms';
+import { UserManga } from '../models/usermanga.type';
+import { Addrating } from '../components/addrating/addrating';
 
 @Component({
   selector: 'app-mangadisplay',
-  imports: [Readingstatus, Ratingchart, Addtolibrary],
+  imports: [Readingstatus, Ratingchart, Addtolibrary, Addrating],
   templateUrl: './mangadisplay.html',
   styleUrl: './mangadisplay.scss',
 })
 export class Mangadisplay implements OnInit {
-  @ViewChild('myDiv', { static: false }) myDiv!: ElementRef;
-  isDescriptionOverflowing = signal(false);
-
   router = inject(Router);
-  route = inject(ActivatedRoute);
   mangaService = inject(MangaService);
   accountService = inject(AccountService);
+
+  route = inject(ActivatedRoute);
   id = this.route.snapshot.paramMap.get('id');
 
+  userManga = signal<UserManga | undefined>(undefined);
   manga = signal<Manga | undefined>(undefined);
   loading = signal(true);
   error = signal(false);
 
+  @ViewChild('description', { static: false }) description!: ElementRef;
+  isDescriptionOverflowing = signal(false);
+
   tagsExpanded = signal(false);
-
-  rating = signal<number | undefined>(undefined);
-  hasManga = signal<boolean | undefined>(undefined);
-
-  addRating(value: string) {
-    console.log('hey');
-    const ratingValue = Number.parseInt(value);
-
-    if (isNaN(ratingValue)) return;
-    if (ratingValue > 10 || ratingValue < 1) return;
-
-    this.mangaService
-      .addRating(this.id, ratingValue)
-      .pipe(
-        catchError((err) => {
-          console.log(err);
-          throw err;
-        }),
-      )
-      .subscribe((value) => {
-        const currentUrl = this.router.url;
-        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-          this.router.navigateByUrl(currentUrl);
-        });
-      });
-  }
 
   ngOnInit(): void {
     this.mangaService
-      .getMangaFromApi(this.id)
+      .getManga(this.id)
       .pipe(
         catchError((err) => {
           this.loading.set(false);
           this.error.set(true);
-          console.log(err);
           throw err;
         }),
       )
@@ -73,19 +49,19 @@ export class Mangadisplay implements OnInit {
         manga.tags.sort();
         this.manga.set(manga);
         setTimeout(() => {
-          if (this.myDiv?.nativeElement) {
-            const el = this.myDiv.nativeElement;
+          // setTimeout with no input, delays this call so that the dom has finished rendering so that the div has the correct height
+          if (this.description?.nativeElement) {
+            const el = this.description.nativeElement;
             this.isDescriptionOverflowing.set(el.scrollHeight > el.clientHeight);
           }
         });
       });
 
+    // Gett Usermanga and distribute to addlibrary component and addrating component
     if (this.accountService.isAuthenticated()) {
-      this.mangaService.getReadingStatusForUser(this.id).subscribe((value) => {
-        console.log(value);
+      this.mangaService.getUserMangaForUser(this.id).subscribe((value) => {
         if (value != null) {
-          this.rating.set(value.rating);
-          this.hasManga.set(!!value.status);
+          this.userManga.set(value);
         }
       });
     }

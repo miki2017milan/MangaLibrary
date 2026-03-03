@@ -14,7 +14,7 @@
   <div class="topContent">
     <div class="cover">
       <img [src]="m.cover" />
-      <app-addtolibrary></app-addtolibrary>
+      <app-addtolibrary [userManga]="userManga()"></app-addtolibrary>
     </div>
 
     <div class="mangaText">
@@ -29,7 +29,7 @@
         class="mangaDescription"
         [innerHTML]="m.description"
         [class.has-border]="isDescriptionOverflowing()"
-        #myDiv
+        #description
       ></div>
     </div>
   </div>
@@ -66,22 +66,7 @@
         }
       </div>
 
-      @if (hasManga()) {
-        <div class="category yourRating">
-          <h2 class="title">YOUR RATING</h2>
-          @if (!rating()) {
-            <div class="ratingInput">
-              <input type="text" #ratingValue (keyup.enter)="addRating(ratingValue.value)" />
-              <p>/ 10</p>
-              <img src="add.jpg" (click)="addRating(ratingValue.value)" />
-            </div>
-          } @else {
-            <div class="ratingInput">
-              <p>{{ rating() }} / 10</p>
-            </div>
-          }
-        </div>
-      }
+      <app-addrating [userManga]="userManga()"></app-addrating>
     </div>
 
     <div class="main">

@@ -25,14 +25,18 @@
       } @else {
         <div class="profile">
           <div class="displayName" (click)="toggle()">
-            <p>{{ displayName() }}</p>
+            @if (displayName()) {
+              <p>{{ displayName() }}</p>
+            } @else {
+              <p>Loading...</p>
+            }
             <img src="downarrow.png" />
           </div>
 
           @if (isOpen()) {
             <ul>
               <li>Profile</li>
-              <li (click)="accountService.logout()">Logout</li>
+              <li (click)="accountService.logout(); reload()">Logout</li>
             </ul>
           }
         </div>

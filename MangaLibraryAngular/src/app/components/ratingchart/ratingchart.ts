@@ -2,7 +2,8 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { MangaService } from '../../services/manga.service';
 import { ActivatedRoute } from '@angular/router';
 import { catchError } from 'rxjs';
-import { Rating } from '../../models/rating.type';
+import { RatingHistogram } from '../../models/ratinghistrogram.type';
+import { RedirectService } from '../../services/redirect-service';
 
 @Component({
   selector: 'app-ratingchart',
@@ -19,11 +20,11 @@ export class Ratingchart implements OnInit {
   error = signal(false);
 
   total = signal(1);
-  ratingEntries = signal<Rating[] | undefined>(undefined);
+  ratingEntries = signal<{ key: string; value: number }[] | undefined>(undefined);
 
   ngOnInit(): void {
     this.mangaService
-      .getRatingFromApi(this.id)
+      .getRatingForManga(this.id)
       .pipe(
         catchError((err) => {
           this.loading.set(false);

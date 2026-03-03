@@ -1,7 +1,8 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError } from 'rxjs';
+import { catchError, EMPTY } from 'rxjs';
+import { AccountService } from './account-service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = localStorage.getItem('token');
@@ -11,11 +12,16 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     headers: req.headers.set('Authorization', 'Bearer ' + token),
   });
 
+  const router = inject(Router);
+  const accountService = inject(AccountService);
+
   return next(request).pipe(
     catchError((err) => {
       if (err.status === 401) {
-        localStorage.removeItem('token');
-        inject(Router).navigate(['/login']);
+        console.log('alarm');
+        accountService.logout();
+        router.navigateByUrl('/');
+        return EMPTY;
       }
       throw err;
     }),

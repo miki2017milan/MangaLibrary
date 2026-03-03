@@ -1,0 +1,40 @@
+@use '../../variables' as *;
+
+.yourRating {
+  .ratingInput {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+
+    input {
+      background: transparent;
+      border: none;
+      width: 15px;
+      border-bottom: 1px solid $text;
+      margin-right: 0.5rem;
+      color: $text;
+      font: $p;
+    }
+  }
+
+  img {
+    height: 17px;
+    margin-left: 0.6rem;
+    cursor: pointer;
+
+    &.remove {
+      height: 10px;
+      margin-bottom: 0.2rem;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+  }
+
+  &:hover .remove {
+    opacity: 1;
+  }
+
+  h2 {
+    font-size: 1.1rem;
+  }
+}

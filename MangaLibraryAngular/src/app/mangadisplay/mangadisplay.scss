@@ -17,7 +17,7 @@ $cover-width: min($space-m * 27 * 0.69, 25vw * 0.69);
 }
 
 .bannerImage {
-  height: 220px;
+  height: 300px;
   width: 100%;
   object-fit: cover;
 }
@@ -100,7 +100,9 @@ $cover-width: min($space-m * 27 * 0.69, 25vw * 0.69);
   text-align: start;
   background-color: $bg;
   padding: $space-l 2rem;
+  height: fit-content;
   border-radius: 0.2rem;
+  flex-shrink: 0;
 
   .category {
     h2 {
@@ -109,29 +111,6 @@ $cover-width: min($space-m * 27 * 0.69, 25vw * 0.69);
 
     p {
       color: $text-muted;
-    }
-  }
-
-  .yourRating {
-    .ratingInput {
-      display: flex;
-      justify-content: start;
-      align-items: center;
-
-      input {
-        background: transparent;
-        border: none;
-        width: 15px;
-        border-bottom: 1px solid $text;
-        margin-right: 0.5rem;
-        color: $text;
-        font: $p;
-      }
-    }
-    img {
-      height: 17px;
-      margin-left: 0.6rem;
-      cursor: pointer;
     }
   }
 }

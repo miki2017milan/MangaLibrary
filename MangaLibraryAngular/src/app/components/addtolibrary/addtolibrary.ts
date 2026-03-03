@@ -1,7 +1,9 @@
-import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, HostListener, inject, input, OnInit, signal } from '@angular/core';
 import { MangaService } from '../../services/manga.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../../services/account-service';
+import { UserManga } from '../../models/usermanga.type';
+import { RedirectService } from '../../services/redirect-service';
 
 @Component({
   selector: 'app-addtolibrary',
@@ -9,37 +11,59 @@ import { AccountService } from '../../services/account-service';
   templateUrl: './addtolibrary.html',
   styleUrl: './addtolibrary.scss',
 })
-export class Addtolibrary implements OnInit {
+export class Addtolibrary {
   mangaService = inject(MangaService);
   accountService = inject(AccountService);
+  redireactService = inject(RedirectService);
   router = inject(Router);
 
   route = inject(ActivatedRoute);
   id = this.route.snapshot.paramMap.get('id');
 
-  isOpen = signal(false);
-  status = signal<string | undefined>(undefined);
+  userManga = input<UserManga>();
+  status = computed(() => {
+    const s = this.userManga()?.status;
+    if (!s) return '';
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  });
 
-  toggle() {
-    this.isOpen.update((value) => !value);
+  private reload() {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigateByUrl(currentUrl);
+    });
   }
 
   add(value: string) {
-    this.mangaService.addReadingStatus(this.id, value).subscribe((_) => {
-      const currentUrl = this.router.url;
-      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigateByUrl(currentUrl);
-      });
+    if (!this.accountService.isAuthenticated()) {
+      this.redireactService.set(this.router.url);
+      console.log(this.router.url);
+      this.router.navigateByUrl('/login');
+      return;
+    }
+
+    this.mangaService.addReadingStatus(this.id, value).subscribe(() => {
+      this.reload();
     });
   }
 
-  ngOnInit(): void {
-    if (!this.accountService.isAuthenticated()) return;
-
-    this.mangaService.getReadingStatusForUser(this.id).subscribe((value) => {
-      const capitilazed = value.status.charAt(0).toUpperCase() + value.status.slice(1);
-      this.status.set(capitilazed);
+  remove() {
+    this.mangaService.removeReadingStatus(this.id).subscribe(() => {
+      this.reload();
     });
+  }
+
+  change(value: string) {
+    this.mangaService.changeReadingStatus(this.id, value).subscribe(() => {
+      this.reload();
+    });
+  }
+
+  // Droppdown logic
+  isOpen = signal(false);
+
+  toggle() {
+    this.isOpen.update((value) => !value);
   }
 
   @HostListener('document:click', ['$event'])

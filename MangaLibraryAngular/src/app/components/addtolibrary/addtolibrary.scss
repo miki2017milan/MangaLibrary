@@ -18,9 +18,11 @@
   gap: 0.5rem;
   width: 100%;
   p {
-    font-size: 1.3rem;
     font-weight: 600;
     color: white;
+    font-size: 1.4rem;
+    padding: 0.3rem;
+    border-radius: 0.2rem;
   }
 
   img {
@@ -101,8 +103,6 @@ ul {
   background-color: $paused;
 }
 
-.status {
-  font-size: 1.4rem;
-  padding: 0.3rem;
-  border-radius: 0.2rem;
+.nodisplay {
+  display: none;
 }
