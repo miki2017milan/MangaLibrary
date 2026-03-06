@@ -1,7 +1,7 @@
 @if (loading()) {
   <div class="bannerImage loading"></div>
   <div class="topContent">
-    <div class="coverImage loading"></div>
+    <div class="loading"></div>
   </div>
 } @else if (error()) {
   <h2 class="errorMessage">Something went wrong when loading the Manga!</h2>
@@ -25,12 +25,7 @@
         }
       </div>
       <h3>{{ m.titleNative }}</h3>
-      <div
-        class="mangaDescription"
-        [innerHTML]="m.description"
-        [class.has-border]="isDescriptionOverflowing()"
-        #description
-      ></div>
+      <app-mangadescription [description]="m.description"></app-mangadescription>
     </div>
   </div>
 

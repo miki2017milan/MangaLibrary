@@ -40,10 +40,10 @@ public class MangasController(IMangaService mangaService) : ControllerBase
     }
 
     [HttpGet("query")]
-    public async Task<ActionResult<IEnumerable<MangaResponse>>> QueryMangas(
-        [FromQuery(Name = "genre")] List<string>? genres, [FromQuery(Name = "title")] string? searchWord)
+    public async Task<ActionResult<PagedResponse<MangaResponse>>> QueryMangas(
+        [FromQuery] MangaQuery mangaQuery)
     {
-        return (await mangaService.QueryMangas(genres, searchWord))!;
+        return await mangaService.QueryMangas(mangaQuery);
     }
 
     [HttpGet("{id}/reading-status")]

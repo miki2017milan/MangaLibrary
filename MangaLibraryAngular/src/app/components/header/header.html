@@ -15,7 +15,7 @@
     </li>
 
     <li class="header-right">
-      @if (!accountService.isAuthenticated()) {
+      @if (!accountService.isAuthenticated() || error()) {
         <div class="login">
           <p routerLink="/login">Login</p>
         </div>
@@ -25,7 +25,7 @@
       } @else {
         <div class="profile">
           <div class="displayName" (click)="toggle()">
-            @if (displayName()) {
+            @if (!loading()) {
               <p>{{ displayName() }}</p>
             } @else {
               <p>Loading...</p>

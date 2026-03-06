@@ -1,1 +1,53 @@
-<h1>Welcome to the Manga Search!</h1>
+<div class="searchContent">
+  <div class="bar">
+    <div class="searchField">
+      <img src="search.webp" />
+      <input
+        [value]="query().title"
+        type="text"
+        placeholder="Search..."
+        (input)="onSearch($event.target.value)"
+      />
+    </div>
+  </div>
+
+  <div class="searchResult" [class.grid]="grid()" [class.list]="!grid()">
+    <ul>
+      @if (loading()) {
+        @for (_ of [].constructor(24); track $index) {
+          <li>
+            <div class="loading"></div>
+          </li>
+        }
+      } @else if (error()) {
+        <div class="errorMessage">
+          <h2>Something went wrong when loading the Manga!</h2>
+          <br />
+          <p>Try again later.</p>
+        </div>
+      } @else {
+        @for (manga of mangas(); track manga.id) {
+          @if (grid()) {
+            <li (click)="navigateToManga(manga.id)">
+              <img [src]="manga.cover" alt="" />
+              <h2>{{ manga.title }}</h2>
+            </li>
+          } @else {
+            <li>
+              <img [src]="manga.cover" alt="" />
+              <div class="text">
+                <h2>{{ manga.title }}</h2>
+                <p></p>
+              </div>
+            </li>
+          }
+        }
+        <li class="filler"></li>
+        <li class="filler"></li>
+        <li class="filler"></li>
+        <li class="filler"></li>
+        <li class="filler"></li>
+      }
+    </ul>
+  </div>
+</div>

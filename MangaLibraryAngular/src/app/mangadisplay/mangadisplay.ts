@@ -9,10 +9,11 @@ import { Addtolibrary } from '../components/addtolibrary/addtolibrary';
 import { AccountService } from '../services/account-service';
 import { UserManga } from '../models/usermanga.type';
 import { Addrating } from '../components/addrating/addrating';
+import { Mangadescription } from '../components/mangadescription/mangadescription';
 
 @Component({
   selector: 'app-mangadisplay',
-  imports: [Readingstatus, Ratingchart, Addtolibrary, Addrating],
+  imports: [Readingstatus, Ratingchart, Addtolibrary, Addrating, Mangadescription],
   templateUrl: './mangadisplay.html',
   styleUrl: './mangadisplay.scss',
 })
@@ -28,9 +29,6 @@ export class Mangadisplay implements OnInit {
   manga = signal<Manga | undefined>(undefined);
   loading = signal(true);
   error = signal(false);
-
-  @ViewChild('description', { static: false }) description!: ElementRef;
-  isDescriptionOverflowing = signal(false);
 
   tagsExpanded = signal(false);
 
@@ -48,13 +46,6 @@ export class Mangadisplay implements OnInit {
         this.loading.set(false);
         manga.tags.sort();
         this.manga.set(manga);
-        setTimeout(() => {
-          // setTimeout with no input, delays this call so that the dom has finished rendering so that the div has the correct height
-          if (this.description?.nativeElement) {
-            const el = this.description.nativeElement;
-            this.isDescriptionOverflowing.set(el.scrollHeight > el.clientHeight);
-          }
-        });
       });
 
     // Gett Usermanga and distribute to addlibrary component and addrating component

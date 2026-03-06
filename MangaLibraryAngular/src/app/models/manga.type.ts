@@ -1,4 +1,5 @@
 export type Manga = {
+  id: string;
   title: string;
   titleNative: string;
   genres: string[];

@@ -7,7 +7,7 @@
 }
 
 $cover-height: min($space-m * 27, 25vw);
-$cover-width: min($space-m * 27 * 0.69, 25vw * 0.69);
+$cover-width: min($space-m * 27 * 0.71, 25vw * 0.71);
 
 .topContent {
   display: flex;
@@ -59,32 +59,6 @@ $cover-width: min($space-m * 27 * 0.69, 25vw * 0.69);
     font-size: 1.5rem;
     font-weight: 400;
     color: $text-muted;
-  }
-
-  .mangaDescription {
-    text-align: start;
-    font-size: $space-l;
-    margin-bottom: $space-l;
-    padding: $space-s;
-    padding-bottom: 0;
-    height: calc($cover-height * 0.8);
-
-    position: relative;
-    overflow-y: scroll;
-    &::after {
-      content: '';
-      position: sticky;
-      bottom: 0;
-      display: block;
-      width: 100%;
-      height: 75px;
-      background: linear-gradient(to bottom, transparent, $bg);
-      opacity: 1;
-      transition: opacity 0.2s;
-    }
-    &:hover::after {
-      opacity: 0;
-    }
   }
 }
 

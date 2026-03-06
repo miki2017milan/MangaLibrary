@@ -18,6 +18,9 @@ export class Header implements OnInit {
   isOpen = signal(false);
   router = inject(Router);
 
+  loading = signal(true);
+  error = signal(false);
+
   reload() {
     const currentUrl = this.router.url;
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -31,9 +34,18 @@ export class Header implements OnInit {
 
   ngOnInit(): void {
     if (this.accountService.isAuthenticated()) {
-      this.accountService.getUserDetails().subscribe((userDetails) => {
-        this.displayName.set(userDetails.displayName);
-      });
+      this.accountService
+        .getUserDetails()
+        .pipe(
+          catchError((err) => {
+            this.error.set(true);
+            return EMPTY;
+          }),
+        )
+        .subscribe((userDetails) => {
+          this.displayName.set(userDetails.displayName);
+          this.loading.set(false);
+        });
     }
   }
 

@@ -341,7 +341,7 @@
   flex-direction: column;
   align-items: center;
   gap: var(--space-l);
-  width: min(1200px, 80vw);
+  "
 }
 
 .searchNavbar {

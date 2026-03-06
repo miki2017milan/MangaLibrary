@@ -111,9 +111,80 @@ public class MangaService(IDbConnectionFactory connectionFactory) : IMangaServic
         await connection.ExecuteAsync("DELETE FROM mangas WHERE id = @Id", new { Id = id });
     }
 
-    public async Task<List<MangaResponse>?> QueryMangas(List<string>? genres, string? searchWord)
+    public async Task<PagedResponse<MangaResponse>> QueryMangas(MangaQuery mangaQuery)
     {
-        return null;
+        var whereParameters = new List<string>();
+        var parameters = new DynamicParameters();
+        var orderBy = "";
+
+        if (!string.IsNullOrEmpty(mangaQuery.Title))
+        {
+            whereParameters.Add("title ILIKE @Title");
+            parameters.Add("@Title", "%" + mangaQuery.Title + "%");
+            orderBy = "ORDER BY similarity(title, @Title) DESC";
+        }
+
+        if (mangaQuery.Genres != null && mangaQuery.Genres.Count != 0)
+        {
+            for (var i = 0; i < mangaQuery.Genres.Count; i++)
+            {
+                whereParameters.Add($"@Genre{i} = ANY(genres)");
+                parameters.Add($"@Genre{i}", mangaQuery.Genres[i]);
+            }
+        }
+
+        if (mangaQuery.Tags != null && mangaQuery.Tags.Count != 0)
+        {
+            for (var i = 0; i < mangaQuery.Tags.Count; i++)
+            {
+                whereParameters.Add($"@Tag{i} = ANY(tags)");
+                parameters.Add($"@Tag{i}", mangaQuery.Tags[i]);
+            }
+        }
+
+        if (!string.IsNullOrEmpty(mangaQuery.Format))
+        {
+            whereParameters.Add("format = @Format");
+            parameters.Add("@Format", mangaQuery.Format);
+        }
+
+        if (!string.IsNullOrEmpty(mangaQuery.CountryOfOrigin))
+        {
+            whereParameters.Add("countryOfOrigin = @CountryOfOrigin");
+            parameters.Add("@CountryOfOrigin", mangaQuery.CountryOfOrigin);
+        }
+
+        whereParameters.Add(!mangaQuery.IncludesAdultContent ? "adult_content = false" : "");
+
+        using var connection = await connectionFactory.CreateDbConnectionAsync();
+        var whereSql = string.Join(" and ", whereParameters);
+
+        var parameterValues = parameters.ParameterNames
+            .Aggregate($"""
+                        Select *
+                        from mangas
+                        where {whereSql}
+                        """, (current, name) =>
+                current.Replace($"@{name}", parameters.Get<object>(name)?.ToString() ?? "NULL"));
+
+        var result =
+            (await connection.QueryAsync<PaginatedManga>(
+                $"""
+                 Select *, Count(*) Over() as TotalCount
+                 from mangas
+                 where {whereSql}
+                 {orderBy}
+                 Offset {(mangaQuery.Page - 1) * mangaQuery.PageSize}
+                 Limit {mangaQuery.PageSize}
+                 """, parameters)).ToList();
+
+        return new PagedResponse<MangaResponse>()
+        {
+            Content = result.Select((value) => value.ToMangaResponse()),
+            Total = result.Count != 0 ? (int)Math.Ceiling((double)result[0].TotalCount / mangaQuery.PageSize) : 0,
+            Page = mangaQuery.Page,
+            PageSize = mangaQuery.PageSize,
+        };
     }
 
     public async Task<Dictionary<string, int>?> GetReadingStatusByManga(Guid mangaId)

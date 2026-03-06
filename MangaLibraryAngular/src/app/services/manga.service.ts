@@ -4,6 +4,8 @@ import { Manga } from '../models/manga.type';
 import { ReadingStatusHistogram } from '../models/readingstatushistogram.type';
 import { RatingHistogram } from '../models/ratinghistrogram.type';
 import { UserManga } from '../models/usermanga.type';
+import { MangaQueryParams } from '../models/mangaqueryparams';
+import { PagedMangas } from '../models/pagedmangas.type';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +18,12 @@ export class MangaService {
 
   getManga(id: string | null) {
     return this.http.get<Manga>(this.mangaUrl + id);
+  }
+
+  queryMangas(queryParams: MangaQueryParams) {
+    return this.http.get<PagedMangas>(this.mangaUrl + 'query', {
+      params: queryParams,
+    });
   }
 
   getReadingStatusForManga(id: string | null) {
