@@ -23,6 +23,10 @@ $cover-width: min($space-m * 27 * 0.71, 25vw * 0.71);
 }
 
 .cover {
+  min-height: $cover-height;
+  min-width: $cover-width;
+  max-height: $cover-height;
+  max-width: $cover-width;
   img {
     min-height: $cover-height;
     min-width: $cover-width;

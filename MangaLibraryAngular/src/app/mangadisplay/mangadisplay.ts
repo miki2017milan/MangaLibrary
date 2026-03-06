@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, OnInit, Signal, signal, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Manga } from '../models/manga.type';
 import { MangaService } from '../services/manga.service';
 import { catchError } from 'rxjs';
@@ -48,7 +48,7 @@ export class Mangadisplay implements OnInit {
         this.manga.set(manga);
       });
 
-    // Gett Usermanga and distribute to addlibrary component and addrating component
+    // Get Usermanga and distribute to addlibrary component and addrating component
     if (this.accountService.isAuthenticated()) {
       this.mangaService.getUserMangaForUser(this.id).subscribe((value) => {
         if (value != null) {
