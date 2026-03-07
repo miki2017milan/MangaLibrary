@@ -14,24 +14,24 @@
     </div>
     <div class="filter">
       <h2>Genres</h2>
-      <app-multidropdown
+      <app-multisearchdropdown
         [selectedValues]="query().genres"
         [possibleValues]="possibleGenres"
         [onSelectValue]="onSelectGenre"
         [heading]="'GENRES'"
         [clearSelectedValues]="clearGenres"
-      ></app-multidropdown>
+      ></app-multisearchdropdown>
     </div>
 
     <div class="filter">
       <h2>Tags</h2>
-      <app-multidropdown
+      <app-multisearchdropdown
         [selectedValues]="query().tags"
         [possibleValues]="possibleTags"
         [onSelectValue]="onSelectTag"
         [heading]="'TAGS'"
         [clearSelectedValues]="clearTags"
-      ></app-multidropdown>
+      ></app-multisearchdropdown>
     </div>
   </div>
 

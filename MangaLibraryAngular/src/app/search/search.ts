@@ -6,12 +6,12 @@ import { mangaTags } from '../models/mangatags';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, debounceTime, EMPTY, Subject, switchMap } from 'rxjs';
 import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { Multidropdown } from '../components/multidropdown/multidropdown';
+import { Multisearchdropdown } from '../components/multisearchdropdown/multisearchdropdown';
 import { MangaQueryParams } from '../models/mangaqueryparams';
 
 @Component({
   selector: 'app-search',
-  imports: [Multidropdown],
+  imports: [Multisearchdropdown],
   templateUrl: './search.html',
   styleUrl: './search.scss',
 })

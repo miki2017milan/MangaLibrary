@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Multidropdown } from './multidropdown';
+import { Multisearchdropdown } from './multisearchdropdown';
 
-describe('Multidropdown', () => {
-  let component: Multidropdown;
-  let fixture: ComponentFixture<Multidropdown>;
+describe('Multisearchdropdown', () => {
+  let component: Multisearchdropdown;
+  let fixture: ComponentFixture<Multisearchdropdown>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Multidropdown],
+      imports: [Multisearchdropdown],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Multidropdown);
+    fixture = TestBed.createComponent(Multisearchdropdown);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

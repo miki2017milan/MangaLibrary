@@ -9,12 +9,12 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'app-multidropdown',
+  selector: 'app-multisearchdropdown',
   imports: [],
-  templateUrl: './multidropdown.html',
-  styleUrl: './multidropdown.scss',
+  templateUrl: './multisearchdropdown.html',
+  styleUrl: './multisearchdropdown.scss',
 })
-export class Multidropdown {
+export class Multisearchdropdown {
   selectedValues = input<string[]>();
   possibleValues = input<string[]>();
   onSelectValue = input<(value: string) => void>();
