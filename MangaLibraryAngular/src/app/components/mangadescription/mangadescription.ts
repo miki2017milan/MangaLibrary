@@ -1,10 +1,9 @@
 import {
+  afterRenderEffect,
   Component,
-  computed,
   effect,
   ElementRef,
   input,
-  OnInit,
   signal,
   ViewChild,
 } from '@angular/core';
@@ -22,15 +21,13 @@ export class Mangadescription {
   description = input();
 
   constructor() {
-    effect(() => {
+    afterRenderEffect(() => {
       this.description();
 
-      setTimeout(() => {
-        if (this.descriptionRef?.nativeElement) {
-          const el = this.descriptionRef.nativeElement;
-          this.isDescriptionOverflowing.set(el.scrollHeight > el.clientHeight);
-        }
-      });
+      if (this.descriptionRef?.nativeElement) {
+        const el = this.descriptionRef.nativeElement;
+        this.isDescriptionOverflowing.set(el.scrollHeight > el.clientHeight);
+      }
     });
   }
 }

@@ -16,31 +16,23 @@ export class Ratingchart implements OnInit {
   route = inject(ActivatedRoute);
   id = this.route.snapshot.paramMap.get('id');
 
-  loading = signal(true);
   error = signal(false);
 
   total = signal(1);
-  ratingEntries = signal<{ key: string; value: number }[] | undefined>(undefined);
+  ratingEntries = signal<[string, number][] | undefined>(undefined);
 
   ngOnInit(): void {
     this.mangaService
       .getRatingForManga(this.id)
       .pipe(
         catchError((err) => {
-          this.loading.set(false);
           this.error.set(true);
-          console.log(err);
           throw err;
         }),
       )
       .subscribe((rating) => {
         this.total.set(Object.values(rating).reduce((acc, val) => acc + val, 0));
-        this.ratingEntries.set(
-          Object.entries(rating).map(([key, value]) => ({
-            key,
-            value,
-          })),
-        );
+        this.ratingEntries.set(Object.entries(rating));
       });
   }
 }

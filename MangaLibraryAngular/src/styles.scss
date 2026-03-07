@@ -8,11 +8,14 @@
   font-size: 14px;
 }
 
+html {
+  overflow-y: scroll;
+}
+
 body {
   font: $p;
   color: $text;
   background-color: $bg-dark;
-  overflow: auto;
 }
 
 h1 {

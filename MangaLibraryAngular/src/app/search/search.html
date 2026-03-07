@@ -1,53 +1,82 @@
 <div class="searchContent">
   <div class="bar">
-    <div class="searchField">
-      <img src="search.webp" />
-      <input
-        [value]="query().title"
-        type="text"
-        placeholder="Search..."
-        (input)="onSearch($event.target.value)"
-      />
+    <div class="filter">
+      <h2>Search</h2>
+      <div class="searchField">
+        <img src="search.webp" />
+        <input
+          [value]="query().title"
+          type="text"
+          placeholder="Search..."
+          (input)="onSearch($event.target.value)"
+        />
+      </div>
+    </div>
+    <div class="filter">
+      <h2>Genres</h2>
+      <app-multidropdown
+        [selectedValues]="query().genres"
+        [possibleValues]="possibleGenres"
+        [onSelectValue]="onSelectGenre"
+        [heading]="'GENRES'"
+        [clearSelectedValues]="clearGenres"
+      ></app-multidropdown>
+    </div>
+
+    <div class="filter">
+      <h2>Tags</h2>
+      <app-multidropdown
+        [selectedValues]="query().tags"
+        [possibleValues]="possibleTags"
+        [onSelectValue]="onSelectTag"
+        [heading]="'TAGS'"
+        [clearSelectedValues]="clearTags"
+      ></app-multidropdown>
     </div>
   </div>
 
-  <div class="searchResult" [class.grid]="grid()" [class.list]="!grid()">
-    <ul>
-      @if (loading()) {
-        @for (_ of [].constructor(24); track $index) {
-          <li>
-            <div class="loading"></div>
-          </li>
-        }
-      } @else if (error()) {
-        <div class="errorMessage">
-          <h2>Something went wrong when loading the Manga!</h2>
-          <br />
-          <p>Try again later.</p>
-        </div>
-      } @else {
-        @for (manga of mangas(); track manga.id) {
-          @if (grid()) {
-            <li (click)="navigateToManga(manga.id)">
-              <img [src]="manga.cover" alt="" />
-              <h2>{{ manga.title }}</h2>
-            </li>
-          } @else {
-            <li>
-              <img [src]="manga.cover" alt="" />
-              <div class="text">
-                <h2>{{ manga.title }}</h2>
-                <p></p>
-              </div>
-            </li>
-          }
-        }
-        <li class="filler"></li>
-        <li class="filler"></li>
-        <li class="filler"></li>
-        <li class="filler"></li>
-        <li class="filler"></li>
+  @if (mangas()?.length == 0) {
+    <h2 class="noresult">No results!</h2>
+  }
+  <ul [class.grid]="grid()" [class.list]="!grid()">
+    @if (loading()) {
+      @for (_ of [].constructor(24); track $index) {
+        <li>
+          <div class="loading"></div>
+        </li>
       }
-    </ul>
-  </div>
+    } @else if (error()) {
+      <div class="errorMessage">
+        <h2>Something went wrong when loading the Manga!</h2>
+        <br />
+        <p>Try again later.</p>
+      </div>
+    } @else {
+      @for (manga of mangas(); track manga.id) {
+        @if (grid()) {
+          <li (click)="navigateToManga(manga.id)">
+            <img [src]="manga.cover" />
+            <h2>{{ manga.title }}</h2>
+
+            <div class="info">
+              <h2>{{ manga.releaseYear }}</h2>
+              <p>{{ manga.format }}</p>
+              <div class="genres">
+                @for (genre of manga.genres.slice(0, 3); track $index) {
+                  <p>{{ genre }}</p>
+                }
+              </div>
+            </div>
+          </li>
+        } @else {
+          <!-- List view TODO -->
+        }
+      }
+      <li class="filler"></li>
+      <li class="filler"></li>
+      <li class="filler"></li>
+      <li class="filler"></li>
+      <li class="filler"></li>
+    }
+  </ul>
 </div>

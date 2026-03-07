@@ -154,10 +154,18 @@ public class MangaService(IDbConnectionFactory connectionFactory) : IMangaServic
             parameters.Add("@CountryOfOrigin", mangaQuery.CountryOfOrigin);
         }
 
-        whereParameters.Add(!mangaQuery.IncludesAdultContent ? "adult_content = false" : "");
+        if (!mangaQuery.IncludesAdultContent)
+        {
+            whereParameters.Add("adult_content = false");
+        }
 
         using var connection = await connectionFactory.CreateDbConnectionAsync();
         var whereSql = string.Join(" and ", whereParameters);
+
+        if (!string.IsNullOrEmpty(whereSql))
+        {
+            whereSql = "where " + whereSql;
+        }
 
         var parameterValues = parameters.ParameterNames
             .Aggregate($"""
@@ -172,7 +180,7 @@ public class MangaService(IDbConnectionFactory connectionFactory) : IMangaServic
                 $"""
                  Select *, Count(*) Over() as TotalCount
                  from mangas
-                 where {whereSql}
+                 {whereSql}
                  {orderBy}
                  Offset {(mangaQuery.Page - 1) * mangaQuery.PageSize}
                  Limit {mangaQuery.PageSize}

@@ -1,0 +1,44 @@
+<div class="dropdown">
+  <div class="field" (click)="isOpen.set(true)">
+    @if (selectedValues() && selectedValues()!.length == 0) {
+      <input
+        [value]="searchWord()"
+        type="search"
+        placeholder="Any"
+        (focus)="isOpen.set(true)"
+        (input)="updateSearchWord($event.target.value)"
+      />
+      <img src="downarrow.png" />
+    } @else {
+      <div class="selectedValues">
+        @if (selectedValues()) {
+          <div class="selectedValue">{{ selectedValues()![0] }}</div>
+          @if (selectedValues()!.length > 1) {
+            <div class="selectedValue">+{{ selectedValues()!.length - 1 }}</div>
+          }
+        }
+      </div>
+      <input
+        [value]="searchWord()"
+        type="search"
+        (focus)="isOpen.set(true)"
+        (input)="updateSearchWord($event.target.value)"
+      />
+      <img src="closeFilter.png" (click)="clearSelectedValues()!(); $event.stopPropagation()" />
+    }
+  </div>
+
+  @if (isOpen()) {
+    <ul animate.enter="slideDown" animate.leave="slideUp">
+      <li class="title">{{ heading() }}</li>
+      @for (value of filteredPossibleValues(); track $index) {
+        <div class="possibleValue" (click)="selectValue(value)">
+          <li>{{ value }}</li>
+          @if (selectedValues() && selectedValues()!.includes(value)) {
+            <img src="check.png" />
+          }
+        </div>
+      }
+    </ul>
+  }
+</div>

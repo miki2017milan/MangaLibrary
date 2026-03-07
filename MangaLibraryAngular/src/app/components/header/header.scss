@@ -7,9 +7,9 @@
 nav {
   position: fixed;
   height: $space-xxl;
-  width: 100%;
   background-color: $bg;
-  z-index: 10;
+  width: 100%;
+  z-index: 1000;
   top: 0;
 }
 
@@ -17,19 +17,15 @@ ul {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  margin: 0 $space-m;
+  padding: 0 20vw;
   height: 100%;
   list-style: none;
-}
-
-li {
-  width: 30vw;
 }
 
 .header-left div {
   display: flex;
   align-items: center;
+  justify-content: end;
   cursor: pointer;
 
   img {
@@ -47,7 +43,7 @@ li {
   align-items: center;
   justify-content: center;
 
-  gap: $space-xxl;
+  gap: $space-xl;
 
   p {
     color: $text;
@@ -67,7 +63,7 @@ li {
 .header-right {
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: start;
   gap: 1em;
 
   p {
@@ -136,7 +132,6 @@ li {
       animation: slideDown 0.2s ease forwards;
 
       li {
-        width: fit-content;
         font-size: 1.3rem;
         cursor: pointer;
         padding: 0.4rem;

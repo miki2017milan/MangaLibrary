@@ -2,11 +2,11 @@
   <h2>RATING</h2>
 
   <div class="rating">
-    @for (entry of ratingEntries(); track entry.key) {
+    @for (entry of ratingEntries(); track entry[0]) {
       <div class="barGroup">
-        <p class="number">{{ entry.value }}</p>
-        <div class="bar" [style.--h]="(entry.value / total()) * 100 + '%'"></div>
-        <p>{{ entry.key }}</p>
+        <p class="number">{{ entry[1] }}</p>
+        <div class="bar" [style.--h]="(entry[1] / total()) * 100 + '%'"></div>
+        <p>{{ entry[0] }}</p>
       </div>
     }
   </div>

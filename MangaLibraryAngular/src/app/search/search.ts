@@ -1,13 +1,17 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { MangaService } from '../services/manga.service';
 import { Manga } from '../models/manga.type';
+import { mangaGenres } from '../models/mangagenres';
+import { mangaTags } from '../models/mangatags';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, debounceTime, EMPTY, Subject, switchMap } from 'rxjs';
 import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { Multidropdown } from '../components/multidropdown/multidropdown';
+import { MangaQueryParams } from '../models/mangaqueryparams';
 
 @Component({
   selector: 'app-search',
-  imports: [],
+  imports: [Multidropdown],
   templateUrl: './search.html',
   styleUrl: './search.scss',
 })
@@ -20,20 +24,24 @@ export class Search {
   error = signal(false);
   totalPages = signal<number>(1);
   currentPage = signal<number>(1);
+
   grid = signal(true);
   searchSubject = new Subject<string>();
+  possibleGenres = mangaGenres;
+  possibleTags = mangaTags;
 
   route = inject(ActivatedRoute);
-  queryParams = toSignal(this.route.queryParams); // create signal fomr queryparams so that a new fetch will be made
-  query = computed(() => {
+  queryParams = toSignal(this.route.queryParams); // create signal from queryparams so that a new fetch will be made
+  query = computed<MangaQueryParams>(() => {
     // changes when queryParmas changes and that will trigger effect in the constructor because effect reads this.query
     return {
       title: this.queryParams()?.['title'] ?? '',
-      genres: this.queryParams()?.['genres'] ?? [],
-      tags: this.queryParams()?.['tags'] ?? [],
+      genres: [this.queryParams()?.['genres'] ?? []].flat(),
+      tags: [this.queryParams()?.['tags'] ?? []].flat(),
       format: this.queryParams()?.['format'] ?? '',
       includesAdultContent: this.queryParams()?.['includesAdultContent'] === 'true' ? true : false,
       countryOfOrigin: this.queryParams()?.['countryOfOrigin'] ?? '',
+      pageSize: 18,
     };
   });
 
@@ -79,4 +87,56 @@ export class Search {
       queryParamsHandling: 'merge',
     });
   }
+
+  // arrow funtion because onSelectGenre gets passed into another component and would lose the
+  // this. context when it is a class funtion
+  onSelectGenre = (genre: string) => {
+    if (this.query().genres.includes(genre)) {
+      const newGenres = this.query().genres.filter((value) => value !== genre);
+
+      this.router.navigate(['/search'], {
+        queryParams: { genres: newGenres },
+        queryParamsHandling: 'merge',
+      });
+      return;
+    }
+
+    const newGenres = [...this.query().genres, genre];
+    this.router.navigate(['/search'], {
+      queryParams: { genres: newGenres },
+      queryParamsHandling: 'merge',
+    });
+  };
+
+  clearGenres = () => {
+    this.router.navigate(['/search'], {
+      queryParams: { genres: [] },
+      queryParamsHandling: 'merge',
+    });
+  };
+
+  onSelectTag = (tag: string) => {
+    if (this.query().tags.includes(tag)) {
+      const newTags = this.query().tags.filter((value) => value !== tag);
+
+      this.router.navigate(['/search'], {
+        queryParams: { tags: newTags },
+        queryParamsHandling: 'merge',
+      });
+      return;
+    }
+
+    const newTags = [...this.query().tags, tag];
+    this.router.navigate(['/search'], {
+      queryParams: { tags: newTags },
+      queryParamsHandling: 'merge',
+    });
+  };
+
+  clearTags = () => {
+    this.router.navigate(['/search'], {
+      queryParams: { tags: [] },
+      queryParamsHandling: 'merge',
+    });
+  };
 }
