@@ -1,1 +1,1 @@
-export const mangaFormats = ['One Shot', 'Novel', 'Manga'];
+export const mangaFormats = ['Manga', 'Novel', 'One Shot'];
