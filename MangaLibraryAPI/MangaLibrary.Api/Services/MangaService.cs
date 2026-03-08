@@ -150,7 +150,7 @@ public class MangaService(IDbConnectionFactory connectionFactory) : IMangaServic
 
         if (!string.IsNullOrEmpty(mangaQuery.CountryOfOrigin))
         {
-            whereParameters.Add("countryOfOrigin = @CountryOfOrigin");
+            whereParameters.Add("country_of_origin = @CountryOfOrigin");
             parameters.Add("@CountryOfOrigin", mangaQuery.CountryOfOrigin);
         }
 

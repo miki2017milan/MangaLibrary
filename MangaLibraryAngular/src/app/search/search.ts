@@ -4,6 +4,7 @@ import { Manga } from '../models/manga.type';
 import { mangaGenres } from '../models/mangagenres';
 import { mangaTags } from '../models/mangatags';
 import { mangaFormats } from '../models/mangaformats';
+import { mangaCountryOfOrigin } from '../models/mangacountryoforigin';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, debounceTime, EMPTY, Subject, switchMap } from 'rxjs';
 import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
@@ -32,6 +33,7 @@ export class Search {
   possibleGenres = mangaGenres;
   possibleTags = mangaTags;
   possibleFormats = mangaFormats;
+  possibleCountryOfOrigin = mangaCountryOfOrigin;
 
   route = inject(ActivatedRoute);
   queryParams = toSignal(this.route.queryParams); // create signal from queryparams so that a new fetch will be made
@@ -95,16 +97,20 @@ export class Search {
   // this. context when it is a class funtion
   onSelectGenre = (genre: string) => {
     if (this.query().genres.includes(genre)) {
-      const newGenres = this.query().genres.filter((value) => value !== genre);
-
-      this.router.navigate(['/search'], {
-        queryParams: { genres: newGenres },
-        queryParamsHandling: 'merge',
-      });
+      this.removeGenre(genre);
       return;
     }
 
     const newGenres = [...this.query().genres, genre];
+    this.router.navigate(['/search'], {
+      queryParams: { genres: newGenres },
+      queryParamsHandling: 'merge',
+    });
+  };
+
+  removeGenre = (genre: string) => {
+    const newGenres = this.query().genres.filter((value) => value !== genre);
+
     this.router.navigate(['/search'], {
       queryParams: { genres: newGenres },
       queryParamsHandling: 'merge',
@@ -120,16 +126,20 @@ export class Search {
 
   onSelectTag = (tag: string) => {
     if (this.query().tags.includes(tag)) {
-      const newTags = this.query().tags.filter((value) => value !== tag);
-
-      this.router.navigate(['/search'], {
-        queryParams: { tags: newTags },
-        queryParamsHandling: 'merge',
-      });
+      this.removeTag(tag);
       return;
     }
 
     const newTags = [...this.query().tags, tag];
+    this.router.navigate(['/search'], {
+      queryParams: { tags: newTags },
+      queryParamsHandling: 'merge',
+    });
+  };
+
+  removeTag = (tag: string) => {
+    const newTags = this.query().tags.filter((value) => value !== tag);
+
     this.router.navigate(['/search'], {
       queryParams: { tags: newTags },
       queryParamsHandling: 'merge',
@@ -161,4 +171,37 @@ export class Search {
       queryParamsHandling: 'merge',
     });
   };
+
+  onSelectCountryOfOrigin = (countryOfOrigin: string) => {
+    if (this.query().countryOfOrigin === countryOfOrigin) {
+      this.clearCountryOfOrigin();
+      return;
+    }
+
+    this.router.navigate(['/search'], {
+      queryParams: { countryOfOrigin: countryOfOrigin },
+      queryParamsHandling: 'merge',
+    });
+  };
+
+  clearCountryOfOrigin = () => {
+    this.router.navigate(['/search'], {
+      queryParams: { countryOfOrigin: null },
+      queryParamsHandling: 'merge',
+    });
+  };
+
+  hasAny() {
+    return (
+      this.query().title ||
+      this.query().genres.length != 0 ||
+      this.query().tags.length != 0 ||
+      this.query().format ||
+      this.query().countryOfOrigin
+    );
+  }
+
+  removeAll() {
+    this.router.navigate(['/search']);
+  }
 }

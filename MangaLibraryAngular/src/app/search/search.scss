@@ -8,15 +8,25 @@
 .searchContent {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   width: min(1400px, 80vw);
 }
 
 .bar {
-  margin: 2rem 0;
   display: flex;
   justify-content: center;
-  gap: 2rem;
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+}
+
+.filterFields {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
 
   .filter {
     display: flex;
@@ -33,7 +43,7 @@
   .searchField {
     display: flex;
     background-color: $bg;
-    width: 300px;
+    width: 200px;
     padding: 0.6rem;
     border-radius: 0.4rem;
     gap: 1rem;
@@ -42,6 +52,12 @@
     img {
       height: 18px;
       align-self: center;
+
+      &.close {
+        height: 12px;
+        margin-right: 0.3rem;
+        cursor: pointer;
+      }
     }
 
     input {
@@ -59,14 +75,64 @@
   }
 }
 
-.grid {
+.activeFilters {
   display: flex;
-  list-style: none;
-  flex-wrap: wrap;
-  gap: 3rem;
-  justify-content: center;
+  justify-content: start;
+  margin: 2rem 0;
+  gap: 1.2rem;
 
+  &:hover .closeAll {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .activeFilter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: $primary;
+    padding: 0.3rem 0.5rem;
+    color: white;
+    border-radius: 0.6rem;
+    cursor: pointer;
+
+    &:hover img {
+      display: unset;
+    }
+
+    p {
+      font-weight: 600;
+    }
+
+    img {
+      display: none;
+      height: 10px;
+      margin-left: 0.5rem;
+      margin-bottom: 0.1rem;
+      filter: brightness(0) invert(1);
+    }
+  }
+
+  .closeAll {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    background-color: gray;
+    pointer-events: none;
+
+    img {
+      display: unset;
+    }
+  }
+}
+
+.grid {
   $width: 180px;
+  display: grid;
+  grid-template-columns: repeat(6, $width);
+  row-gap: 2rem;
+  justify-content: space-between;
+  list-style: none;
 
   li {
     width: $width;
@@ -128,8 +194,8 @@
         p {
           color: #ffffff;
           background-color: $primary;
-          padding: 0.1rem 0.3rem;
-          border-radius: 0.4rem;
+          padding: 0.1rem 0.6rem;
+          border-radius: 1rem;
           white-space: nowrap;
         }
       }
@@ -160,6 +226,10 @@
 .noresult {
   margin-top: 2rem;
   color: $text-muted;
+}
+
+.nodisplay {
+  display: none;
 }
 
 @keyframes shimmer {
