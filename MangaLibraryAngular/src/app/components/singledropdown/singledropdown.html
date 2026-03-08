@@ -1,0 +1,26 @@
+<div class="dropdown">
+  <div class="field" (click)="isOpen.set(true)">
+    @if (!selectedValue()) {
+      <p>Any</p>
+      <img src="downarrow.png" />
+    } @else {
+      <p class="selected">{{ selectedValue() }}</p>
+      <img src="closeFilter.png" (click)="clearSelectedValues()!(); $event.stopPropagation()" />
+    }
+  </div>
+
+  @if (isOpen()) {
+    <ul animate.enter="slideDown" animate.leave="slideUp">
+      <li class="title">{{ heading() }}</li>
+      @for (value of possibleValues(); track $index) {
+        <div class="possibleValue" (click)="selectValue(value)">
+          <li>{{ value }}</li>
+          @if (selectedValue() && selectedValue() === value) {
+            <img src="check.png" />
+          }
+        </div>
+        
+      }
+    </ul>
+  }
+</div>

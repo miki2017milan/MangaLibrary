@@ -14,7 +14,7 @@
         @if (selectedValues()) {
           <div class="selectedValue">{{ selectedValues()![0] }}</div>
           @if (selectedValues()!.length > 1) {
-            <div class="selectedValue">+{{ selectedValues()!.length - 1 }}</div>
+            <div class="selectedValue number">+{{ selectedValues()!.length - 1 }}</div>
           }
         }
       </div>

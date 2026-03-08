@@ -33,6 +33,17 @@
         [clearSelectedValues]="clearTags"
       ></app-multisearchdropdown>
     </div>
+
+    <div class="filter">
+      <h2>Format</h2>
+      <app-singledropdown
+        [selectedValue]="query().format"
+        [possibleValues]="possibleFormats"
+        [onSelectValue]="onSelectFormat"
+        [heading]="'Format'"
+        [clearSelectedValues]="clearFormat"
+      ></app-singledropdown>
+    </div>
   </div>
 
   @if (mangas()?.length == 0) {

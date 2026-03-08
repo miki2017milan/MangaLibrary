@@ -3,9 +3,9 @@
 main {
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-direction: column;
   text-align: center;
   margin-top: $space-xxl;
   overflow-x: hidden;
+  height: 100%;
 }

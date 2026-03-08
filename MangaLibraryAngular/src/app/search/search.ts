@@ -3,15 +3,17 @@ import { MangaService } from '../services/manga.service';
 import { Manga } from '../models/manga.type';
 import { mangaGenres } from '../models/mangagenres';
 import { mangaTags } from '../models/mangatags';
+import { mangaFormats } from '../models/mangaformats';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, debounceTime, EMPTY, Subject, switchMap } from 'rxjs';
 import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Multisearchdropdown } from '../components/multisearchdropdown/multisearchdropdown';
 import { MangaQueryParams } from '../models/mangaqueryparams';
+import { Singledropdown } from '../components/singledropdown/singledropdown';
 
 @Component({
   selector: 'app-search',
-  imports: [Multisearchdropdown],
+  imports: [Multisearchdropdown, Singledropdown],
   templateUrl: './search.html',
   styleUrl: './search.scss',
 })
@@ -29,6 +31,7 @@ export class Search {
   searchSubject = new Subject<string>();
   possibleGenres = mangaGenres;
   possibleTags = mangaTags;
+  possibleFormats = mangaFormats;
 
   route = inject(ActivatedRoute);
   queryParams = toSignal(this.route.queryParams); // create signal from queryparams so that a new fetch will be made
@@ -136,6 +139,25 @@ export class Search {
   clearTags = () => {
     this.router.navigate(['/search'], {
       queryParams: { tags: [] },
+      queryParamsHandling: 'merge',
+    });
+  };
+
+  onSelectFormat = (format: string) => {
+    if (this.query().format === format) {
+      this.clearFormat();
+      return;
+    }
+
+    this.router.navigate(['/search'], {
+      queryParams: { format: format },
+      queryParamsHandling: 'merge',
+    });
+  };
+
+  clearFormat = () => {
+    this.router.navigate(['/search'], {
+      queryParams: { format: null },
       queryParamsHandling: 'merge',
     });
   };

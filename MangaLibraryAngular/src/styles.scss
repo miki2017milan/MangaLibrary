@@ -16,6 +16,7 @@ body {
   font: $p;
   color: $text;
   background-color: $bg-dark;
+  height: calc(100vh - $space-xxl);
 }
 
 h1 {
@@ -28,6 +29,10 @@ h2 {
 
 a {
   text-decoration: none;
+}
+
+p {
+  font: $p;
 }
 
 image {
