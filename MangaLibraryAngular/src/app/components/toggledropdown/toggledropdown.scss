@@ -1,0 +1,113 @@
+@use '../../variables' as *;
+
+.dropdown {
+  position: relative;
+  background-color: $bg;
+  border-radius: 0.4rem;
+  z-index: 100;
+
+  ul {
+    position: absolute;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    background-color: $bg;
+    border-radius: 0.4rem;
+
+    margin-top: 1rem;
+    padding: 1rem;
+    gap: 0.5rem;
+    width: 100%;
+    text-align: left;
+    overflow: scroll;
+
+    .title {
+      font-size: 1.2rem;
+      cursor: default;
+      padding-left: 0;
+      font-weight: 600;
+    }
+
+    .possibleValue {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border-radius: 0.4rem;
+
+      img {
+        height: 16px;
+      }
+
+      li {
+        color: $text-muted;
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+
+      &:hover {
+        background-color: $bg-dark;
+      }
+    }
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
+.slideDown {
+  animation: slideDown 0.2s ease-in;
+}
+
+.slideUp {
+  animation: slideUp 0.1s ease-out;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 200px;
+  padding: 0.6rem 1rem;
+  gap: 0.5rem;
+  height: 40px;
+  cursor: pointer;
+
+  &:has(input:focus) .selectedValues {
+    display: none;
+  }
+
+  img {
+    width: 12px;
+  }
+
+  p {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: $text-very-muted;
+
+    &.selected {
+      color: $light-primary;
+    }
+  }
+}

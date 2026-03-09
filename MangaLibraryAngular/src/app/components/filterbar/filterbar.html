@@ -1,0 +1,121 @@
+<div class="bar">
+  <div class="filters">
+    <div class="filterFields">
+      <div class="filter">
+        <h2>Search</h2>
+        <div class="searchField">
+          <img src="search.webp" />
+          <input
+            [value]="query().title"
+            type="text"
+            placeholder="Search..."
+            (input)="onSearch($event.target.value)"
+          />
+          <img src="closeFilter.png" class="close" (click)="search('')" />
+        </div>
+      </div>
+
+      <div class="filter">
+        <h2>Genres</h2>
+        <app-multisearchdropdown
+          [selectedValues]="query().genres"
+          [possibleValues]="possibleGenres"
+          [onSelectValue]="onSelectGenre"
+          [heading]="'GENRES'"
+          [clearSelectedValues]="clearGenres"
+        ></app-multisearchdropdown>
+      </div>
+
+      <div class="filter">
+        <h2>Tags</h2>
+        <app-multisearchdropdown
+          [selectedValues]="query().tags"
+          [possibleValues]="possibleTags"
+          [onSelectValue]="onSelectTag"
+          [heading]="'TAGS'"
+          [clearSelectedValues]="clearTags"
+        ></app-multisearchdropdown>
+      </div>
+
+      <div class="filter">
+        <h2>Format</h2>
+        <app-singledropdown
+          [selectedValue]="query().format"
+          [possibleValues]="possibleFormats"
+          [onSelectValue]="onSelectFormat"
+          [heading]="'FORMAT'"
+          [clearSelectedValues]="clearFormat"
+        ></app-singledropdown>
+      </div>
+
+      <div class="filter">
+        <h2>Country Of Origin</h2>
+        <app-singledropdown
+          [selectedValue]="query().countryOfOrigin"
+          [possibleValues]="possibleCountryOfOrigin"
+          [onSelectValue]="onSelectCountryOfOrigin"
+          [heading]="'COUNTRY OF ORIGIN'"
+          [clearSelectedValues]="clearCountryOfOrigin"
+        ></app-singledropdown>
+      </div>
+
+      <div class="filter">
+        <h2>Includes Adult Content</h2>
+        <app-toggledropdown
+          [isTrue]="query().includesAdultContent"
+          [onSelectValue]="onSelectInculdesAdultContent"
+          [heading]="'Includes Adult Content'"
+        ></app-toggledropdown>
+      </div>
+    </div>
+
+    <div class="activeFilters">
+      @if (query().title) {
+        <div class="activeFilter" (click)="search('')">
+          <p>Search: {{ query().title }}</p>
+          <img src="closeFilter.png" />
+        </div>
+      }
+      @if (query().genres && query().genres.length != 0) {
+        @for (genre of query().genres; track $index) {
+          <div class="activeFilter" (click)="removeGenre(genre)">
+            <p>{{ genre }}</p>
+            <img src="closeFilter.png" />
+          </div>
+        }
+      }
+      @if (query().tags && query().tags.length != 0) {
+        @for (tag of query().tags; track $index) {
+          <div class="activeFilter" (click)="removeTag(tag)">
+            <p>{{ tag }}</p>
+            <img src="closeFilter.png" />
+          </div>
+        }
+      }
+      @if (query().format) {
+        <div class="activeFilter" (click)="clearFormat()">
+          <p>{{ query().format }}</p>
+          <img src="closeFilter.png" />
+        </div>
+      }
+      @if (query().countryOfOrigin) {
+        <div class="activeFilter" (click)="clearCountryOfOrigin()">
+          <p>{{ query().countryOfOrigin }}</p>
+          <img src="closeFilter.png" />
+        </div>
+      }
+      @if (query().includesAdultContent) {
+        <div class="activeFilter" (click)="clearIncludesAdultContent()">
+          <p>Includes Adult Content</p>
+          <img src="closeFilter.png" />
+        </div>
+      }
+      @if (hasAny()) {
+        <div class="activeFilter closeAll" (click)="removeAll()">
+          <p>Close all</p>
+          <img src="closeFilter.png" />
+        </div>
+      }
+    </div>
+  </div>
+</div>

@@ -8,122 +8,8 @@
 .searchContent {
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: center;
   width: min(1400px, 80vw);
-}
-
-.bar {
-  display: flex;
-  justify-content: center;
-}
-
-.filters {
-  display: flex;
-  flex-direction: column;
-}
-
-.filterFields {
-  margin-top: 2rem;
-  display: flex;
-  justify-content: center;
-  gap: 3rem;
-
-  .filter {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    gap: 0.5rem;
-
-    h2 {
-      font-size: 1.2rem;
-      color: $text-muted;
-    }
-  }
-
-  .searchField {
-    display: flex;
-    background-color: $bg;
-    width: 200px;
-    padding: 0.6rem;
-    border-radius: 0.4rem;
-    gap: 1rem;
-    height: 40px;
-
-    img {
-      height: 18px;
-      align-self: center;
-
-      &.close {
-        height: 12px;
-        margin-right: 0.3rem;
-        cursor: pointer;
-      }
-    }
-
-    input {
-      border: none;
-      background: transparent;
-      color: $text-muted;
-      width: 100%;
-      outline: none;
-      font-weight: 500;
-
-      &:focus::placeholder {
-        color: transparent;
-      }
-    }
-  }
-}
-
-.activeFilters {
-  display: flex;
-  justify-content: start;
-  margin: 2rem 0;
-  gap: 1.2rem;
-
-  &:hover .closeAll {
-    opacity: 1;
-    pointer-events: all;
-  }
-
-  .activeFilter {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    background-color: $primary;
-    padding: 0.3rem 0.5rem;
-    color: white;
-    border-radius: 0.6rem;
-    cursor: pointer;
-
-    &:hover img {
-      display: unset;
-    }
-
-    p {
-      font-weight: 600;
-    }
-
-    img {
-      display: none;
-      height: 10px;
-      margin-left: 0.5rem;
-      margin-bottom: 0.1rem;
-      filter: brightness(0) invert(1);
-    }
-  }
-
-  .closeAll {
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    background-color: gray;
-    pointer-events: none;
-
-    img {
-      display: unset;
-    }
-  }
 }
 
 .grid {
@@ -133,6 +19,7 @@
   row-gap: 2rem;
   justify-content: space-between;
   list-style: none;
+  margin-bottom: 5rem;
 
   li {
     width: $width;
@@ -201,11 +88,6 @@
       }
     }
 
-    .filler {
-      height: 0;
-      visibility: hidden;
-    }
-
     .loading {
       background: linear-gradient(-45deg, $bg 40%, $bg-light 50%, $bg 60%);
       background-size: 600%;
@@ -226,10 +108,6 @@
 .noresult {
   margin-top: 2rem;
   color: $text-muted;
-}
-
-.nodisplay {
-  display: none;
 }
 
 @keyframes shimmer {

@@ -1,0 +1,24 @@
+<div class="dropdown">
+  <div class="field" (click)="isOpen.set(true)">
+    <p [class.selected]="isTrue()">{{ isTrue() ? 'Yes' : 'No' }}</p>
+    <img src="downarrow.png" />
+  </div>
+
+  @if (isOpen()) {
+    <ul animate.enter="slideDown" animate.leave="slideUp">
+      <li class="title">{{ heading() }}</li>
+      <div class="possibleValue" (click)="onSelectValue()!(true)">
+        <li>Yes</li>
+        @if (isTrue()) {
+          <img src="check.png" />
+        }
+      </div>
+      <div class="possibleValue" (click)="onSelectValue()!(false)">
+        <li>No</li>
+        @if (!isTrue()) {
+          <img src="check.png" />
+        }
+      </div>
+    </ul>
+  }
+</div>
