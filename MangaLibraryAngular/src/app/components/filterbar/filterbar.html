@@ -11,7 +11,9 @@
             placeholder="Search..."
             (input)="onSearch($event.target.value)"
           />
-          <img src="closeFilter.png" class="close" (click)="search('')" />
+          @if (query().title) {
+            <img src="closeFilter.png" class="close" (click)="search('')" />
+          }
         </div>
       </div>
 

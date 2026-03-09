@@ -1,8 +1,16 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  OnDestroy,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { MangaService } from '../services/manga.service';
 import { Manga } from '../models/manga.type';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { catchError, EMPTY, switchMap } from 'rxjs';
+import { catchError, EMPTY, exhaustMap, Subject, switchMap } from 'rxjs';
 import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { MangaQueryParams } from '../models/mangaqueryparams';
 import { Filterbar } from '../components/filterbar/filterbar';
@@ -13,14 +21,17 @@ import { Filterbar } from '../components/filterbar/filterbar';
   templateUrl: './search.html',
   styleUrl: './search.scss',
 })
-export class Search {
+export class Search implements OnDestroy {
+  @ViewChild('loadMore') loadMoreTrigger!: ElementRef;
+  observer!: IntersectionObserver;
   router = inject(Router);
   mangaService = inject(MangaService);
 
   mangas = signal<Manga[] | undefined>(undefined);
   loading = signal(true);
+  loadingMore = signal(false);
   error = signal(false);
-  totalPages = signal<number>(1);
+  hasNext = signal<boolean>(false);
   currentPage = signal<number>(1);
 
   grid = signal(true);
@@ -36,9 +47,12 @@ export class Search {
       format: this.queryParams()?.['format'] ?? '',
       includesAdultContent: this.queryParams()?.['includesAdultContent'] === 'true' ? true : false,
       countryOfOrigin: this.queryParams()?.['countryOfOrigin'] ?? '',
+      page: 1,
       pageSize: 24,
     };
   });
+
+  loadingSubject = new Subject<void>();
 
   constructor() {
     toObservable(this.query) // Converto to observable meaning whenever this.query changes the new value gets push intu the switchMap
@@ -59,9 +73,54 @@ export class Search {
       )
       .subscribe((result) => {
         this.mangas.set(result.content);
-        this.totalPages.set(result.total);
+        this.hasNext.set(result.hasNext);
         this.currentPage.set(result.page);
         this.loading.set(false);
+        console.log(this.hasNext());
       });
+
+    this.loadingSubject
+      .pipe(
+        exhaustMap(() => {
+          if (!this.hasNext() || this.currentPage() > 10) return EMPTY;
+          return this.mangaService
+            .queryMangas({ ...this.query(), page: this.currentPage() + 1 })
+            .pipe(
+              catchError(() => {
+                this.error.set(true);
+                return EMPTY;
+              }),
+            );
+        }),
+        takeUntilDestroyed(),
+      )
+      .subscribe((result) => {
+        this.mangas.update((prev) => [...prev!, ...result.content]);
+        this.hasNext.set(result.hasNext);
+        this.currentPage.set(result.page);
+        this.loadingMore.set(false);
+      });
+  }
+
+  loadMore() {
+    if (this.loading() || this.loadingMore() || !this.hasNext() || this.currentPage() > 10) {
+      return;
+    }
+
+    this.loadingMore.set(true);
+    this.loadingSubject.next();
+  }
+
+  ngAfterViewInit() {
+    this.observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        this.loadMore();
+      }
+    });
+    this.observer.observe(this.loadMoreTrigger.nativeElement);
+  }
+
+  ngOnDestroy(): void {
+    this.observer.disconnect();
   }
 }

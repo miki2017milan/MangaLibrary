@@ -5,4 +5,5 @@ export type MangaQueryParams = {
   format: string;
   includesAdultContent: boolean;
   countryOfOrigin: string;
+  page: number;
 };

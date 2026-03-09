@@ -1,43 +1,55 @@
 <div class="searchContent">
   <app-filterbar [query]="query()"></app-filterbar>
 
-  @if (mangas()?.length == 0) {
-    <h2 class="noresult">No results!</h2>
-  }
-  <ul [class.grid]="grid()" [class.list]="!grid()">
-    @if (loading()) {
-      @for (_ of [].constructor(24); track $index) {
-        <li>
-          <div class="loading"></div>
-        </li>
-      }
-    } @else if (error()) {
-      <div class="errorMessage">
-        <h2>Something went wrong when loading the Manga!</h2>
-        <br />
-        <p>Try again later.</p>
-      </div>
-    } @else {
-      @for (manga of mangas(); track manga.id) {
-        @if (grid()) {
-          <li [routerLink]="['/manga', manga.id]">
-            <img [src]="manga.cover" />
-            <h2>{{ manga.title }}</h2>
-
-            <div class="info">
-              <h2>{{ manga.releaseYear }}</h2>
-              <p>{{ manga.format }}</p>
-              <div class="genres">
-                @for (genre of manga.genres.slice(0, 3); track $index) {
-                  <p>{{ genre }}</p>
-                }
-              </div>
-            </div>
+  @if (error()) {
+    <div class="errorMessage">
+      <h2>Something went wrong when loading the Manga!</h2>
+      <br />
+      <p>Try again later.</p>
+    </div>
+  } @else {
+    @if (mangas()?.length == 0) {
+      <h2 class="noresult">No results!</h2>
+    }
+    <ul [class.grid]="grid()" [class.list]="!grid()">
+      @if (loading()) {
+        @for (_ of [].constructor(24); track $index) {
+          <li>
+            <div class="loading"></div>
           </li>
-        } @else {
-          <!-- List view TODO -->
+        }
+      } @else {
+        @for (manga of mangas(); track manga.id) {
+          @if (grid()) {
+            <li [routerLink]="['/manga', manga.id]">
+              <img [src]="manga.cover" />
+              <h2>{{ manga.title }}</h2>
+
+              <div class="info">
+                <h2>{{ manga.releaseYear }}</h2>
+                <p>{{ manga.format }}</p>
+                <div class="genres">
+                  @for (genre of manga.genres.slice(0, 3); track $index) {
+                    <p>{{ genre }}</p>
+                  }
+                </div>
+              </div>
+            </li>
+          } @else {
+            <!-- List view TODO -->
+          }
+        }
+
+        @if (loadingMore()) {
+          @for (_ of [].constructor(6); track $index) {
+            <li>
+              <div class="loading"></div>
+            </li>
+          }
         }
       }
-    }
-  </ul>
+    </ul>
+  }
+
+  <div #loadMore class="loadMore"></div>
 </div>

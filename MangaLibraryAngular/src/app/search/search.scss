@@ -110,6 +110,11 @@
   color: $text-muted;
 }
 
+.loadMore {
+  width: 100%;
+  min-height: 1px;
+}
+
 @keyframes shimmer {
   to {
     background-position-x: 0%;
