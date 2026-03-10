@@ -1,1 +1,31 @@
-<h1>Welcome to the Manga Library :3</h1>
+<div class="home">
+  <h1>Welcome to the Manga Library!</h1>
+  <div class="content">
+    <div class="item">
+      <img src="search.webp" alt="" />
+      <div class="text">
+        <h2>The Search</h2>
+        <p>
+          Discover mangas from all around the world! Use our powerful search to filter by genre,
+          tags, format, country of origin, and more. Whether you're hunting for a hidden gem or
+          exploring a new genre, there's always something exciting waiting to be found — and added
+          to your collection.
+        </p>
+        <h3 [routerLink]="['/search']">Go to Search!</h3>
+      </div>
+    </div>
+    <div class="item">
+      <img src="book.png" alt="" />
+      <div class="text">
+        <h2>The Library</h2>
+        <p>
+          Your personal manga collection, all in one place. Keep track of what you're reading, what
+          you've finished, and what's next on your list. Assign reading statuses, score your
+          favorites, and build a library that reflects your unique taste — then share it with the
+          world.
+        </p>
+        <h3 [routerLink]="['/library']">Go to Library!</h3>
+      </div>
+    </div>
+  </div>
+</div>

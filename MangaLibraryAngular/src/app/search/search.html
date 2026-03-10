@@ -8,7 +8,7 @@
       <p>Try again later.</p>
     </div>
   } @else {
-    @if (mangas().length == 0) {
+    @if (mangas().length == 0 && !loading()) {
       <h2 class="noresult">No results!</h2>
     }
     <ul [class.grid]="grid()" [class.list]="!grid()">

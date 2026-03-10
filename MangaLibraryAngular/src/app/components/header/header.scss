@@ -43,18 +43,18 @@ ul {
   align-items: center;
   justify-content: center;
 
-  gap: $space-xl;
+  gap: $space-xxl;
 
   p {
-    color: $text;
-    font-size: 1.5rem;
+    color: $text-muted;
+    font-size: 1.3rem;
     font-weight: 600;
     cursor: pointer;
     transition: 200ms ease;
     text-wrap: none;
 
     &:hover {
-      color: #ffffff;
+      color: $light-primary;
       transform: scale(1.05);
     }
   }
@@ -134,11 +134,12 @@ ul {
       li {
         font-size: 1.3rem;
         cursor: pointer;
-        padding: 0.4rem;
-        border-radius: 0.2rem;
+        padding: 0.4rem 1rem;
+        border-radius: 0.4rem;
 
         &:hover {
-          background-color: $bg-light;
+          background-color: $bg-dark;
+          color: $light-primary;
         }
       }
 
@@ -153,5 +154,21 @@ ul {
         }
       }
     }
+  }
+}
+
+.loading {
+  background: linear-gradient(-45deg, $bg 40%, $bg-light 50%, $bg 60%);
+  background-size: 300%;
+  background-position-x: 130%;
+  animation: shimmer 1s infinite linear;
+  border-radius: 1rem;
+  width: 100px;
+  height: 20px;
+}
+
+@keyframes shimmer {
+  to {
+    background-position-x: -20%;
   }
 }

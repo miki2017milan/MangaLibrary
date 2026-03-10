@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, HostListener, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AccountService } from '../../services/account-service';
 import { catchError, EMPTY } from 'rxjs';
@@ -10,7 +10,7 @@ import { catchError, EMPTY } from 'rxjs';
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
-export class Header implements OnInit {
+export class Header {
   accountService = inject(AccountService);
   displayName = signal<string | undefined>(undefined);
 
@@ -32,21 +32,23 @@ export class Header implements OnInit {
     this.isOpen.update((value) => !value);
   }
 
-  ngOnInit(): void {
-    if (this.accountService.isAuthenticated()) {
-      this.accountService
-        .getUserDetails()
-        .pipe(
-          catchError((err) => {
-            this.error.set(true);
-            return EMPTY;
-          }),
-        )
-        .subscribe((userDetails) => {
-          this.displayName.set(userDetails.displayName);
-          this.loading.set(false);
-        });
-    }
+  constructor() {
+    effect(() => {
+      if (this.accountService.isAuthenticated()) {
+        this.accountService
+          .getUserDetails()
+          .pipe(
+            catchError(() => {
+              this.error.set(true);
+              return EMPTY;
+            }),
+          )
+          .subscribe((userDetails) => {
+            this.displayName.set(userDetails.displayName);
+            this.loading.set(false);
+          });
+      }
+    });
   }
 
   @HostListener('document:click', ['$event'])
