@@ -26,6 +26,7 @@ export class Search implements OnDestroy {
   observer!: IntersectionObserver;
   router = inject(Router);
   mangaService = inject(MangaService);
+  MAX_PAGES = signal(10);
 
   mangas = signal<Manga[]>([]);
   loading = signal(true);
@@ -80,7 +81,7 @@ export class Search implements OnDestroy {
     this.loadingSubject
       .pipe(
         exhaustMap(() => {
-          if (!this.hasNext() || this.currentPage() > 10) return EMPTY;
+          if (!this.hasNext() || this.currentPage() > this.MAX_PAGES()) return EMPTY;
           return this.mangaService
             .queryMangas({ ...this.query(), page: this.currentPage() + 1 })
             .pipe(
@@ -101,7 +102,12 @@ export class Search implements OnDestroy {
   }
 
   loadMore() {
-    if (this.loading() || this.loadingMore() || !this.hasNext() || this.currentPage() > 10) {
+    if (
+      this.loading() ||
+      this.loadingMore() ||
+      !this.hasNext() ||
+      this.currentPage() > this.MAX_PAGES()
+    ) {
       return;
     }
     this.loadingMore.set(true);

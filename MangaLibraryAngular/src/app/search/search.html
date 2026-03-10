@@ -43,7 +43,7 @@
     </ul>
   }
 
-  @if (currentPage() <= 10) {
+  @if (currentPage() <= MAX_PAGES()) {
     <ul [class.grid]="grid()" #loadMore>
       @for (_ of [].constructor(6); track $index) {
         <li>

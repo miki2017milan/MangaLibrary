@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, HostListener, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { mangaGenres } from '../../models/mangagenres';
 import { mangaTags } from '../../models/mangatags';
@@ -21,12 +21,31 @@ import { Toggledropdown } from '../toggledropdown/toggledropdown';
 export class Filterbar {
   router = inject(Router);
   query = input.required<MangaQueryParams>();
+  isMobile = signal(window.innerWidth <= 1024);
 
   searchSubject = new Subject<string>();
   possibleGenres = mangaGenres;
   possibleTags = mangaTags;
   possibleFormats = mangaFormats;
   possibleCountryOfOrigin = mangaCountryOfOrigin;
+
+  isExtended = signal(false);
+
+  toggleExtended() {
+    this.isExtended.update((prev) => !prev);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: Event) {
+    if (!(event.target as HTMLElement).closest('.config') && !this.isMobile()) {
+      this.isExtended.set(false);
+    }
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.isMobile.set(window.innerWidth <= 1024);
+  }
 
   constructor() {
     // takeUntilDestroyed to unsubscribe from the searchSubject whenever the component gets destoryed to prevent memoryleak
@@ -56,7 +75,8 @@ export class Filterbar {
       this.query().genres.length != 0 ||
       this.query().tags.length != 0 ||
       this.query().format ||
-      this.query().countryOfOrigin
+      this.query().countryOfOrigin ||
+      this.query().includesAdultContent
     );
   });
 

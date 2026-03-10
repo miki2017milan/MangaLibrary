@@ -1,19 +1,21 @@
 @use '../variables' as *;
 
+$width: 180px;
+
 :host {
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 
 .searchContent {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: min(1400px, 80vw);
+  width: 1300px;
 }
 
 .grid {
-  $width: 180px;
   display: grid;
   grid-template-columns: repeat(6, $width);
   row-gap: 2rem;
@@ -102,7 +104,13 @@
 }
 
 .errorMessage {
-  margin-top: $space-xl;
+  h2 {
+    line-height: 2rem;
+  }
+
+  p {
+    margin-bottom: 1rem;
+  }
 }
 
 .noresult {
@@ -118,5 +126,69 @@
 @keyframes shimmer {
   to {
     background-position-x: 0%;
+  }
+}
+
+@media screen and (max-width: 1500px) {
+  .searchContent {
+    width: 1050px;
+  }
+  .grid {
+    grid-template-columns: repeat(5, $width);
+  }
+}
+
+@media screen and (max-width: 1090px) {
+  .searchContent {
+    width: 100%;
+    margin: 0 2rem;
+  }
+
+  .grid {
+    margin: 0;
+  }
+
+  .grid {
+    grid-template-columns: repeat(4, $width);
+  }
+}
+
+@media screen and (max-width: 950px) {
+  .grid {
+    margin: 0;
+    justify-content: space-around;
+  }
+
+  .grid {
+    grid-template-columns: repeat(3, $width);
+  }
+}
+
+@media screen and (max-width: 680px) {
+  .grid {
+    grid-template-columns: repeat(2, $width);
+  }
+}
+
+@media screen and (max-width: 460px) {
+  $width: 100%;
+
+  .grid {
+    display: flex;
+    flex-direction: column;
+    margin: 0 2rem;
+    li {
+      width: $width;
+      img {
+        width: $width;
+        height: 100px;
+      }
+
+      .loading {
+        width: 100%;
+        height: 0;
+        padding-bottom: 141%; /* 1.41 × 100% */
+      }
+    }
   }
 }

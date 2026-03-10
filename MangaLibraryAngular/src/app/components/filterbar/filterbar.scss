@@ -13,16 +13,62 @@
       display: flex;
       justify-content: center;
       gap: 2.5rem;
+      position: relative;
+
+      .extendedFilters {
+        display: flex;
+        width: fit-content;
+        height: fit-content;
+        background-color: $bg;
+        padding: 1rem;
+        gap: 2rem;
+        border-radius: 0.6rem;
+
+        position: absolute;
+        right: 0;
+        top: 90px;
+      }
 
       .filter {
         display: flex;
         flex-direction: column;
         align-items: start;
+        justify-content: center;
         gap: 0.5rem;
 
         h2 {
           font-size: 1.2rem;
           color: $text-muted;
+        }
+
+        .button {
+          justify-content: center;
+          align-items: center;
+          background-color: $bg;
+          padding: 0 0.8rem;
+          border-radius: 0.4rem;
+          height: 40px;
+          margin-top: 2rem;
+          cursor: pointer;
+          display: none;
+
+          img {
+            height: 20px;
+          }
+
+          .highlight {
+            display: none;
+          }
+
+          &:hover {
+            img {
+              display: none;
+            }
+
+            .highlight {
+              display: unset;
+            }
+          }
         }
       }
 
@@ -64,6 +110,7 @@
     .activeFilters {
       display: flex;
       justify-content: start;
+      flex-wrap: wrap;
       margin: 2rem 0;
       gap: 1.2rem;
 
@@ -108,6 +155,97 @@
 
         img {
           display: unset;
+        }
+      }
+    }
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
+.slideDown {
+  animation: slideDown 0.2s ease-in;
+}
+
+.slideUp {
+  animation: slideUp 0.1s ease-out;
+}
+
+@media screen and (max-width: 1500px) {
+  .bar {
+    justify-content: start;
+    .filters {
+      width: 100%;
+      .filterFields {
+        justify-content: start;
+        .shrink {
+          display: none;
+        }
+
+        .filter {
+          .button {
+            display: flex;
+          }
+        }
+
+        .config {
+          margin-left: auto;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .bar {
+    .filters {
+      .filterFields {
+        flex-direction: column;
+        .search {
+          display: flex;
+          justify-content: start;
+          align-items: center;
+
+          .searchField {
+            width: 100%;
+            input {
+              width: 100%;
+            }
+          }
+
+          .button {
+            margin: 0;
+            margin-left: 3rem;
+          }
+          .config {
+            margin-left: 0;
+          }
+        }
+
+        .otherThenSearch {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 2rem;
         }
       }
     }

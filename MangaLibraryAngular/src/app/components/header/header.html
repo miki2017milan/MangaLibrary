@@ -1,46 +1,53 @@
-<nav [class.showing]="isShowing()">
-  <ul>
-    <li class="header-left">
-      <div routerLink="/">
-        <img src="logo.webp" />
-        <h2>Manga Library</h2>
-      </div>
-      <img class="closeButton" src="/close-button.webp" />
-    </li>
+@if (!isMobile() || (isShowing() && isMobile())) {
+  @if (isMobile()) {
+    <div class="overlay" animate.enter="fadein" animate.leave="fadeout"></div>
+  }
 
-    <li class="header-middle">
-      <p routerLink="/">Home</p>
-      <p routerLink="/search">Search</p>
-      <p routerLink="/library">Library</p>
-    </li>
+  <nav class="header" animate.enter="slideRight" animate.leave="slideLeft">
+    <ul>
+      <li class="header-left">
+        <div routerLink="/">
+          <img src="logo.webp" />
+          <h2>Manga Library</h2>
+        </div>
+      </li>
 
-    <li class="header-right">
-      @if (!accountService.isAuthenticated() || error()) {
-        <div class="login">
-          <p routerLink="/login">Login</p>
-        </div>
-        <div class="signup">
-          <p routerLink="/register">Sign up</p>
-        </div>
-      } @else {
-        <div class="profile">
-          <div class="displayName" (click)="toggle()">
-            @if (!loading()) {
-              <p>{{ displayName() }}</p>
-            } @else {
-              <div class="loading"></div>
-            }
-            <img src="downarrow.png" />
+      <li class="header-middle">
+        <p routerLink="/" (click)="isShowing.set(false)">Home</p>
+        <p routerLink="/search" (click)="isShowing.set(false)">Search</p>
+        <p routerLink="/library" (click)="isShowing.set(false)">Library</p>
+      </li>
+
+      <li class="header-right">
+        @if (!accountService.isAuthenticated() || error()) {
+          <div class="login">
+            <p routerLink="/login">Login</p>
           </div>
+          <div class="signup">
+            <p routerLink="/register">Sign up</p>
+          </div>
+        } @else {
+          <div class="profile">
+            <div class="displayName" (click)="toggle()">
+              @if (!loading()) {
+                <p>{{ displayName() }}</p>
+              } @else {
+                <div class="loading"></div>
+              }
+              <img src="downarrow.png" />
+            </div>
 
-          @if (isOpen()) {
-            <ul>
-              <li>Profile</li>
-              <li (click)="accountService.logout(); reload()">Logout</li>
-            </ul>
-          }
-        </div>
-      }
-    </li>
-  </ul>
-</nav>
+            @if (isOpen()) {
+              <ul>
+                <li>Profile</li>
+                <li (click)="accountService.logout(); reload()">Logout</li>
+              </ul>
+            }
+          </div>
+        }
+      </li>
+    </ul>
+  </nav>
+} @else {
+  <img src="menu-button.webp" (click)="isShowing.set(true)" class="menu" />
+}

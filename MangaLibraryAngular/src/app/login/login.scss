@@ -7,7 +7,7 @@
   border-radius: 0.2rem;
   display: flex;
   flex-direction: column;
-  width: 500px;
+  width: min(500px, 90vw);
 
   form {
     display: flex;

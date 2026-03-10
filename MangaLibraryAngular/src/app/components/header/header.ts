@@ -14,7 +14,8 @@ export class Header {
   accountService = inject(AccountService);
   displayName = signal<string | undefined>(undefined);
 
-  isShowing = signal(true);
+  isShowing = signal(false);
+  isMobile = signal(window.innerWidth <= 1024);
   isOpen = signal(false);
   router = inject(Router);
 
@@ -53,8 +54,21 @@ export class Header {
 
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event) {
+    console.log(this.isShowing());
+    if (
+      !(event.target as HTMLElement).closest('.header') &&
+      !((event.target as HTMLElement).className == 'menu')
+    ) {
+      console.log('hey', this.isShowing(), this.isMobile());
+      this.isShowing.set(false);
+    }
     if (!(event.target as HTMLElement).closest('.profile')) {
       this.isOpen.set(false);
     }
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.isMobile.set(window.innerWidth <= 1024);
   }
 }

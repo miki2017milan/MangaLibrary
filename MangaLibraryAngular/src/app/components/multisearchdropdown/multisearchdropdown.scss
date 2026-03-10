@@ -4,7 +4,6 @@
   position: relative;
   background-color: $bg;
   border-radius: 0.4rem;
-  z-index: 100;
 
   ul {
     position: absolute;
@@ -21,6 +20,7 @@
     width: 100%;
     text-align: left;
     overflow: scroll;
+    z-index: 100;
 
     .title {
       font-size: 1.2rem;

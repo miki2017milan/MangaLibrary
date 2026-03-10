@@ -1,5 +1,11 @@
 @use '../variables' as *;
 
+:host {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .home {
   display: flex;
   flex-direction: column;
@@ -15,6 +21,8 @@
   h1 {
     color: $text-highlight;
     font-size: clamp(1.5rem, calc(4vw + 1rem), 4rem);
+    line-height: 3rem;
+    padding: 0 1rem;
   }
 }
 
@@ -59,6 +67,39 @@
         font-size: 1.1rem;
         color: #acd5f2;
       }
+    }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .home {
+    width: 100%;
+    margin: 0;
+  }
+
+  .content {
+    flex-direction: column;
+    align-items: center;
+
+    .item {
+      flex-direction: row;
+      width: min(90%, 700px);
+
+      img {
+        height: min(100px, 10vw);
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .home {
+    width: 100%;
+    margin: 0;
+    gap: 4rem;
+
+    img {
+      display: none;
     }
   }
 }
