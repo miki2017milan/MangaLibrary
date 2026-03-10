@@ -27,12 +27,13 @@ export class Search implements OnDestroy {
   router = inject(Router);
   mangaService = inject(MangaService);
 
-  mangas = signal<Manga[] | undefined>(undefined);
+  mangas = signal<Manga[]>([]);
   loading = signal(true);
   loadingMore = signal(false);
   error = signal(false);
   hasNext = signal<boolean>(false);
   currentPage = signal<number>(1);
+  loadingSubject = new Subject<void>();
 
   grid = signal(true);
 
@@ -51,8 +52,6 @@ export class Search implements OnDestroy {
       pageSize: 24,
     };
   });
-
-  loadingSubject = new Subject<void>();
 
   constructor() {
     toObservable(this.query) // Converto to observable meaning whenever this.query changes the new value gets push intu the switchMap
@@ -76,7 +75,6 @@ export class Search implements OnDestroy {
         this.hasNext.set(result.hasNext);
         this.currentPage.set(result.page);
         this.loading.set(false);
-        console.log(this.hasNext());
       });
 
     this.loadingSubject
@@ -106,7 +104,6 @@ export class Search implements OnDestroy {
     if (this.loading() || this.loadingMore() || !this.hasNext() || this.currentPage() > 10) {
       return;
     }
-
     this.loadingMore.set(true);
     this.loadingSubject.next();
   }

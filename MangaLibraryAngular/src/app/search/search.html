@@ -8,7 +8,7 @@
       <p>Try again later.</p>
     </div>
   } @else {
-    @if (mangas()?.length == 0) {
+    @if (mangas().length == 0) {
       <h2 class="noresult">No results!</h2>
     }
     <ul [class.grid]="grid()" [class.list]="!grid()">
@@ -39,17 +39,17 @@
             <!-- List view TODO -->
           }
         }
-
-        @if (loadingMore()) {
-          @for (_ of [].constructor(6); track $index) {
-            <li>
-              <div class="loading"></div>
-            </li>
-          }
-        }
       }
     </ul>
   }
 
-  <div #loadMore class="loadMore"></div>
+  @if (currentPage() <= 10) {
+    <ul [class.grid]="grid()" #loadMore>
+      @for (_ of [].constructor(6); track $index) {
+        <li>
+          <div class="loading"></div>
+        </li>
+      }
+    </ul>
+  }
 </div>
