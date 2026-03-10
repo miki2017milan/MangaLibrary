@@ -1,15 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, tap } from 'rxjs';
 import { UserDetails } from '../models/useretails.type';
 import { RedirectService } from './redirect-service';
+import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AccountService {
-  accountUrl = 'http://localhost:5050/api/account/';
+  accountUrl = 'http://192.168.0.47:5050/api/account/';
 
   http = inject(HttpClient);
   router = inject(Router);

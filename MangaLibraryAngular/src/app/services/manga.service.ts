@@ -13,8 +13,8 @@ import { PagedMangas } from '../models/pagedmangas.type';
 export class MangaService {
   http = inject(HttpClient);
 
-  mangaUrl = 'http://localhost:5050/api/mangas/';
-  userMangaUrl = 'http://localhost:5050/api/users/manga/';
+  mangaUrl = 'http://192.168.0.47:5050/api/mangas/';
+  userMangaUrl = 'http://192.168.0.47:5050/api/users/manga/';
 
   getManga(id: string | null) {
     return this.http.get<Manga>(this.mangaUrl + id);

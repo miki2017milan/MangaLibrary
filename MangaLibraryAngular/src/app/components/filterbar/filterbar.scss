@@ -219,6 +219,8 @@
 @media screen and (max-width: 1024px) {
   .bar {
     .filters {
+      margin-left: 1rem;
+      margin-right: 1rem;
       .filterFields {
         flex-direction: column;
         .search {
@@ -231,14 +233,11 @@
             input {
               width: 100%;
             }
+            margin-right: 1rem;
           }
 
           .button {
             margin: 0;
-            margin-left: 3rem;
-          }
-          .config {
-            margin-left: 0;
           }
         }
 

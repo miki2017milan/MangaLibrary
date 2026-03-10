@@ -22,7 +22,6 @@ import { Filterbar } from '../components/filterbar/filterbar';
   styleUrl: './search.scss',
 })
 export class Search implements OnDestroy {
-  @ViewChild('loadMore') loadMoreTrigger!: ElementRef;
   observer!: IntersectionObserver;
   router = inject(Router);
   mangaService = inject(MangaService);
@@ -114,13 +113,21 @@ export class Search implements OnDestroy {
     this.loadingSubject.next();
   }
 
-  ngAfterViewInit() {
+  @ViewChild('loadMore')
+  set loadMoreTrigger(el: ElementRef) {
+    if (el) {
+      this.observer?.disconnect();
+      this.setupIntersectionObserver(el.nativeElement);
+    }
+  }
+
+  setupIntersectionObserver(element: HTMLElement) {
     this.observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         this.loadMore();
       }
     });
-    this.observer.observe(this.loadMoreTrigger.nativeElement);
+    this.observer.observe(element);
   }
 
   ngOnDestroy(): void {

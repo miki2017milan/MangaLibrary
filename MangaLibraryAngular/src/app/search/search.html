@@ -43,7 +43,7 @@
     </ul>
   }
 
-  @if (currentPage() <= MAX_PAGES()) {
+  @if (currentPage() <= MAX_PAGES() && hasNext() && mangas().length != 0) {
     <ul [class.grid]="grid()" #loadMore>
       @for (_ of [].constructor(6); track $index) {
         <li>
