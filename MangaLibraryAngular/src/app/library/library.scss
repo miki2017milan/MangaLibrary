@@ -1,9 +1,86 @@
 @use '../variables' as *;
 
-h1 {
-    color: $text-highlight;
-    font-size: clamp(1.5rem, calc(4vw + 1rem), 5rem);
-    line-height: 3rem;
-    margin-top: $space-xxl;
-    margin-bottom: $space-xl;
+$width: 180px;
+
+:host {
+  width: 100%;
+}
+
+.content {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+
+  .library {
+    display: flex;
+    flex-direction: column;
+    margin-top: 3rem;
+    width: 1400px;
+    gap: 2rem;
+
+    .category {
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+
+      h2 {
+        margin-bottom: 1rem;
+      }
+
+      .mangas {
+        display: flex;
+        gap: 2rem;
+
+        .manga {
+          width: $width;
+          cursor: pointer;
+          position: relative;
+          text-align: center;
+
+          img {
+            width: $width;
+            height: $width * 1.41;
+            border-radius: 0.2rem;
+          }
+
+          p {
+            font-size: 1.2rem;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            color: $text-muted;
+          }
+
+          span {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            position: absolute;
+            top: -5px;
+            left: -5px;
+
+            &.completed {
+              background-color: $completed;
+            }
+
+            &.reading {
+              background-color: $reading;
+            }
+
+            &.planning {
+              background-color: $planning;
+            }
+
+            &.paused {
+              background-color: $paused;
+            }
+
+            &.dropped {
+              background-color: $dropped;
+            }
+          }
+        }
+      }
+    }
   }
+}

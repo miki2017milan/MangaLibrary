@@ -8,67 +8,151 @@
   <br />
   <p>Try again later.</p>
 } @else if (manga(); as m) {
-  @if (m.banner) {
-    <img class="bannerImage" [src]="m.banner" />
-  }
-  <div class="topContent">
-    <div class="cover">
-      <img [src]="m.cover" />
-      <app-addtolibrary [userManga]="userManga()"></app-addtolibrary>
+  @if (!isMobile()) {
+    @if (m.banner) {
+      <img class="bannerImage" [src]="m.banner" />
+    }
+    <div class="topContent">
+      <div class="cover">
+        <img [src]="m.cover" />
+        <app-addtolibrary [userManga]="userManga()"></app-addtolibrary>
+      </div>
+
+      <div class="mangaText">
+        <div class="title">
+          <h2>{{ m.title }}</h2>
+          @if (m.adultContent) {
+            <img src="/nsfw.png" />
+          }
+        </div>
+        <h3>{{ m.titleNative }}</h3>
+        <app-mangadescription [description]="m.description"></app-mangadescription>
+      </div>
     </div>
 
-    <div class="mangaText">
-      <div class="title">
-        <h2>{{ m.title }}</h2>
-        @if (m.adultContent) {
-          <img src="/nsfw.png" />
-        }
+    <div class="content">
+      <div class="data">
+        <div class="category">
+          <h2>FORMAT</h2>
+          <p>{{ m.format }}</p>
+        </div>
+
+        <div class="category">
+          <h2>COUNTRY OF ORIGIN</h2>
+          <p>{{ m.countryOfOrigin }}</p>
+        </div>
+
+        <div class="category">
+          <h2>GENRES</h2>
+          @for (genre of m.genres; track $index) {
+            <p>{{ genre }}</p>
+          }
+        </div>
+
+        <div class="category">
+          <h2>TAGS</h2>
+          @for (tag of tagsExpanded() ? m.tags : m.tags.slice(0, 5); track $index) {
+            <p>{{ tag }}</p>
+          }
+
+          @if (m.tags.length > 5) {
+            <p class="showButton" (click)="tagsExpanded.update((value) => !value)">
+              {{ tagsExpanded() ? 'Show Less' : 'Show More' }}
+            </p>
+          }
+        </div>
+
+        <app-addrating [userManga]="userManga()"></app-addrating>
       </div>
-      <h3>{{ m.titleNative }}</h3>
-      <app-mangadescription [description]="m.description"></app-mangadescription>
+
+      <div class="main">
+        <div class="activity">
+          <app-readingstatus></app-readingstatus>
+          <app-ratingchart></app-ratingchart>
+        </div>
+
+        <div class="staff">
+          <h2>STAFF</h2>
+          <ul>
+            @for (member of m.staff; track $index) {
+              <li>
+                <p class="staffName">{{ member.name }}</p>
+                <p class="staffRole">{{ member.role }}</p>
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
     </div>
-  </div>
-
-  <div class="content">
-    <div class="data">
-      <div class="category">
-        <h2>FORMAT</h2>
-        <p>{{ m.format }}</p>
+  } @else {
+    @if (m.banner) {
+      <img class="bannerImage" [src]="m.banner" />
+    }
+    <div class="topContent">
+      <div class="cover">
+        <img [src]="m.cover" />
       </div>
 
-      <div class="category">
-        <h2>COUNTRY OF ORIGIN</h2>
-        <p>{{ m.countryOfOrigin }}</p>
+      <div class="mangaText">
+        <div class="title">
+          <h2>{{ m.title }}</h2>
+          @if (m.adultContent) {
+            <img src="/nsfw.png" />
+          }
+        </div>
+        <h3>{{ m.titleNative }}</h3>
+        <app-addtolibrary [userManga]="userManga()"></app-addtolibrary>
       </div>
-
-      <div class="category">
-        <h2>GENRES</h2>
-        @for (genre of m.genres; track $index) {
-          <p>{{ genre }}</p>
-        }
-      </div>
-
-      <div class="category">
-        <h2>TAGS</h2>
-        @for (tag of tagsExpanded() ? m.tags : m.tags.slice(0, 5); track $index) {
-          <p>{{ tag }}</p>
-        }
-
-        @if (m.tags.length > 5) {
-          <p class="showButton" (click)="tagsExpanded.update((value) => !value)">
-            {{ tagsExpanded() ? 'Show Less' : 'Show More' }}
-          </p>
-        }
-      </div>
-
-      <app-addrating [userManga]="userManga()"></app-addrating>
     </div>
 
-    <div class="main">
-      <div class="activity">
-        <app-readingstatus></app-readingstatus>
-        <app-ratingchart></app-ratingchart>
+    <div class="content">
+      <div class="data">
+        <div class="category">
+          <h2>FORMAT</h2>
+          <p>{{ m.format }}</p>
+        </div>
+
+        <div class="category">
+          <h2>COUNTRY OF ORIGIN</h2>
+          <p>{{ m.countryOfOrigin }}</p>
+        </div>
+
+        <div class="category">
+          <h2>GENRES</h2>
+          <div class="multiple">
+            @for (genre of m.genres; track $index) {
+              <p>{{ genre }}</p>
+            }
+          </div>
+        </div>
+
+        <div class="category">
+          <h2>TAGS</h2>
+          <div class="multiple">
+            @for (tag of tagsExpanded() ? m.tags : m.tags.slice(0, 5); track $index) {
+              <p>{{ tag }}</p>
+            }
+
+            @if (m.tags.length > 5) {
+              <p class="showButton" (click)="tagsExpanded.update((value) => !value)">
+                {{ tagsExpanded() ? 'Show Less' : 'Show More' }}
+              </p>
+            }
+          </div>
+        </div>
+
+        <app-addrating [userManga]="userManga()"></app-addrating>
       </div>
+
+      <div class="description">
+        <h2>DESCRIPTION</h2>
+        <div class="bg">
+          <app-mangadescription [description]="m.description"></app-mangadescription>
+        </div>
+      </div>
+
+      <app-readingstatus></app-readingstatus>
+      <app-ratingchart></app-ratingchart>
 
       <div class="staff">
         <h2>STAFF</h2>
@@ -82,5 +166,5 @@
         </ul>
       </div>
     </div>
-  </div>
+  }
 }

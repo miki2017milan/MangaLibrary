@@ -6,6 +6,7 @@ import { RatingHistogram } from '../models/ratinghistrogram.type';
 import { UserManga } from '../models/usermanga.type';
 import { MangaQueryParams } from '../models/mangaqueryparams';
 import { PagedMangas } from '../models/pagedmangas.type';
+import { LibraryManga } from '../models/librarymanga';
 
 @Injectable({
   providedIn: 'root',
@@ -56,5 +57,9 @@ export class MangaService {
 
   removeRating(id: string | null) {
     return this.http.put(this.userMangaUrl + id, { rating: null });
+  }
+
+  getMangasByUser() {
+    return this.http.get<LibraryManga[]>(this.userMangaUrl);
   }
 }

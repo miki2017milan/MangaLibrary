@@ -88,3 +88,18 @@
     }
   }
 }
+
+@media screen and (max-width: 900px) {
+  .status {
+    width: 100%;
+    justify-content: space-around;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .status {
+    flex-wrap: wrap;
+    height: fit-content;
+    gap: 0.2rem;
+  }
+}

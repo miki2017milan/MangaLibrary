@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
 import { Manga } from '../models/manga.type';
 import { MangaService } from '../services/manga.service';
 import { catchError } from 'rxjs';
@@ -31,6 +31,12 @@ export class Mangadisplay implements OnInit {
   error = signal(false);
 
   tagsExpanded = signal(false);
+
+  isMobile = signal(window.innerWidth <= 900);
+  @HostListener('window:resize')
+  onResize() {
+    this.isMobile.set(window.innerWidth <= 900);
+  }
 
   ngOnInit(): void {
     this.mangaService

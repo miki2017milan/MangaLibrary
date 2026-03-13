@@ -25,3 +25,9 @@
     opacity: 0;
   }
 }
+
+@media screen and (max-width: 700px) {
+  .mangaDescription {
+    height: 200px;
+  }
+}

@@ -108,6 +108,7 @@ $cover-width: min($space-m * 27 * 0.71, 25vw * 0.71);
 
 .activity {
   display: flex;
+  flex-wrap: wrap;
   margin: $space-xl;
   gap: 1rem;
 }
@@ -168,5 +169,103 @@ $cover-width: min($space-m * 27 * 0.71, 25vw * 0.71);
 
   .content {
     margin: $space-xl 5rem;
+  }
+
+  .topContent {
+    padding: $space-xl 5rem;
+  }
+
+  .bannerImage {
+    height: 200px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .mangaText {
+    width: 100%;
+  }
+
+  .content {
+    flex-direction: column;
+    gap: 2rem;
+    margin: $space-xl 2rem;
+  }
+
+  .mangaDisplayContent {
+    padding: $space-xl 2rem;
+  }
+
+  .topContent {
+    padding: $space-xl 2rem;
+  }
+
+  .data {
+    flex-direction: row;
+    overflow-x: scroll;
+    height: fit-content;
+    white-space: nowrap;
+
+    .category {
+      .multiple {
+        display: flex;
+
+        *::after {
+          content: ', ';
+          margin-right: 3px;
+        }
+
+        *:last-child::after {
+          content: '';
+        }
+      }
+    }
+  }
+
+  .description {
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+
+    h2 {
+      font-size: 1.3rem;
+    }
+
+    .bg {
+      background-color: $bg;
+      padding: 1rem;
+    }
+  }
+
+  .staff {
+    padding: 0;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .bannerImage {
+    height: 150px;
+  }
+  .topContent {
+    .cover {
+      min-height: 149px;
+      min-width: 100px;
+      img {
+        min-height: 149px;
+        min-width: 100px;
+      }
+    }
+
+    .mangaText {
+      gap: 0.2rem;
+      .title {
+        h2 {
+          font-size: 1.5rem;
+        }
+      }
+
+      h3 {
+        font-size: 1.2rem;
+      }
+    }
   }
 }
