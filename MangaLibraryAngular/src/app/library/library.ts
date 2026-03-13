@@ -34,7 +34,6 @@ export class Library implements OnInit {
       )
       .subscribe((mangas) => {
         this.loading.set(false);
-        console.log(mangas);
         for (const manga of mangas) {
           if (manga.status === 'completed') {
             this.completed.update((prev) => [...prev, manga]);

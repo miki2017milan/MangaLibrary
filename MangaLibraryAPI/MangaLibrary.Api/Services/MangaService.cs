@@ -113,6 +113,33 @@ public class MangaService(IDbConnectionFactory connectionFactory) : IMangaServic
 
     public async Task<PagedResponse<MangaResponse>> QueryMangas(MangaQuery mangaQuery)
     {
+        using var connection = await connectionFactory.CreateDbConnectionAsync();
+
+        if (string.IsNullOrEmpty(mangaQuery.Title) && (mangaQuery.Genres == null || mangaQuery.Genres.Count == 0) &&
+            (mangaQuery.Tags == null || mangaQuery.Tags.Count == 0) && string.IsNullOrEmpty(mangaQuery.Format) &&
+            string.IsNullOrEmpty(mangaQuery.CountryOfOrigin))
+        {
+            var popularMangas =
+                (await connection.QueryAsync<PaginatedManga>(
+                    $"""
+                     Select id, title, title_native, genres, tags, format, release_year, release_month, release_day, adult_content, country_of_origin, cover, banner, description, staff,
+                            Count(*) Over() as TotalCount
+                     from mangas, popular_mangas
+                     where id = mangaid
+                     order by spot 
+                     """)).ToList();
+
+            return new PagedResponse<MangaResponse>()
+            {
+                Content = popularMangas.Select((value) => value.ToMangaResponse()),
+                Total = popularMangas.Count != 0
+                    ? (int)Math.Ceiling((double)popularMangas[0].TotalCount / mangaQuery.PageSize)
+                    : 0,
+                Page = mangaQuery.Page,
+                PageSize = mangaQuery.PageSize,
+            };
+        }
+
         var whereParameters = new List<string>();
         var parameters = new DynamicParameters();
         var orderBy = "";
@@ -159,7 +186,6 @@ public class MangaService(IDbConnectionFactory connectionFactory) : IMangaServic
             whereParameters.Add("adult_content = false");
         }
 
-        using var connection = await connectionFactory.CreateDbConnectionAsync();
         var whereSql = string.Join(" and ", whereParameters);
 
         if (!string.IsNullOrEmpty(whereSql))

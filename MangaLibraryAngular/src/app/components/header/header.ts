@@ -54,12 +54,10 @@ export class Header {
 
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event) {
-    console.log(this.isShowing());
     if (
       !(event.target as HTMLElement).closest('.header') &&
       !((event.target as HTMLElement).className == 'menu')
     ) {
-      console.log('hey', this.isShowing(), this.isMobile());
       this.isShowing.set(false);
     }
     if (!(event.target as HTMLElement).closest('.profile')) {

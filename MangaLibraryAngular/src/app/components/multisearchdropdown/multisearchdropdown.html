@@ -30,7 +30,9 @@
 
   @if (isOpen()) {
     <ul animate.enter="slideDown" animate.leave="slideUp">
-      <li class="title">{{ heading() }}</li>
+      @if (heading() !== '') {
+        <li class="title">{{ heading() }}</li>
+      }
       @for (value of filteredPossibleValues(); track $index) {
         <div class="possibleValue" (click)="selectValue(value)">
           <li>{{ value }}</li>

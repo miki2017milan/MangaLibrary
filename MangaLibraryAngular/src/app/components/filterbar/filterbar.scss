@@ -7,6 +7,7 @@
   .filters {
     display: flex;
     flex-direction: column;
+    width: 100%;
 
     .filterFields {
       margin-top: 2rem;
@@ -23,6 +24,7 @@
         padding: 1rem;
         gap: 2rem;
         border-radius: 0.6rem;
+        z-index: 800;
 
         position: absolute;
         right: 0;
@@ -50,7 +52,7 @@
           height: 40px;
           margin-top: 2rem;
           cursor: pointer;
-          display: none;
+          display: flex;
 
           img {
             height: 20px;
@@ -69,6 +71,14 @@
               display: unset;
             }
           }
+        }
+
+        &.config {
+          margin-left: auto;
+        }
+
+        &.grow {
+          display: none;
         }
       }
 
@@ -198,13 +208,18 @@
       width: 100%;
       .filterFields {
         justify-content: start;
-        .shrink {
-          display: none;
-        }
 
         .filter {
           .button {
             display: flex;
+          }
+
+          &.shrink {
+            display: none;
+          }
+
+          &.grow {
+            display: unset;
           }
         }
 

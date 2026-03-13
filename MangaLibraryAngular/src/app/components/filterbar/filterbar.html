@@ -62,15 +62,6 @@
           ></app-singledropdown>
         </div>
 
-        <div class="filter shrink">
-          <h2>Includes Adult Content</h2>
-          <app-toggledropdown
-            [isTrue]="query().includesAdultContent"
-            [onSelectValue]="onSelectInculdesAdultContent"
-            [heading]="'Includes Adult Content'"
-          ></app-toggledropdown>
-        </div>
-
         <div class="filter config">
           <div class="button" (click)="toggleExtended()">
             <img src="config.png" />
@@ -79,13 +70,13 @@
 
           @if (isExtended()) {
             <div class="extendedFilters" animate.enter="slideDown" animate.leave="slideUp">
-              <div class="filter">
+              <div class="filter grow">
                 <h2>Country Of Origin</h2>
                 <app-singledropdown
                   [selectedValue]="query().countryOfOrigin"
                   [possibleValues]="possibleCountryOfOrigin"
                   [onSelectValue]="onSelectCountryOfOrigin"
-                  [heading]="'COUNTRY OF ORIGIN'"
+                  [heading]="''"
                   [clearSelectedValues]="clearCountryOfOrigin"
                 ></app-singledropdown>
               </div>
@@ -95,7 +86,7 @@
                 <app-toggledropdown
                   [isTrue]="query().includesAdultContent"
                   [onSelectValue]="onSelectInculdesAdultContent"
-                  [heading]="'Includes Adult Content'"
+                  [heading]="''"
                 ></app-toggledropdown>
               </div>
             </div>

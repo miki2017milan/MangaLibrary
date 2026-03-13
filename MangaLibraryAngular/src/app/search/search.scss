@@ -13,6 +13,13 @@ $width: 180px;
   flex-direction: column;
   justify-content: center;
   width: 1300px;
+
+  .heading {
+    text-align: start;
+    margin-bottom: 1rem;
+    color: $text-muted;
+    font-size: 1.3rem;
+  }
 }
 
 .grid {

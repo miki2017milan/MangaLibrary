@@ -6,7 +6,9 @@
 
   @if (isOpen()) {
     <ul animate.enter="slideDown" animate.leave="slideUp">
-      <li class="title">{{ heading() }}</li>
+      @if (heading() !== '') {
+        <li class="title">{{ heading() }}</li>
+      }
       <div class="possibleValue" (click)="onSelectValue()!(true)">
         <li>Yes</li>
         @if (isTrue()) {

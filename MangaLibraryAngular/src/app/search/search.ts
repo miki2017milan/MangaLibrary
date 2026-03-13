@@ -53,7 +53,19 @@ export class Search implements OnDestroy {
     };
   });
 
+  emptySearch = computed(() => {
+    return (
+      this.query().title === '' &&
+      this.query().genres.length == 0 &&
+      this.query().tags.length == 0 &&
+      this.query().format === '' &&
+      !this.query().includesAdultContent &&
+      this.query().countryOfOrigin === ''
+    );
+  });
+
   constructor() {
+    console.log(this.query());
     toObservable(this.query) // Converto to observable meaning whenever this.query changes the new value gets push intu the switchMap
       .pipe(
         // switchMap atomaticly cancels old request that did not finish befor the next one was made
@@ -131,6 +143,6 @@ export class Search implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.observer.disconnect();
+    if (this.observer) this.observer.disconnect();
   }
 }

@@ -11,6 +11,9 @@
     @if (mangas().length == 0 && !loading()) {
       <h2 class="noresult">No results!</h2>
     }
+    @if (emptySearch()) {
+      <h2 class="heading">ALL TIME POPULAR</h2>
+    }
     <ul [class.grid]="grid()" [class.list]="!grid()">
       @if (loading()) {
         @for (_ of [].constructor(24); track $index) {
