@@ -1,84 +1,183 @@
 @use '../variables' as *;
 
-$width: 180px;
+$width: 160px;
 
 :host {
+  display: flex;
+  justify-content: center;
   width: 100%;
 }
 
 .content {
   display: flex;
-  width: 100%;
+  width: 1400px;
   justify-content: center;
+  margin-top: 3rem;
 
-  .library {
+  .filterbar {
     display: flex;
     flex-direction: column;
-    margin-top: 3rem;
-    width: 1400px;
-    gap: 2rem;
+    margin-right: 2rem;
+    width: 280px;
+    flex-shrink: 0;
 
-    .category {
+    .filter {
       display: flex;
       flex-direction: column;
       align-items: start;
+      gap: 0.5rem;
 
       h2 {
-        margin-bottom: 1rem;
+        font-size: 1.1rem;
+        color: $text-muted;
+      }
+    }
+
+    .search {
+      display: flex;
+      justify-content: space-between;
+
+      h2 {
+        font-size: 1.1rem;
+        color: $text-muted;
       }
 
-      .mangas {
+      .viewStyle {
         display: flex;
-        gap: 2rem;
+        justify-content: center;
+        align-items: center;
+        gap: 0.2rem;
+        background-color: $bg;
+        height: 40px;
+        border-radius: 0.4rem;
+        padding: 0.5rem;
 
-        .manga {
-          width: $width;
+        img {
+          height: 30px;
+          padding: 0.4rem;
+          border-radius: 0.4rem;
           cursor: pointer;
-          position: relative;
-          text-align: center;
 
-          img {
-            width: $width;
-            height: $width * 1.41;
-            border-radius: 0.2rem;
+          &:hover {
+            background-color: $bg-light;
           }
+        }
+      }
 
-          p {
-            font-size: 1.2rem;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-            color: $text-muted;
+      .searchField {
+        display: flex;
+        background-color: $bg;
+        width: 180px;
+        padding: 0.6rem;
+        border-radius: 0.4rem;
+        gap: 1rem;
+        height: 40px;
+
+        img {
+          height: 18px;
+          align-self: center;
+
+          &.close {
+            height: 12px;
+            margin-right: 0.3rem;
+            cursor: pointer;
           }
+        }
 
-          span {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            position: absolute;
-            top: -5px;
-            left: -5px;
+        input {
+          border: none;
+          background: transparent;
+          color: $text-muted;
+          width: 100%;
+          outline: none;
+          font-weight: 500;
 
-            &.completed {
-              background-color: $completed;
-            }
-
-            &.reading {
-              background-color: $reading;
-            }
-
-            &.planning {
-              background-color: $planning;
-            }
-
-            &.paused {
-              background-color: $paused;
-            }
-
-            &.dropped {
-              background-color: $dropped;
-            }
+          &:focus::placeholder {
+            color: transparent;
           }
+        }
+      }
+    }
+  }
+
+  .library {
+    width: 100%;
+
+    .manga {
+      width: $width;
+      cursor: pointer;
+      position: relative;
+      text-align: center;
+
+      img {
+        width: $width;
+        height: $width * 1.41;
+        border-radius: 0.2rem;
+      }
+
+      p {
+        font-size: 1.2rem;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        color: $text-muted;
+      }
+
+      span {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        position: absolute;
+        top: -5px;
+        left: -5px;
+
+        &.completed {
+          background-color: $completed;
+        }
+
+        &.reading {
+          background-color: $reading;
+        }
+
+        &.planning {
+          background-color: $planning;
+        }
+
+        &.paused {
+          background-color: $paused;
+        }
+
+        &.dropped {
+          background-color: $dropped;
+        }
+      }
+    }
+
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .category {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        flex-wrap: wrap;
+
+        h2 {
+          margin-bottom: 1rem;
+          font-size: 1.5rem;
+        }
+
+        .mangas {
+          display: flex;
+          gap: 2rem;
         }
       }
     }

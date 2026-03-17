@@ -1,26 +1,10 @@
 <div class="dropdown">
-  <div class="field" (click)="isOpen.set(true)">
+  <div class="field" (click)="onSelectValue()(!isTrue())">
     <p [class.selected]="isTrue()">{{ isTrue() ? 'Yes' : 'No' }}</p>
-    <img src="downarrow.png" />
+    @if (isTrue()) {
+      <img src="close-button.webp" (click)="onSelectValue()(false)" />
+    } @else {
+      <img src="downarrow.png" />
+    }
   </div>
-
-  @if (isOpen()) {
-    <ul animate.enter="slideDown" animate.leave="slideUp">
-      @if (heading() !== '') {
-        <li class="title">{{ heading() }}</li>
-      }
-      <div class="possibleValue" (click)="onSelectValue()!(true)">
-        <li>Yes</li>
-        @if (isTrue()) {
-          <img src="check.png" />
-        }
-      </div>
-      <div class="possibleValue" (click)="onSelectValue()!(false)">
-        <li>No</li>
-        @if (!isTrue()) {
-          <img src="check.png" />
-        }
-      </div>
-    </ul>
-  }
 </div>

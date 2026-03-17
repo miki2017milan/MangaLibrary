@@ -14,8 +14,8 @@ import { LibraryManga } from '../models/librarymanga';
 export class MangaService {
   http = inject(HttpClient);
 
-  mangaUrl = 'http://192.168.0.47:5050/api/mangas/';
-  userMangaUrl = 'http://192.168.0.47:5050/api/users/manga/';
+  mangaUrl = 'http://localhost:5050/api/mangas/';
+  userMangaUrl = 'http://localhost:5050/api/users/manga/';
 
   getManga(id: string | null) {
     return this.http.get<Manga>(this.mangaUrl + id);

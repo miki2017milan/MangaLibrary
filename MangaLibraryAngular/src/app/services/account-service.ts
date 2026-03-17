@@ -9,7 +9,7 @@ import { tap } from 'rxjs';
   providedIn: 'root',
 })
 export class AccountService {
-  accountUrl = 'http://192.168.0.47:5050/api/account/';
+  accountUrl = 'http://localhost:5050/api/account/';
 
   http = inject(HttpClient);
   router = inject(Router);

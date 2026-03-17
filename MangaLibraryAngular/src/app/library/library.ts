@@ -16,11 +16,25 @@ export class Library implements OnInit {
   loading = signal(true);
   error = signal(false);
 
-  completed = signal<LibraryManga[]>([]);
-  reading = signal<LibraryManga[]>([]);
-  planning = signal<LibraryManga[]>([]);
-  dropped = signal<LibraryManga[]>([]);
-  paused = signal<LibraryManga[]>([]);
+  mangas = signal<LibraryManga[]>([]);
+  filterdMangas = signal<LibraryManga[]>([]);
+
+  searchWord = signal<string>('');
+  viewStyle = signal<string>('grid');
+
+  filterMangas() {
+    this.filterdMangas.set(
+      this.mangas().filter((manga) =>
+        manga.title.toLowerCase().includes(this.searchWord().toLowerCase()),
+      ),
+    );
+    console.log(this.searchWord());
+    console.log(
+      'lol',
+      this.filterdMangas(),
+      this.mangas()[0].title.toLowerCase().includes(this.searchWord().toLowerCase()),
+    );
+  }
 
   ngOnInit(): void {
     this.mangaService
@@ -34,19 +48,8 @@ export class Library implements OnInit {
       )
       .subscribe((mangas) => {
         this.loading.set(false);
-        for (const manga of mangas) {
-          if (manga.status === 'completed') {
-            this.completed.update((prev) => [...prev, manga]);
-          } else if (manga.status === 'reading') {
-            this.reading.update((prev) => [...prev, manga]);
-          } else if (manga.status === 'planning') {
-            this.planning.update((prev) => [...prev, manga]);
-          } else if (manga.status === 'dropped') {
-            this.dropped.update((prev) => [...prev, manga]);
-          } else if (manga.status === 'paused') {
-            this.paused.update((prev) => [...prev, manga]);
-          }
-        }
+        this.mangas.set(mangas);
+        this.filterdMangas.set(mangas);
       });
   }
 }

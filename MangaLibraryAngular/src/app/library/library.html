@@ -1,78 +1,155 @@
 <div class="content">
-  <div class="filterbar"></div>
+  <div class="filterbar">
+    <div class="search">
+      <div class="searchField">
+        <img src="search.webp" />
+        <input
+          [value]="searchWord()"
+          type="text"
+          placeholder="Search..."
+          (input)="searchWord.set($event.target.value); filterMangas()"
+        />
+        @if (searchWord()) {
+          <img src="closeFilter.png" class="close" (click)="searchWord.set(''); filterMangas()" />
+        }
+      </div>
+
+      <div class="viewStyle">
+        @if (viewStyle() === 'grid') {
+          <img src="grid-highlight.png" />
+        } @else {
+          <img src="grid.png" (click)="viewStyle.set('grid')" />
+        }
+        @if (viewStyle() === 'list') {
+          <img src="list-highlight.png" />
+        } @else {
+          <img src="list.png" (click)="viewStyle.set('list')" />
+        }
+      </div>
+    </div>
+  </div>
+
   <div class="library">
-    @if (completed().length != 0) {
-      <div class="category">
-        <h2>Completed</h2>
-        <div class="mangas">
-          @for (manga of completed(); track manga.mangaId) {
-            <div class="manga" [routerLink]="['/manga', manga.mangaId]">
-              <img [src]="manga.cover" />
-              <p>{{ manga.title }}</p>
-              <span class="completed"></span>
-            </div>
-          }
-        </div>
-      </div>
-    }
+    @let completed = filterdMangas().filter((manga) => manga.status === 'completed');
+    @let reading = filterdMangas().filter((manga) => manga.status === 'reading');
+    @let planning = filterdMangas().filter((manga) => manga.status === 'planning');
+    @let paused = filterdMangas().filter((manga) => manga.status === 'paused');
+    @let dropped = filterdMangas().filter((manga) => manga.status === 'dropped');
 
-    @if (reading().length != 0) {
-      <div class="category">
-        <h2>Reading</h2>
-        <div class="mangas">
-          @for (manga of reading(); track manga.mangaId) {
-            <div class="manga" [routerLink]="['/manga', manga.mangaId]">
-              <img [src]="manga.cover" />
-              <p>{{ manga.title }}</p>
-              <span class="reading"></span>
+    @if (viewStyle() === 'list') {
+      <div class="list">
+        @if (completed.length != 0) {
+          <div class="category">
+            <h2>Completed</h2>
+            <div class="mangas">
+              @for (manga of completed; track manga.mangaId) {
+                <div class="manga" [routerLink]="['/manga', manga.mangaId]">
+                  <img [src]="manga.cover" />
+                  <p>{{ manga.title }}</p>
+                  <span class="completed"></span>
+                </div>
+              }
             </div>
-          }
-        </div>
-      </div>
-    }
+          </div>
+        }
 
-    @if (planning().length != 0) {
-      <div class="category">
-        <h2>Planning</h2>
-        <div class="mangas">
-          @for (manga of planning(); track manga.mangaId) {
-            <div class="manga" [routerLink]="['/manga', manga.mangaId]">
-              <img [src]="manga.cover" />
-              <p>{{ manga.title }}</p>
-              <span class="planning"></span>
+        @if (reading.length != 0) {
+          <div class="category">
+            <h2>Reading</h2>
+            <div class="mangas">
+              @for (manga of reading; track manga.mangaId) {
+                <div class="manga" [routerLink]="['/manga', manga.mangaId]">
+                  <img [src]="manga.cover" />
+                  <p>{{ manga.title }}</p>
+                  <span class="reading"></span>
+                </div>
+              }
             </div>
-          }
-        </div>
-      </div>
-    }
+          </div>
+        }
 
-    @if (paused().length != 0) {
-      <div class="category">
-        <h2>Paused</h2>
-        <div class="mangas">
-          @for (manga of paused(); track manga.mangaId) {
-            <div class="manga" [routerLink]="['/manga', manga.mangaId]">
-              <img [src]="manga.cover" />
-              <p>{{ manga.title }}</p>
-              <span class="paused"></span>
+        @if (planning.length != 0) {
+          <div class="category">
+            <h2>Planning</h2>
+            <div class="mangas">
+              @for (manga of planning; track manga.mangaId) {
+                <div class="manga" [routerLink]="['/manga', manga.mangaId]">
+                  <img [src]="manga.cover" />
+                  <p>{{ manga.title }}</p>
+                  <span class="planning"></span>
+                </div>
+              }
             </div>
-          }
-        </div>
-      </div>
-    }
+          </div>
+        }
 
-    @if (dropped().length != 0) {
-      <div class="category">
-        <h2>Dropped</h2>
-        <div class="mangas">
-          @for (manga of dropped(); track manga.mangaId) {
-            <div class="manga" [routerLink]="['/manga', manga.mangaId]">
-              <img [src]="manga.cover" />
-              <p>{{ manga.title }}</p>
-              <span class="dropped"></span>
+        @if (paused.length != 0) {
+          <div class="category">
+            <h2>Paused</h2>
+            <div class="mangas">
+              @for (manga of paused; track manga.mangaId) {
+                <div class="manga" [routerLink]="['/manga', manga.mangaId]">
+                  <img [src]="manga.cover" />
+                  <p>{{ manga.title }}</p>
+                  <span class="paused"></span>
+                </div>
+              }
             </div>
-          }
-        </div>
+          </div>
+        }
+
+        @if (dropped.length != 0) {
+          <div class="category">
+            <h2>Dropped</h2>
+            <div class="mangas">
+              @for (manga of dropped; track manga.mangaId) {
+                <div class="manga" [routerLink]="['/manga', manga.mangaId]">
+                  <img [src]="manga.cover" />
+                  <p>{{ manga.title }}</p>
+                  <span class="dropped"></span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    } @else if (viewStyle() === 'grid') {
+      <div class="grid">
+        @for (manga of completed; track manga.mangaId) {
+          <div class="manga" [routerLink]="['/manga', manga.mangaId]">
+            <img [src]="manga.cover" />
+            <p>{{ manga.title }}</p>
+            <span class="completed"></span>
+          </div>
+        }
+        @for (manga of reading; track manga.mangaId) {
+          <div class="manga" [routerLink]="['/manga', manga.mangaId]">
+            <img [src]="manga.cover" />
+            <p>{{ manga.title }}</p>
+            <span class="reading"></span>
+          </div>
+        }
+        @for (manga of planning; track manga.mangaId) {
+          <div class="manga" [routerLink]="['/manga', manga.mangaId]">
+            <img [src]="manga.cover" />
+            <p>{{ manga.title }}</p>
+            <span class="planning"></span>
+          </div>
+        }
+        @for (manga of paused; track manga.mangaId) {
+          <div class="manga" [routerLink]="['/manga', manga.mangaId]">
+            <img [src]="manga.cover" />
+            <p>{{ manga.title }}</p>
+            <span class="paused"></span>
+          </div>
+        }
+        @for (manga of dropped; track manga.mangaId) {
+          <div class="manga" [routerLink]="['/manga', manga.mangaId]">
+            <img [src]="manga.cover" />
+            <p>{{ manga.title }}</p>
+            <span class="dropped"></span>
+          </div>
+        }
       </div>
     }
   </div>
