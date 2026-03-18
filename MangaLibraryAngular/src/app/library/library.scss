@@ -12,14 +12,16 @@ $width: 160px;
   display: flex;
   width: 1400px;
   justify-content: center;
-  margin-top: 3rem;
+  margin: 0 5rem;
+  margin-top: 4rem;
 
   .filterbar {
     display: flex;
     flex-direction: column;
     margin-right: 2rem;
-    width: 280px;
+    width: 220px;
     flex-shrink: 0;
+    gap: 2rem;
 
     .filter {
       display: flex;
@@ -33,6 +35,29 @@ $width: 160px;
       }
     }
 
+    .viewStyle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.2rem;
+      background-color: $bg;
+      height: 40px;
+      border-radius: 0.4rem;
+      padding: 0.5rem;
+      width: fit-content;
+
+      img {
+        height: 30px;
+        padding: 0.4rem;
+        border-radius: 0.4rem;
+        cursor: pointer;
+
+        &:hover {
+          background-color: $bg-light;
+        }
+      }
+    }
+
     .search {
       display: flex;
       justify-content: space-between;
@@ -42,32 +67,10 @@ $width: 160px;
         color: $text-muted;
       }
 
-      .viewStyle {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0.2rem;
-        background-color: $bg;
-        height: 40px;
-        border-radius: 0.4rem;
-        padding: 0.5rem;
-
-        img {
-          height: 30px;
-          padding: 0.4rem;
-          border-radius: 0.4rem;
-          cursor: pointer;
-
-          &:hover {
-            background-color: $bg-light;
-          }
-        }
-      }
-
       .searchField {
         display: flex;
         background-color: $bg;
-        width: 180px;
+        width: 200px;
         padding: 0.6rem;
         border-radius: 0.4rem;
         gap: 1rem;
@@ -178,8 +181,79 @@ $width: 160px;
         .mangas {
           display: flex;
           gap: 2rem;
+          width: 100%;
         }
       }
     }
+  }
+}
+
+.button {
+  justify-content: center;
+  align-items: center;
+  background-color: $bg;
+  padding: 0 0.8rem;
+  border-radius: 0.4rem;
+  height: 40px;
+  cursor: pointer;
+  display: none;
+  margin-left: 1rem;
+
+  img {
+    height: 20px;
+  }
+
+  .highlight {
+    display: none;
+  }
+
+  &:hover {
+    img {
+      display: none;
+    }
+
+    .highlight {
+      display: unset;
+    }
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .content {
+    flex-direction: column;
+    gap: 2rem;
+    margin: 0 2rem;
+    margin-top: 4rem;
+
+    .filterbar {
+      width: 100%;
+      margin: 0;
+      .search {
+        width: 100%;
+        .searchField {
+          width: 100%;
+        }
+      }
+    }
+
+    .library {
+      .manga {
+        width: min(30%, $width);
+        aspect-ratio: 1/ 1.41;
+        img {
+          width: min(100%, $width);
+          aspect-ratio: 1/ 1.41;
+          height: auto;
+        }
+      }
+      .grid {
+        justify-content: center;
+        gap: 1rem;
+      }
+    }
+  }
+
+  .button {
+    display: flex;
   }
 }

@@ -9,5 +9,5 @@ public interface IUserMangaService
     public Task<UserManga?> AddMangaToUser(UserManga readingStatus);
     public Task<UserManga?> UpdateUserManga(UserManga readingStatus);
     public Task RemoveMangaFromUser(Guid mangaId, Guid userId);
-    public Task<IEnumerable<UserMangaReadingStatus>?> GetMangasFromUser(Guid userId);
+    public Task<IEnumerable<MangaLibraryResponse>> GetMangasFromUser(Guid userId);
 }

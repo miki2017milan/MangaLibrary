@@ -84,17 +84,17 @@ public class UserMangaService(IDbConnectionFactory connectionFactory) : IUserMan
             new { mangaId, userId });
     }
 
-    public async Task<IEnumerable<UserMangaReadingStatus>?> GetMangasFromUser(Guid userId)
+    public async Task<IEnumerable<MangaLibraryResponse>> GetMangasFromUser(Guid userId)
     {
         using var connection = await connectionFactory.CreateDbConnectionAsync();
 
-        var mangas = await connection.QueryAsync<UserMangaReadingStatus>(
+        var result = await connection.QueryAsync<MangaLibraryResponse>(
             """
-            Select manga_id, title, cover, status
+            Select status, mangas.*
             from user_manga, mangas
             where user_id = @userId and id = manga_id
             """, new { userId });
 
-        return mangas;
+        return result;
     }
 }

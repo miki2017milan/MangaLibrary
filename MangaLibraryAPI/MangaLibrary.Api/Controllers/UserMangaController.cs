@@ -13,7 +13,7 @@ public class UserMangaController(IUserMangaService userMangaService) : Controlle
 {
     [Authorize]
     [HttpGet("manga")]
-    public async Task<ActionResult<IEnumerable<UserMangaReadingStatus>>> GetMangasByUser()
+    public async Task<ActionResult<IEnumerable<MangaLibraryResponse>>> GetMangasByUser()
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var mangas =
@@ -24,7 +24,7 @@ public class UserMangaController(IUserMangaService userMangaService) : Controlle
 
     [Authorize]
     [HttpGet("manga/{mangaId}")]
-    public async Task<ActionResult<UserMangaReadingStatus>> GetUserManga([FromRoute] Guid mangaId)
+    public async Task<ActionResult<MangaLibraryResponse>> GetUserManga([FromRoute] Guid mangaId)
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var manga =

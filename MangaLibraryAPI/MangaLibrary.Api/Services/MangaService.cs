@@ -155,7 +155,7 @@ public class MangaService(IDbConnectionFactory connectionFactory) : IMangaServic
         {
             for (var i = 0; i < mangaQuery.Genres.Count; i++)
             {
-                whereParameters.Add($"@Genre{i} = ANY(genres)");
+                whereParameters.Add($"genres @> ARRAY[@Genre{i}::varchar]");
                 parameters.Add($"@Genre{i}", mangaQuery.Genres[i]);
             }
         }
@@ -164,7 +164,7 @@ public class MangaService(IDbConnectionFactory connectionFactory) : IMangaServic
         {
             for (var i = 0; i < mangaQuery.Tags.Count; i++)
             {
-                whereParameters.Add($"@Tag{i} = ANY(tags)");
+                whereParameters.Add($"tags @> ARRAY[@Tag{i}::varchar]");
                 parameters.Add($"@Tag{i}", mangaQuery.Tags[i]);
             }
         }
@@ -204,9 +204,17 @@ public class MangaService(IDbConnectionFactory connectionFactory) : IMangaServic
         var result =
             (await connection.QueryAsync<PaginatedManga>(
                 $"""
-                 Select *, Count(*) Over() as TotalCount
-                 from mangas
-                 {whereSql}
+                 With filtered as (
+                     Select *
+                     from mangas
+                     {whereSql}
+                     Limit 240
+                 ),
+                 total as (
+                    Select Count(*) as TotalCount from filtered
+                 )
+                 Select f.*, t.TotalCount
+                 from filtered f, total t
                  {orderBy}
                  Offset {(mangaQuery.Page - 1) * mangaQuery.PageSize}
                  Limit {mangaQuery.PageSize}
