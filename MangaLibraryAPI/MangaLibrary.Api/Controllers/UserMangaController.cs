@@ -24,13 +24,18 @@ public class UserMangaController(IUserMangaService userMangaService) : Controlle
 
     [Authorize]
     [HttpGet("manga/{mangaId}")]
-    public async Task<ActionResult<MangaLibraryResponse>> GetUserManga([FromRoute] Guid mangaId)
+    public async Task<ActionResult<UserMangaResponse>> GetUserManga([FromRoute] Guid mangaId)
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var manga =
             await userMangaService.GetUserManga(mangaId, userId);
 
-        return Ok(manga);
+        if (manga == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(manga?.ToUserMangaResponse());
     }
 
     [Authorize]
@@ -78,6 +83,7 @@ public class UserMangaController(IUserMangaService userMangaService) : Controlle
         return NoContent();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("{userId}/manga/{mangaId}")]
     public async Task<ActionResult<UserManga>> AddUserManga([FromBody] UserMangaRequest userMangaRequest,
         [FromRoute] Guid userId, [FromRoute] Guid mangaId)
@@ -92,6 +98,7 @@ public class UserMangaController(IUserMangaService userMangaService) : Controlle
         return Created("", createdUserManga);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{userId}/manga/{mangaId}")]
     public async Task<ActionResult<UserManga>> UpdateUserManga([FromBody] UserMangaUpdate userMangaUpdate,
         [FromRoute] Guid userId, [FromRoute] Guid mangaId)
@@ -113,6 +120,7 @@ public class UserMangaController(IUserMangaService userMangaService) : Controlle
         return Problem("Cannot add rating to a manga not added ot the user.", statusCode: 400);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{userId}/manga/{mangaId}")]
     public async Task<ActionResult> DeleteUserManga([FromRoute] Guid mangaId, [FromRoute] Guid userId)
     {

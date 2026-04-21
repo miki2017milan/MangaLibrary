@@ -1,0 +1,73 @@
+<div class="content">
+  <h2>Register</h2>
+  <form [formGroup]="form" (submit)="submitRegister()">
+    @let emailRequiredError = getEmail()?.errors?.['required'] && getEmail()?.touched;
+    @let emailFormatError = getEmail()?.errors?.['email'] && getEmail()?.touched;
+
+    <label for="email" [class.error]="errorMessage() || emailRequiredError || emailFormatError"
+      >Email</label
+    >
+    <input
+      type="email"
+      formControlName="email"
+      [class.error]="errorMessage() || emailRequiredError || emailFormatError"
+      (input)="errorMessage.set('')"
+    />
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
+
+    @if (emailRequiredError) {
+      <p class="error">Email is required</p>
+    } @else if (emailFormatError) {
+      <p class="error">Email format is wrong</p>
+    }
+
+    @let displayNameRequiredError =
+      getDisplayName()?.errors?.['required'] && getDisplayName()?.touched;
+    @let displayNameLengthError =
+      (getDisplayName()?.errors?.['minlength'] || getDisplayName()?.errors?.['maxlength']) &&
+      getDisplayName()?.touched;
+
+    <label for="displayName" [class.error]="displayNameRequiredError || displayNameLengthError"
+      >Display Name</label
+    >
+    <input
+      type="text"
+      formControlName="displayName"
+      [class.error]="displayNameRequiredError || displayNameLengthError"
+    />
+
+    @if (displayNameRequiredError) {
+      <p class="error">Display name is required</p>
+    } @else if (displayNameLengthError) {
+      <p class="error">Display name must be between 3 and 32 characters long</p>
+    }
+
+    @let passwordMinLength = getPassword()?.errors?.['minlength'] && getPassword()?.touched;
+    @let passwordMatches = form.errors?.['passwordMismatch'] && getConfirmPassword()?.touched;
+
+    <label for="password" [class.error]="passwordMatches || passwordMinLength">Password</label>
+    <input
+      type="password"
+      formControlName="password"
+      [class.error]="passwordMatches || passwordMinLength"
+    />
+    @if (passwordMinLength) {
+      <p class="error">Password must be at least 8 characters</p>
+    }
+
+    <label for="confirmPassword" [class.error]="passwordMatches">Confirm Password</label>
+    <input type="password" formControlName="confirmPassword" [class.error]="passwordMatches" />
+    @if (passwordMatches) {
+      <p class="error">Passwords do not match</p>
+    }
+
+    <button type="submit" (click)="form.markAllAsTouched()">Register</button>
+  </form>
+
+  <div class="login">
+    <p>Already have a account?</p>
+    <p class="link" [routerLink]="['/login']">Login</p>
+  </div>
+</div>

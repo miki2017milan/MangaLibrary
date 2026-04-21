@@ -37,7 +37,6 @@ export class Addrating {
       .addRating(this.id, ratingValue)
       .pipe(
         catchError((err) => {
-          console.log(err);
           throw err;
         }),
       )

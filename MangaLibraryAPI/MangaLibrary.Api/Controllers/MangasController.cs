@@ -1,5 +1,6 @@
 using MangaLibraryAPI.DTO;
 using MangaLibraryAPI.ServiceContracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MangaLibraryAPI.Controllers;
@@ -16,6 +17,7 @@ public class MangasController(IMangaService mangaService) : ControllerBase
         return Ok(manga);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<MangaResponse>> CreateManga([FromBody] MangaRequest mangaRequest)
     {
@@ -23,6 +25,7 @@ public class MangasController(IMangaService mangaService) : ControllerBase
         return CreatedAtAction(nameof(GetMangaFromId), new { manga!.Id }, manga);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public async Task<ActionResult<MangaResponse>> UpdateManga([FromRoute] Guid id,
         [FromBody] MangaRequest mangaRequest)
@@ -32,6 +35,7 @@ public class MangasController(IMangaService mangaService) : ControllerBase
         return Ok(manga);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteManga([FromRoute] Guid id)
     {

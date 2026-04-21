@@ -47,6 +47,16 @@ public class JwtService(IConfiguration configuration, UserManager<ApplicationUse
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!));
         var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+        if (string.IsNullOrEmpty(configuration["Jwt:Issuer"]))
+        {
+            throw new Exception("Issuer must be set");
+        }
+
+        if (string.IsNullOrEmpty(configuration["Jwt:Audience"]))
+        {
+            throw new Exception("Audience must be set");
+        }
+
         var issuer = configuration["Jwt:Issuer"];
         var audience = configuration["Jwt:Audience"];
         var tokenGenerator = new JwtSecurityToken(issuer, audience, claims, expires: expiration,

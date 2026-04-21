@@ -37,7 +37,6 @@ export class Addtolibrary {
   add(value: string) {
     if (!this.accountService.isAuthenticated()) {
       this.redireactService.set(this.router.url);
-      console.log(this.router.url);
       this.router.navigateByUrl('/login');
       return;
     }

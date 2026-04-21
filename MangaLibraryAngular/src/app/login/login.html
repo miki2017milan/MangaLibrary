@@ -1,16 +1,44 @@
 <div class="content">
   <h2>Login</h2>
-  <form [formGroup]="loginForm" (submit)="submitLogin()">
-    <label for="email">Email</label>
-    <input type="email" formControlName="email" />
+  <form [formGroup]="form" (submit)="submitLogin()">
+    @let emailReuiqredError = getEmail()?.errors?.['required'] && getEmail()?.touched;
+    @let emailFormatError = getEmail()?.errors?.['email'] && getEmail()?.touched;
 
-    <label for="email">Password</label>
-    <input type="password" formControlName="password" />
+    <label for="email" [class.error]="errorMessage() || emailReuiqredError || emailFormatError"
+      >Email</label
+    >
+
+    <input
+      type="email"
+      formControlName="email"
+      [class.error]="errorMessage() || emailReuiqredError || emailFormatError"
+      (input)="errorMessage.set('')"
+    />
+
+    @if (emailReuiqredError) {
+      <p class="error">Email is required</p>
+    } @else if (emailFormatError) {
+      <p class="error">Email format is wrong</p>
+    }
+
+    @let passwordReuiqredError = getPassword()?.errors?.['required'] && getPassword()?.touched;
+
+    <label for="password" [class.error]="errorMessage() || passwordReuiqredError">Password</label>
+    <input
+      type="password"
+      formControlName="password"
+      [class.error]="errorMessage() || passwordReuiqredError"
+      (input)="errorMessage.set('')"
+    />
+    @if (passwordReuiqredError) {
+      <p class="error">Password is required</p>
+    }
+
     @if (errorMessage()) {
       <p class="error">{{ errorMessage() }}</p>
     }
 
-    <button type="submit">Login</button>
+    <button type="submit" (click)="form.markAllAsTouched()">Login</button>
   </form>
 
   <div class="register">

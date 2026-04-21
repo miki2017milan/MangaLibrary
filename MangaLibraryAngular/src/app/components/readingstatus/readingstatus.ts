@@ -30,7 +30,6 @@ export class Readingstatus implements OnInit {
         catchError((err) => {
           this.loading.set(false);
           this.error.set(true);
-          console.log(err);
           throw err;
         }),
       )

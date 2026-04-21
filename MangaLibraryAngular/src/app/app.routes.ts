@@ -29,6 +29,12 @@ export const routes: Routes = [
     },
   },
   {
+    path: 'register',
+    loadComponent: () => {
+      return import('./register/register').then((m) => m.Register);
+    },
+  },
+  {
     path: 'manga/:id',
     loadComponent: () => {
       return import('./mangadisplay/mangadisplay').then((m) => m.Mangadisplay);

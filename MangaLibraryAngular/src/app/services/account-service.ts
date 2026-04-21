@@ -28,6 +28,23 @@ export class AccountService {
       );
   }
 
+  registerUser(email: string, password: string, displayName: string, confirmPassword: string) {
+    return this.http
+      .post<{ token: string; expiration: string }>(this.accountUrl + 'register', {
+        email,
+        password,
+        displayName,
+        confirmPassword,
+      })
+      .pipe(
+        tap((response) => {
+          localStorage.setItem('token', response.token);
+          this.isAuthenticated.set(true);
+          this.router.navigateByUrl(this.redireactService.get());
+        }),
+      );
+  }
+
   getUserDetails() {
     return this.http.get<UserDetails>(this.accountUrl + 'profile');
   }
