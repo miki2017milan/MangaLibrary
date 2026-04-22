@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { UserDetails } from '../models/useretails.type';
 import { RedirectService } from './redirect-service';
 import { tap } from 'rxjs';
+import { AuthenticationResponse as AuthenticationResponse } from '../models/AuthenticationResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -18,19 +19,17 @@ export class AccountService {
 
   login(email: string, password: string) {
     return this.http
-      .post<{ token: string; expiration: string }>(this.accountUrl + 'login', { email, password })
+      .post<AuthenticationResponse>(this.accountUrl + 'login', { email, password })
       .pipe(
         tap((response) => {
-          localStorage.setItem('token', response.token);
-          this.isAuthenticated.set(true);
-          this.router.navigateByUrl(this.redireactService.get());
+          this.storeTokens(response);
         }),
       );
   }
 
   registerUser(email: string, password: string, displayName: string, confirmPassword: string) {
     return this.http
-      .post<{ token: string; expiration: string }>(this.accountUrl + 'register', {
+      .post<AuthenticationResponse>(this.accountUrl + 'register', {
         email,
         password,
         displayName,
@@ -38,9 +37,20 @@ export class AccountService {
       })
       .pipe(
         tap((response) => {
-          localStorage.setItem('token', response.token);
-          this.isAuthenticated.set(true);
-          this.router.navigateByUrl(this.redireactService.get());
+          this.storeTokens(response);
+        }),
+      );
+  }
+
+  refreshToken() {
+    return this.http
+      .post<AuthenticationResponse>(this.accountUrl + 'refresh-token', {
+        token: localStorage.getItem('token'),
+        refreshToken: localStorage.getItem('refreshToken'),
+      })
+      .pipe(
+        tap((response) => {
+          this.storeTokens(response);
         }),
       );
   }
@@ -51,6 +61,14 @@ export class AccountService {
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
     this.isAuthenticated.set(false);
+  }
+
+  storeTokens(response: AuthenticationResponse) {
+    localStorage.setItem('token', response.token);
+    localStorage.setItem('refreshToken', response.refreshToken);
+    this.isAuthenticated.set(true);
+    this.router.navigateByUrl(this.redireactService.get());
   }
 }

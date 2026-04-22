@@ -65,7 +65,6 @@ export class Search implements OnDestroy {
   });
 
   constructor() {
-    console.log(this.query());
     toObservable(this.query) // Converto to observable meaning whenever this.query changes the new value gets push intu the switchMap
       .pipe(
         // switchMap atomaticly cancels old request that did not finish befor the next one was made

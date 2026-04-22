@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using MangaLibraryAPI.DTO;
 using MangaLibraryAPI.Entities;
@@ -15,7 +16,7 @@ public class JwtService(IConfiguration configuration, UserManager<ApplicationUse
     {
         if (string.IsNullOrEmpty(configuration["Jwt:ExpirationMinutes"]))
         {
-            throw new Exception("ExpirationMinutes must be set");
+            throw new Exception("JWT ExpirationMinutes must be set");
         }
 
         var expiration = DateTime.UtcNow.AddMinutes(Convert.ToDouble(configuration["Jwt:ExpirationMinutes"]));
@@ -65,10 +66,55 @@ public class JwtService(IConfiguration configuration, UserManager<ApplicationUse
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.WriteToken(tokenGenerator);
 
+        if (string.IsNullOrEmpty(configuration["RefreshToken:ExpirationMinutes"]))
+        {
+            throw new Exception("RefreshToken ExpirationMinutes must be set");
+        }
+
+        var refreshTokenExpiration =
+            DateTime.UtcNow.AddMinutes(Convert.ToDouble(configuration["RefreshToken:ExpirationMinutes"]));
+
         return new AuthenticationResponse()
         {
             Token = token,
-            Expiration = expiration
+            Expiration = expiration,
+            RefreshToken = GenerateRefreshToken(),
+            RefreshTokenExpiration = refreshTokenExpiration
         };
+    }
+
+    private static string GenerateRefreshToken()
+    {
+        var bytes = new byte[64];
+        var randomNumberGenerator = RandomNumberGenerator.Create();
+        randomNumberGenerator.GetBytes(bytes);
+        return Convert.ToBase64String(bytes);
+    }
+
+    public ClaimsPrincipal? GetClaimsPrincipleFromJwtToken(string token)
+    {
+        var tokenValidationParams = new TokenValidationParameters()
+        {
+            ValidateAudience = true,
+            ValidAudience = configuration["Jwt:Audience"],
+            ValidateIssuer = true,
+            ValidIssuer = configuration["Jwt:Issuer"],
+            ValidateIssuerSigningKey = true,
+            ValidateLifetime = false,
+            IssuerSigningKey =
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!)),
+        };
+
+        var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+        var claims = jwtSecurityTokenHandler.ValidateToken(token, tokenValidationParams, out var securityToken);
+
+        if (securityToken is not JwtSecurityToken jwtSecurityToken ||
+            !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
+                StringComparison.InvariantCultureIgnoreCase))
+        {
+            throw new SecurityTokenException("Invalid token");
+        }
+
+        return claims;
     }
 }

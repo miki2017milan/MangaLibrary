@@ -16,7 +16,7 @@ public class AccountController(
     : ControllerBase
 {
     [HttpPost("register")]
-    public async Task<ActionResult> RegisterUser([FromBody] RegisterRequest userDetails)
+    public async Task<ActionResult<AuthenticationResponse>> RegisterUser([FromBody] RegisterRequest userDetails)
     {
         var user = new ApplicationUser
             { Email = userDetails.Email, UserName = userDetails.Email, DisplayName = userDetails.DisplayName! };
@@ -26,19 +26,60 @@ public class AccountController(
 
         await userManager.AddToRoleAsync(user, "User");
 
-        return Ok(await jwtService.CreateJwtToken(user));
+        var authenticationResponse = await jwtService.CreateJwtToken(user);
+        user.RefreshToken = authenticationResponse.RefreshToken;
+        user.RefreshTokenExpiration = authenticationResponse.RefreshTokenExpiration;
+        await userManager.UpdateAsync(user);
+
+        return Ok(authenticationResponse);
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult> LoginUser([FromBody] LoginRequest userDetails)
+    public async Task<ActionResult<AuthenticationResponse>> LoginUser([FromBody] LoginRequest userDetails)
     {
-        var user = await userManager.FindByEmailAsync(userDetails.Email!);
+        var user = await userManager.FindByEmailAsync(userDetails.Email);
         if (user == null) return Problem("Email or Password are wrong", statusCode: 401);
 
-        var isPasswordValid = await userManager.CheckPasswordAsync(user, userDetails.Password!);
+        var isPasswordValid = await userManager.CheckPasswordAsync(user, userDetails.Password);
         if (!isPasswordValid) return Problem("Email or Password are wrong", statusCode: 401);
 
-        return Ok(await jwtService.CreateJwtToken(user));
+        var authenticationResponse = await jwtService.CreateJwtToken(user);
+        user.RefreshToken = authenticationResponse.RefreshToken;
+        user.RefreshTokenExpiration = authenticationResponse.RefreshTokenExpiration;
+        await userManager.UpdateAsync(user);
+
+        return Ok(authenticationResponse);
+    }
+
+    [HttpPost("refresh-token")]
+    public async Task<IActionResult> GenerateJwtToken([FromBody] RefreshTokenRequest refreshTokenRequest)
+    {
+        var jwtToken = refreshTokenRequest.Token;
+        var refreshToken = refreshTokenRequest.RefreshToken;
+
+        if (string.IsNullOrEmpty(jwtToken) || string.IsNullOrEmpty(refreshToken))
+        {
+            return BadRequest();
+        }
+
+        var claims = jwtService.GetClaimsPrincipleFromJwtToken(jwtToken);
+
+        if (claims is null) return BadRequest();
+
+        var userId = claims.Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value;
+        var user = await userManager.FindByIdAsync(userId);
+
+        if (user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpiration < DateTime.UtcNow)
+        {
+            return BadRequest();
+        }
+
+        var authenticationResponse = await jwtService.CreateJwtToken(user);
+        user.RefreshToken = authenticationResponse.RefreshToken;
+        user.RefreshTokenExpiration = authenticationResponse.RefreshTokenExpiration;
+        await userManager.UpdateAsync(user);
+
+        return Ok(authenticationResponse);
     }
 
     [Authorize]
