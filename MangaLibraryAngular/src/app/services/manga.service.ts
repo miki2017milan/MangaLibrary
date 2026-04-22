@@ -7,6 +7,7 @@ import { UserManga } from '../models/usermanga.type';
 import { MangaQueryParams } from '../models/mangaqueryparams';
 import { PagedMangas } from '../models/pagedmangas.type';
 import { LibraryManga } from '../models/librarymanga';
+import { environment } from '../../enviroments/enviroment';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +15,8 @@ import { LibraryManga } from '../models/librarymanga';
 export class MangaService {
   http = inject(HttpClient);
 
-  mangaUrl = 'http://localhost:5050/api/mangas/';
-  userMangaUrl = 'http://localhost:5050/api/users/manga/';
+  mangaUrl = environment.apiUrl + 'mangas/';
+  userMangaUrl = environment.apiUrl + 'users/manga/';
 
   getManga(id: string | null) {
     return this.http.get<Manga>(this.mangaUrl + id);
