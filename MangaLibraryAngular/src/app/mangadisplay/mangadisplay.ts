@@ -1,7 +1,7 @@
 import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
 import { Manga } from '../models/manga.type';
 import { MangaService } from '../services/manga.service';
-import { catchError } from 'rxjs';
+import { catchError, EMPTY, throwError } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Readingstatus } from '../components/readingstatus/readingstatus';
 import { Ratingchart } from '../components/ratingchart/ratingchart';
@@ -10,6 +10,7 @@ import { AccountService } from '../services/account-service';
 import { UserManga } from '../models/usermanga.type';
 import { Addrating } from '../components/addrating/addrating';
 import { Mangadescription } from '../components/mangadescription/mangadescription';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-mangadisplay',
@@ -56,11 +57,21 @@ export class Mangadisplay implements OnInit {
 
     // Get Usermanga and distribute to addlibrary component and addrating component
     if (this.accountService.isAuthenticated()) {
-      this.mangaService.getUserMangaForUser(this.id).subscribe((value) => {
-        if (value != null) {
-          this.userManga.set(value);
-        }
-      });
+      this.mangaService
+        .getUserMangaForUser(this.id)
+        .pipe(
+          catchError((err) => {
+            if (err instanceof HttpErrorResponse && err.status === 404) {
+              return EMPTY;
+            }
+            return throwError(() => err);
+          }),
+        )
+        .subscribe((value) => {
+          if (value != null) {
+            this.userManga.set(value);
+          }
+        });
     }
   }
 }
