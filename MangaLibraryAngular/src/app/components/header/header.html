@@ -34,11 +34,11 @@
               } @else {
                 <div class="loading"></div>
               }
-              <img src="downarrow.png" />
+              <img src="downarrow.png" [class.mobile]="isMobile()" />
             </div>
 
             @if (isOpen()) {
-              <ul>
+              <ul [class.mobile]="isMobile()">
                 <li>Profile</li>
                 <li (click)="accountService.logout(); reload()">Logout</li>
               </ul>
