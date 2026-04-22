@@ -7,7 +7,7 @@ import { UserManga } from '../models/usermanga.type';
 import { MangaQueryParams } from '../models/mangaqueryparams';
 import { PagedMangas } from '../models/pagedmangas.type';
 import { LibraryManga } from '../models/librarymanga';
-import { environment } from '../../enviroments/enviroment';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',

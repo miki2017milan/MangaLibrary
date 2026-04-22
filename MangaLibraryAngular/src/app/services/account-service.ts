@@ -5,7 +5,7 @@ import { UserDetails } from '../models/useretails.type';
 import { RedirectService } from './redirect-service';
 import { tap } from 'rxjs';
 import { AuthenticationResponse as AuthenticationResponse } from '../models/AuthenticationResponse';
-import { environment } from '../../enviroments/enviroment';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
