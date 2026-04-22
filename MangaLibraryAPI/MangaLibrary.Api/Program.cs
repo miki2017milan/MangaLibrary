@@ -84,6 +84,8 @@ builder.Services.AddControllers()
         options.InvalidModelStateResponseFactory = CustomModelStateResponse.Factory;
     });
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 app.UseHsts();
@@ -105,5 +107,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/health");
 
 app.Run();
