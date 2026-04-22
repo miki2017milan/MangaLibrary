@@ -28,10 +28,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(authRequest).pipe(
     catchError((err) => {
       if (err instanceof HttpErrorResponse && err.status === 401) {
-        console.log('handeling 401');
         return handle401(req, next, accountService, router);
       }
-      throw throwError(() => err);
+      return throwError(() => err);
     }),
   );
 };
@@ -48,14 +47,11 @@ const handle401 = (
   accountService: AccountService,
   router: Router,
 ) => {
-  console.log(isRefreshing);
   if (!isRefreshing) {
-    console.log('refreshing');
     isRefreshing = true;
     refreshingSubject.next(null);
     return accountService.refreshToken().pipe(
       switchMap((response) => {
-        console.log(response);
         isRefreshing = false;
         accountService.storeTokens(response);
         refreshingSubject.next(response.token);
