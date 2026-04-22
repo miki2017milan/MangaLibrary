@@ -100,9 +100,9 @@ app.UseRouting();
 
 using (var scope = app.Services.CreateScope())
 {
-    await RoleSeeder.SeedAsync(scope.ServiceProvider);
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     db.Database.Migrate();
+    await RoleSeeder.SeedAsync(scope.ServiceProvider);
 }
 
 app.UseAuthentication();
