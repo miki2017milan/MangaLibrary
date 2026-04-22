@@ -89,12 +89,14 @@ builder.Services.AddHealthChecks();
 var app = builder.Build();
 
 app.UseHsts();
-app.UseHttpsRedirection();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 }
+
+app.MapHealthChecks("/health");
+
 
 app.UseRouting();
 
@@ -108,6 +110,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHealthChecks("/health");
 
 app.Run();
