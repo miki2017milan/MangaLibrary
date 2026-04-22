@@ -62,8 +62,6 @@ export class Register implements OnInit {
 
   submitRegister() {
     if (!this.form.valid) {
-      console.log('not valid');
-      console.log(this.form.errors);
       return;
     }
 
@@ -76,7 +74,7 @@ export class Register implements OnInit {
       )
       .pipe(
         catchError((err) => {
-          if (err.error[0]?.code === 'DuplicateUserName') {
+          if (err.error?.[0]?.code === 'DuplicateUserName') {
             this.errorMessage.set('Email already taken');
           }
           return EMPTY;
