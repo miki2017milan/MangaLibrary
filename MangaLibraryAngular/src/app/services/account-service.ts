@@ -24,6 +24,8 @@ export class AccountService {
       .pipe(
         tap((response) => {
           this.storeTokens(response);
+          this.router.navigateByUrl(this.redireactService.get());
+          this.redireactService.clear();
         }),
       );
   }
@@ -39,6 +41,8 @@ export class AccountService {
       .pipe(
         tap((response) => {
           this.storeTokens(response);
+          this.router.navigateByUrl(this.redireactService.get());
+          this.redireactService.clear();
         }),
       );
   }
@@ -70,6 +74,5 @@ export class AccountService {
     localStorage.setItem('token', response.token);
     localStorage.setItem('refreshToken', response.refreshToken);
     this.isAuthenticated.set(true);
-    this.router.navigateByUrl(this.redireactService.get());
   }
 }
