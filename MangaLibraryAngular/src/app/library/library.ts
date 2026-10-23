@@ -116,7 +116,6 @@ export class Library implements OnInit {
   };
 
   filterMangas() {
-    console.log(this.selectedFormat());
     this.filterdMangas.set(
       this.mangas().filter((manga) => {
         return (

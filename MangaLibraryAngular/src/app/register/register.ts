@@ -4,6 +4,8 @@ import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -23,8 +25,8 @@ export class Register implements OnInit {
 
   constructor(private fb: FormBuilder) {}
 
-  passwordMatchValidator() {
-    return (group: AbstractControl) => {
+  passwordMatchValidator(): ValidatorFn {
+    return (group: AbstractControl): ValidationErrors | null => {
       const password = group.get('password')?.value;
       const confirmPassword = group.get('confirmPassword')?.value;
 
@@ -32,12 +34,47 @@ export class Register implements OnInit {
     };
   }
 
+  passwordRequiresNonAlphanumericValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value: string = control.value ?? '';
+    if (!value) return null; // let Validators.required handle empty
+
+    return /[^a-zA-Z0-9]/.test(value) ? null : { requiresNonAlphanumeric: true };
+  };
+}
+
+passwordRequiresLowercaseValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value: string = control.value ?? '';
+    if (!value) return null;
+
+    return /[a-z]/.test(value) ? null : { requiresLowercase: true };
+  };
+}
+
+passwordRequiresUppercaseValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value: string = control.value ?? '';
+    if (!value) return null;
+
+    return /[A-Z]/.test(value) ? null : { requiresUppercase: true };
+  };
+}
+
   ngOnInit(): void {
     this.form = this.fb.group(
       {
         email: ['', [Validators.required, Validators.email, Validators.maxLength(256)]],
         displayName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(32)]],
-        password: ['', [Validators.required, Validators.minLength(8)]],
+        password: ['', 
+          [
+            Validators.required, 
+            Validators.minLength(8),
+            this.passwordRequiresNonAlphanumericValidator(),
+            this.passwordRequiresLowercaseValidator(),
+            this.passwordRequiresUppercaseValidator(),
+          ],
+        ],
         confirmPassword: ['', Validators.required],
       },
       { validators: this.passwordMatchValidator() },

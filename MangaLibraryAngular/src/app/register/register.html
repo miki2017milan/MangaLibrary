@@ -45,6 +45,9 @@
     }
 
     @let passwordMinLength = getPassword()?.errors?.['minlength'] && getPassword()?.touched;
+    @let passwordNonAlphanumeric = getPassword()?.errors?.['requiresNonAlphanumeric'] && getPassword()?.touched;
+    @let passwordLowercase = getPassword()?.errors?.['requiresLowercase'] && getPassword()?.touched;
+    @let passwordUppercase = getPassword()?.errors?.['requiresUppercase'] && getPassword()?.touched;
     @let passwordMatches = form.errors?.['passwordMismatch'] && getConfirmPassword()?.touched;
 
     <label for="password" [class.error]="passwordMatches || passwordMinLength">Password</label>
@@ -53,9 +56,21 @@
       formControlName="password"
       [class.error]="passwordMatches || passwordMinLength"
     />
-    @if (passwordMinLength) {
-      <p class="error">Password must be at least 8 characters</p>
-    }
+    <ul class="error">
+      @if (passwordMinLength) {
+        <li class="error">Password must be at least 8 characters long</li>
+      } 
+      @if(passwordNonAlphanumeric) {
+        <li class="error">Password must include at least one special character</li>
+      }
+      @if(passwordLowercase) {
+        <li class="error">Password must include at least one lowercase character</li>
+      }
+      @if(passwordUppercase) {
+        <li class="error">Password must include at least one uppercase character</li>
+      }
+    </ul>
+    
 
     <label for="confirmPassword" [class.error]="passwordMatches">Confirm Password</label>
     <input type="password" formControlName="confirmPassword" [class.error]="passwordMatches" />
